@@ -1,0 +1,29 @@
+set -a && \
+source code/product/.env && \
+set +a && \
+( cd code/components/webui && npm install && npm run build ) && \
+( cd code/components/business && go build -tags plugin -buildmode=plugin -o ../../apps/webapp/build/business.so ./cmd/plugin ) && \
+( cd code/components/data && go build -tags plugin -buildmode=plugin -o ../../apps/webapp/build/data.so ./cmd/plugin ) && \
+( cd code/apps/webapp && (pkill -f webapp || true) && \
+  POSTGRES_DSN="$POSTGRES_DSN" \
+  DATA_PLUGIN_PATH=./build/data.so \
+  BUSINESS_PLUGIN_PATH=./build/business.so \
+  OPENAI_MODEL="$OPENAI_MODEL" \
+  OPENAI_API_KEY="$OPENAI_API_KEY" \
+  OPENAI_BASE_URL="$OPENAI_BASE_URL" \
+  go run ./cmd/webapp )
+
+set -a && \
+source code/product/.env && \
+set +a && \
+( cd code/components/webui && npm install && npm run build ) && \
+( cd code/components/business && go build -tags plugin -buildmode=plugin -o ../../apps/webapp/build/business.so ./cmd/plugin ) && \
+( cd code/components/data && go build -tags plugin -buildmode=plugin -o ../../apps/webapp/build/data.so ./cmd/plugin ) && \
+( cd code/apps/webapp && mkdir -p runtime/data && (pkill -f webapp || true) && \
+  DATA_SOURCE=./config/data_local.json \
+  DATA_PLUGIN_PATH=./build/data.so \
+  BUSINESS_PLUGIN_PATH=./build/business.so \
+  OPENAI_MODEL="$OPENAI_MODEL" \
+  OPENAI_API_KEY="$OPENAI_API_KEY" \
+  OPENAI_BASE_URL="$OPENAI_BASE_URL" \
+  go run ./cmd/webapp )
