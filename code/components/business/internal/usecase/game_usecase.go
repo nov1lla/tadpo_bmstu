@@ -112,3 +112,16 @@ func (uc *gameUseCase) FinishGame(ctx context.Context, cmd sdkusecase.FinishGame
 func (uc *gameUseCase) UpdateBoardState(ctx context.Context, id domain.GameID, state domain.BoardState) error {
 	return uc.gameRepo.UpdateBoardState(ctx, id, state)
 }
+
+func (uc *gameUseCase) Delete(ctx context.Context, id domain.GameID) error {
+	if id == "" {
+		return errors.New("game id is required")
+	}
+	if uc.moveRepo == nil {
+		return errors.New("move repository not configured")
+	}
+	if err := uc.moveRepo.DeleteByGame(ctx, id); err != nil {
+		return err
+	}
+	return uc.gameRepo.Delete(ctx, id)
+}

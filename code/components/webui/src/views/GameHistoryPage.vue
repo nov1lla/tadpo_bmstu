@@ -5,24 +5,28 @@
       <ul>
         <li v-for="gameItem in games" :key="gameItem.id">
           <button
-            :class="['list-button', { active: gameItem.id === game?.id }]"
+            :class="['list-button', { active: gameItem.id === selectedGame?.id }]"
             @click="openGame(gameItem.id)"
             :disabled="loading"
           >
-            <span class="id">{{ gameItem.id }}</span>
+            <span class="id">{{ formatGameLabel(gameItem) }}</span>
             <span class="meta">{{ formatStatus(gameItem.status) }} · {{ formatDate(gameItem.startedAt) }}</span>
           </button>
         </li>
       </ul>
     </aside>
 
-    <section class="history-content" v-if="game">
+    <section class="history-content" v-if="selectedGame">
       <div class="summary">
-        <StatsPanel :user="user" :game="game" />
-        <RouterLink to="/game" class="nav-button">Open in play view</RouterLink>
+        <GamePanel :game="selectedGame">
+          <button class="primary" @click="resumeGame" :disabled="loading">Resume game</button>
+          <button class="danger" @click="deleteGame" :disabled="loading">Delete game</button>
+        </GamePanel>
       </div>
-      <BoardView :board="board" />
-      <HistoryTable :moves="history" />
+      <div class="board-wide">
+        <BoardView :board="selectedBoard" />
+      </div>
+      <HistoryTable :moves="selectedHistory" />
     </section>
     <section v-else class="history-empty">
       <p>Select a game to view its history.</p>
@@ -35,28 +39,56 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { RouterLink } from 'vue-router';
+import { computed, onMounted, ref } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
 import BoardView from '../components/BoardView.vue';
 import HistoryTable from '../components/HistoryTable.vue';
-import StatsPanel from '../components/StatsPanel.vue';
+import GamePanel from '../components/GamePanel.vue';
 import { useGameStore } from '../viewmodels/useGameViewModel';
+import { getGameState } from '../services/api';
+import type { BoardState, Game, Move } from '../types';
 
 const store = useGameStore();
+const router = useRouter();
 
 const loading = computed(() => store.loading.value);
 const user = computed(() => store.user.value ?? null);
-const game = computed(() => store.game.value ?? null);
-const board = computed(() => store.board.value ?? null);
-const history = computed(() => store.history.value);
 const games = computed(() => store.availableGames.value);
+
+const selectedGame = ref<Game | null>(null);
+const selectedBoard = ref<BoardState | null>(null);
+const selectedHistory = ref<Move[]>([]);
 
 onMounted(() => {
   store.loadGames();
 });
 
 async function openGame(id: string) {
-  await store.loadGame(id);
+  const state = await getGameState(id);
+  selectedGame.value = state.game;
+  selectedBoard.value = state.board;
+  selectedHistory.value = state.moves;
+}
+
+async function resumeGame() {
+  if (!selectedGame.value) {
+    return;
+  }
+  await store.loadGame(selectedGame.value.id, { remember: true });
+  await router.push('/game');
+}
+
+async function deleteGame() {
+  if (!selectedGame.value) {
+    return;
+  }
+  const id = selectedGame.value.id;
+  await store.deleteGame(id);
+  if (selectedGame.value?.id === id) {
+    selectedGame.value = null;
+    selectedBoard.value = null;
+    selectedHistory.value = [];
+  }
 }
 
 function formatStatus(status: string | undefined | null) {
@@ -75,6 +107,19 @@ function formatDate(iso: string | undefined | null) {
     return '—';
   }
   return parsed.toLocaleString();
+}
+
+function formatGameLabel(gameItem: Game) {
+  if (gameItem.number !== undefined && gameItem.number !== null) {
+    return `#${gameItem.number}`;
+  }
+  if (gameItem.startedAt) {
+    const parsed = new Date(gameItem.startedAt);
+    if (!Number.isNaN(parsed.getTime())) {
+      return parsed.toLocaleString();
+    }
+  }
+  return gameItem.id;
 }
 </script>
 
@@ -142,6 +187,54 @@ function formatDate(iso: string | undefined | null) {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.summary :deep(.block) {
+  width: 100%;
+}
+
+.primary,
+.danger {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--accent-color);
+  color: #1a1a1a;
+}
+
+.danger {
+  background: rgba(208, 77, 57, 0.2);
+  color: #ffb4a3;
+}
+
+.primary:disabled,
+.danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.history-empty {
+  background: var(--surface-color);
+  padding: 24px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.board-wide {
+  width: 100%;
+}
+
+.board-wide :deep(.board) {
+  width: 100%;
 }
 
 .nav-button {
@@ -154,14 +247,5 @@ function formatDate(iso: string | undefined | null) {
   color: var(--accent-color);
   text-decoration: none;
   font-weight: 600;
-}
-
-.history-empty {
-  background: var(--surface-color);
-  padding: 24px;
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 </style>

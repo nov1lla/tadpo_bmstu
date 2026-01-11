@@ -95,6 +95,46 @@ func (r *GameRepository) Update(ctx context.Context, game domain.Game) error {
 	return files.persistGames(updatedGames)
 }
 
+func (r *GameRepository) Delete(ctx context.Context, id domain.GameID) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if id == "" {
+		return fmt.Errorf("game id empty: %w", ErrInvalidData)
+	}
+
+	files := r.storage.files
+	files.mu.Lock()
+	defer files.mu.Unlock()
+
+	games, err := files.loadGames()
+	if err != nil {
+		return err
+	}
+	if _, exists := games[string(id)]; !exists {
+		return fmt.Errorf("game %s: %w", id, ErrNotFound)
+	}
+	boardStates, err := files.loadBoardStates()
+	if err != nil {
+		return err
+	}
+
+	updatedGames := cloneStoredGames(games)
+	delete(updatedGames, string(id))
+
+	updatedStates := cloneStoredBoardStates(boardStates)
+	delete(updatedStates, string(id))
+
+	if err := files.persistGames(updatedGames); err != nil {
+		return err
+	}
+	if err := files.persistBoardStates(updatedStates); err != nil {
+		_ = files.persistGames(games)
+		return err
+	}
+	return nil
+}
+
 func (r *GameRepository) GetByID(ctx context.Context, id domain.GameID) (domain.Game, error) {
 	if err := ctx.Err(); err != nil {
 		return domain.Game{}, err

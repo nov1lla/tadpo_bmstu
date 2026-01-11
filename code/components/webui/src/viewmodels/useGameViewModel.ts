@@ -7,6 +7,7 @@ import {
   getUser,
   login,
   listGames,
+  deleteGame,
   register,
   requestOpponentMove,
   submitMove,
@@ -357,6 +358,17 @@ function createGameStore() {
     localStorage.removeItem(GAME_STORAGE_KEY);
   }
 
+  async function deleteGameByID(gameId: string) {
+    await guard(async () => {
+      await deleteGame(gameId);
+      if (game.value?.id === gameId) {
+        clearGame();
+      }
+      await loadGames();
+      await refreshUser();
+    }, 'deleteGame');
+  }
+
   async function restore() {
     const storedUser = localStorage.getItem(USER_STORAGE_KEY);
     if (storedUser) {
@@ -395,6 +407,7 @@ function createGameStore() {
     refreshGame,
     submitUserMove,
     triggerOpponentMove,
+    deleteGame: deleteGameByID,
     clearGame,
     restore
   };

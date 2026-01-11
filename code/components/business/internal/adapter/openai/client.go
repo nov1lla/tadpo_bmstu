@@ -38,6 +38,8 @@ type Client struct {
 	baseURL    string
 	model      string
 	apiKey     string
+	temperature float64
+	hasTemp     bool
 }
 
 type Option func(*Client)
@@ -63,6 +65,13 @@ func WithBaseURL(url string) Option {
 		if url != "" {
 			c.baseURL = url
 		}
+	}
+}
+
+func WithTemperature(value float64) Option {
+	return func(c *Client) {
+		c.temperature = value
+		c.hasTemp = true
 	}
 }
 
@@ -109,6 +118,7 @@ func (c *Client) SuggestMove(ctx context.Context, req port.OpponentMoveRequest) 
 	httpReq.Header.Set("Content-Type", "application/json")
 	httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apiKey))
 
+	start := time.Now()
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return domain.Move{}, err
@@ -117,12 +127,23 @@ func (c *Client) SuggestMove(ctx context.Context, req port.OpponentMoveRequest) 
 
 	if resp.StatusCode >= http.StatusMultipleChoices {
 		bodyBytes, _ := io.ReadAll(resp.Body)
+		log.Printf("openai request failed: model=%s status=%d duration=%s", c.model, resp.StatusCode, time.Since(start))
 		return domain.Move{}, APIError{Status: resp.StatusCode, Body: string(bodyBytes)}
 	}
 
 	var completion completionResponse
 	if err := json.NewDecoder(resp.Body).Decode(&completion); err != nil {
 		return domain.Move{}, err
+	}
+	log.Printf("openai request done: model=%s status=%d duration=%s", c.model, resp.StatusCode, time.Since(start))
+	if completion.Usage != nil {
+		log.Printf(
+			"openai tokens: model=%s prompt=%d completion=%d total=%d",
+			c.model,
+			completion.Usage.PromptTokens,
+			completion.Usage.CompletionTokens,
+			completion.Usage.TotalTokens,
+		)
 	}
 	if len(completion.Choices) == 0 {
 		return domain.Move{}, ErrEmptyResponse
@@ -194,9 +215,12 @@ Board state (JSON map keyed by piece_id):
 
 	log.Printf("openai model=%s", c.model)
 
-	return chatCompletionRequest{
-		Model:       c.model,
-		Temperature: 0.1,
+	return c.buildChatCompletionRequest(prompt), nil
+}
+
+func (c *Client) buildChatCompletionRequest(prompt string) chatCompletionRequest {
+	request := chatCompletionRequest{
+		Model: c.model,
 		ResponseFormat: &responseFormat{
 			Type: "json_object",
 		},
@@ -204,7 +228,15 @@ Board state (JSON map keyed by piece_id):
 			{Role: "system", Content: "You are an assistant that outputs valid JSON for checkers moves."},
 			{Role: "user", Content: prompt},
 		},
-	}, nil
+	}
+	if !strings.Contains(strings.ToLower(c.model), "mini") {
+		if c.hasTemp {
+			request.Temperature = c.temperature
+		} else {
+			request.Temperature = 0.1
+		}
+	}
+	return request
 }
 
 type chatCompletionRequest struct {
@@ -227,6 +259,13 @@ type completionResponse struct {
 	Choices []struct {
 		Message chatMessage `json:"message"`
 	} `json:"choices"`
+	Usage *completionUsage `json:"usage,omitempty"`
+}
+
+type completionUsage struct {
+	PromptTokens     int `json:"prompt_tokens"`
+	CompletionTokens int `json:"completion_tokens"`
+	TotalTokens      int `json:"total_tokens"`
 }
 
 type aiMoveResponse struct {

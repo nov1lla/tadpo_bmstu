@@ -1,7 +1,7 @@
 <template>
   <div class="menu">
     <section class="panel">
-      <h3>Start match</h3>
+      <h3>New game</h3>
       <form class="stack" @submit.prevent="startMatch">
         <div class="field">
           <label>Piece color</label>
@@ -15,20 +15,25 @@
           <span>Player moves first</span>
         </label>
         <button type="submit" :disabled="loading || !user">
-          {{ loading ? 'Preparing…' : 'Start game' }}
+          {{ loading ? 'Preparing…' : 'New game' }}
         </button>
       </form>
     </section>
 
     <section class="panel">
-      <StatsPanel :user="user" :game="game" />
+      <PlayerPanel :user="user" />
+    </section>
+
+    <section class="panel">
+      <GamePanel :game="game" />
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import StatsPanel from '../components/StatsPanel.vue';
+import PlayerPanel from '../components/PlayerPanel.vue';
+import GamePanel from '../components/GamePanel.vue';
 import { useGameStore } from '../viewmodels/useGameViewModel';
 
 const store = useGameStore();

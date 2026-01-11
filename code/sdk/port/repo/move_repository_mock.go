@@ -10,6 +10,7 @@ type MoveRepositoryMock struct {
 	GetByIDFunc    func(ctx context.Context, id domain.MoveID) (domain.Move, error)
 	AddFunc        func(ctx context.Context, move domain.Move) error
 	ListByGameFunc func(ctx context.Context, id domain.GameID) ([]domain.Move, error)
+	DeleteByGameFunc func(ctx context.Context, id domain.GameID) error
 }
 
 func (m *MoveRepositoryMock) GetByID(ctx context.Context, id domain.MoveID) (domain.Move, error) {
@@ -31,4 +32,11 @@ func (m *MoveRepositoryMock) ListByGame(ctx context.Context, id domain.GameID) (
 		return m.ListByGameFunc(ctx, id)
 	}
 	return nil, nil
+}
+
+func (m *MoveRepositoryMock) DeleteByGame(ctx context.Context, id domain.GameID) error {
+	if m.DeleteByGameFunc != nil {
+		return m.DeleteByGameFunc(ctx, id)
+	}
+	return nil
 }

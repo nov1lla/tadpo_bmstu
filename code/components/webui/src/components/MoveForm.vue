@@ -6,7 +6,7 @@
         <label>Piece</label>
         <select v-model="selectedPieceId" @change="applySelectedPiece">
           <option v-for="piece in pieceOptions" :key="piece.id" :value="piece.id">
-            {{ piece.id }} · ({{ piece.row }},{{ piece.col }})
+            {{ formatPieceLabel(piece) }} · ({{ formatCoord(piece.row) }},{{ formatCoord(piece.col) }})
           </option>
         </select>
       </div>
@@ -45,6 +45,14 @@
     <button type="submit" class="submit" :disabled="disabled">
       {{ disabled ? 'Working…' : 'Submit move' }}
     </button>
+    <button
+      type="button"
+      class="secondary"
+      :disabled="disabled || form.autoOpponent"
+      @click="requestOpponent"
+    >
+      Request opponent move
+    </button>
   </form>
 </template>
 
@@ -56,6 +64,7 @@ interface PieceOption {
   id: string;
   row: number;
   col: number;
+  color: 'light' | 'dark';
 }
 
 const props = defineProps<{
@@ -67,6 +76,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: 'submit', payload: { start: PositionInput; steps: PositionInput[]; auto: boolean; difficulty: Difficulty }): void;
+  (e: 'requestOpponent', payload: { difficulty: Difficulty }): void;
 }>();
 
 const form = reactive({
@@ -95,8 +105,8 @@ function applySelectedPiece() {
   if (!piece) {
     return;
   }
-  form.start.row = piece.row;
-  form.start.col = piece.col;
+  form.start.row = formatCoord(piece.row);
+  form.start.col = formatCoord(piece.col);
 }
 
 function handleSubmit() {
@@ -115,6 +125,27 @@ function handleSubmit() {
   });
 }
 
+function requestOpponent() {
+  emit('requestOpponent', { difficulty: form.difficulty });
+}
+
+function formatPieceId(id: string) {
+  const match = id.match(/(\d{1,2})$/);
+  if (match) {
+    return match[1].padStart(2, '0');
+  }
+  return id;
+}
+
+function formatPieceLabel(piece: PieceOption) {
+  const idLabel = formatPieceId(piece.id);
+  return `${idLabel} (${piece.color})`;
+}
+
+function formatCoord(value: number) {
+  return Math.round(value);
+}
+
 watch(
   () => pieceOptions.value,
   (options) => {
@@ -122,10 +153,11 @@ watch(
       selectedPieceId.value = '';
       return;
     }
-    if (!selectedPieceId.value || !options.find((option) => option.id === selectedPieceId.value)) {
+    const hasSelected = options.find((option) => option.id === selectedPieceId.value);
+    if (!selectedPieceId.value || !hasSelected) {
       selectedPieceId.value = options[0].id;
-      applySelectedPiece();
     }
+    applySelectedPiece();
   },
   { immediate: true }
 );
@@ -226,7 +258,18 @@ onMounted(() => {
   cursor: pointer;
 }
 
-.submit:disabled {
+.secondary {
+  padding: 10px 16px;
+  background: rgba(240, 180, 41, 0.18);
+  border: none;
+  border-radius: 12px;
+  color: var(--accent-color);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit:disabled,
+.secondary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }

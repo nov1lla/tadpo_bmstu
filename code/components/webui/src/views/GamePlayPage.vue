@@ -2,25 +2,15 @@
   <div class="play" v-if="game">
     <section class="play-main">
       <BoardView :board="board" />
-      <MoveForm
-        :disabled="loading"
-        :defaultDifficulty="opponentPreference.difficulty"
-        :autoOpponent="opponentPreference.auto"
-        :pieces="playerPieces"
-        @submit="submitMove"
-      />
-    </section>
-
-    <section class="play-sidebar">
-      <StatsPanel :user="user" :game="game" />
-      <div class="actions">
-        <button
-          class="secondary"
-          @click="store.triggerOpponentMove()"
+      <div class="play-controls">
+        <MoveForm
           :disabled="loading"
-        >
-          Request opponent move
-        </button>
+          :defaultDifficulty="opponentPreference.difficulty"
+          :autoOpponent="opponentPreference.auto"
+          :pieces="playerPieces"
+          @submit="submitMove"
+          @requestOpponent="requestOpponentMove"
+        />
         <button class="danger" @click="resign" :disabled="loading">
           Resign game
         </button>
@@ -41,7 +31,6 @@ import { RouterLink } from 'vue-router';
 import BoardView from '../components/BoardView.vue';
 import MoveForm from '../components/MoveForm.vue';
 import HistoryTable from '../components/HistoryTable.vue';
-import StatsPanel from '../components/StatsPanel.vue';
 import { useGameStore } from '../viewmodels/useGameViewModel';
 import type { Difficulty } from '../services/api';
 
@@ -49,7 +38,6 @@ const store = useGameStore();
 
 const loading = computed(() => store.loading.value);
 const opponentPreference = store.opponentPreference;
-const user = computed(() => store.user.value ?? null);
 const game = computed(() => store.game.value ?? null);
 const board = computed(() => store.board.value ?? null);
 const history = computed(() => store.history.value);
@@ -63,7 +51,12 @@ const playerPieces = computed(() => {
   const color = currentGame.playerColor;
   return (currentBoard.pieces ?? [])
     .filter((piece) => piece.color === color)
-    .map((piece) => ({ id: piece.id, row: piece.row, col: piece.col }))
+    .map((piece) => ({
+      id: piece.id,
+      row: Math.round(piece.row),
+      col: Math.round(piece.col),
+      color: piece.color
+    }))
     .sort((a, b) => (a.row === b.row ? a.col - b.col : a.row - b.row));
 });
 
@@ -72,6 +65,10 @@ async function submitMove(payload: { start: { row: number; col: number }; steps:
     auto: payload.auto,
     difficulty: payload.difficulty
   });
+}
+
+async function requestOpponentMove(payload: { difficulty: Difficulty }) {
+  await store.triggerOpponentMove(payload.difficulty);
 }
 
 function resign() {
@@ -96,13 +93,7 @@ onMounted(() => {
   gap: 24px;
 }
 
-.play-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.actions {
+.play-controls {
   display: flex;
   flex-direction: column;
   gap: 12px;

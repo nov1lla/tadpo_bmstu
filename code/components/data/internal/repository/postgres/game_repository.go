@@ -100,6 +100,31 @@ func (r *GameRepository) Update(ctx context.Context, game domain.Game) error {
 	return nil
 }
 
+func (r *GameRepository) Delete(ctx context.Context, id domain.GameID) error {
+	const boardQuery = `DELETE FROM game_board_states WHERE game_id=$1`
+	const gameQuery = `DELETE FROM games WHERE id=$1`
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+
+	if _, err := tx.ExecContext(ctx, boardQuery, id); err != nil {
+		return err
+	}
+	res, err := tx.ExecContext(ctx, gameQuery, id)
+	if err != nil {
+		return err
+	}
+	if err := checkRowsAffected(res); err != nil {
+		if errors.Is(err, ErrNotFound) {
+			return fmt.Errorf("game %s: %w", id, err)
+		}
+		return err
+	}
+	return tx.Commit()
+}
+
 func (r *GameRepository) GetByID(ctx context.Context, id domain.GameID) (domain.Game, error) {
 	const query = `SELECT id, user_id, start_time, end_time, status, player_color, is_player_first FROM games WHERE id=$1`
 	var (

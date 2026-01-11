@@ -98,6 +98,29 @@ func (r *MoveRepository) ListByGame(ctx context.Context, id domain.GameID) ([]do
 	return result, nil
 }
 
+func (r *MoveRepository) DeleteByGame(ctx context.Context, id domain.GameID) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+
+	files := r.storage.files
+	files.mu.Lock()
+	defer files.mu.Unlock()
+
+	moves, err := files.loadMoves()
+	if err != nil {
+		return err
+	}
+
+	updated := cloneStoredMoves(moves)
+	for key, move := range updated {
+		if move.GameID == string(id) {
+			delete(updated, key)
+		}
+	}
+	return files.persistMoves(updated)
+}
+
 func cloneStoredMoves(src map[string]storedMove) map[string]storedMove {
 	duplicated := make(map[string]storedMove, len(src))
 	for k, v := range src {

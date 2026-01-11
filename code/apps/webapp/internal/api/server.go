@@ -56,12 +56,21 @@ func NewServer(staticDir string, business component.BusinessProvider) (*Server, 
 }
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Printf("%s %s", r.Method, r.URL.Path)
+	start := time.Now()
+	recorder := &responseRecorder{ResponseWriter: w, status: http.StatusOK}
 	if strings.HasPrefix(r.URL.Path, "/api/") {
-		s.mux.ServeHTTP(w, r)
-		return
+		s.mux.ServeHTTP(recorder, r)
+	} else {
+		s.serveStatic(recorder, r)
 	}
-	s.serveStatic(w, r)
+	log.Printf(
+		"http %s %s status=%d bytes=%d duration=%s",
+		r.Method,
+		r.URL.Path,
+		recorder.status,
+		recorder.bytes,
+		time.Since(start),
+	)
 }
 
 func (s *Server) serveStatic(w http.ResponseWriter, r *http.Request) {
@@ -253,6 +262,8 @@ func (s *Server) handleGameByID(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
 		case http.MethodGet:
 			s.getGameState(w, r, gameID)
+		case http.MethodDelete:
+			s.deleteGame(w, r, gameID)
 		default:
 			writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
 		}
@@ -316,6 +327,14 @@ func (s *Server) getGameState(w http.ResponseWriter, r *http.Request, id domain.
 		Board: newBoardDTO(board),
 		Moves: newMovesDTO(history),
 	})
+}
+
+func (s *Server) deleteGame(w http.ResponseWriter, r *http.Request, id domain.GameID) {
+	if err := s.games.Delete(r.Context(), id); err != nil {
+		writeError(w, http.StatusNotFound, err)
+		return
+	}
+	w.WriteHeader(http.StatusNoContent)
 }
 
 func (s *Server) applyUserMove(w http.ResponseWriter, r *http.Request, id domain.GameID) {
@@ -476,6 +495,23 @@ type userDTO struct {
 
 type authResponse struct {
 	User userDTO `json:"user"`
+}
+
+type responseRecorder struct {
+	http.ResponseWriter
+	status int
+	bytes  int
+}
+
+func (r *responseRecorder) WriteHeader(status int) {
+	r.status = status
+	r.ResponseWriter.WriteHeader(status)
+}
+
+func (r *responseRecorder) Write(p []byte) (int, error) {
+	n, err := r.ResponseWriter.Write(p)
+	r.bytes += n
+	return n, err
 }
 
 type gameDTO struct {

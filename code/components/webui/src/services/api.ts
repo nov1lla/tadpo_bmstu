@@ -79,6 +79,12 @@ export async function getGameState(gameId: string): Promise<GameStateResponse> {
   return request<GameStateResponse>(`/games/${gameId}`);
 }
 
+export async function deleteGame(gameId: string): Promise<void> {
+  await request<void>(`/games/${gameId}`, {
+    method: 'DELETE'
+  });
+}
+
 export interface GamesListResponse {
   games: Game[];
 }

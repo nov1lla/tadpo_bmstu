@@ -35,6 +35,7 @@ export interface User {
 
 export interface Game {
   id: string;
+  number?: number;
   status: string;
   userId: string;
   playerColor: 'light' | 'dark';

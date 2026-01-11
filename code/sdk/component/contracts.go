@@ -28,8 +28,9 @@ type BusinessProvider interface {
 
 // BusinessConfig описывает параметры, необходимые для настройки слоя бизнес-логики.
 type BusinessConfig struct {
-	OpenAIKey     string
-	OpenAIModel   string
-	OpenAIBaseURL string
-	HTTPTimeout   time.Duration
+	OpenAIKey         string
+	OpenAIModel       string
+	OpenAIBaseURL     string
+	OpenAITemperature float64
+	HTTPTimeout       time.Duration
 }

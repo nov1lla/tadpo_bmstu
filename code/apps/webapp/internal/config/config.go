@@ -19,9 +19,10 @@ type Config struct {
 }
 
 type OpenAIConfig struct {
-	APIKey  string
-	Model   string
-	BaseURL string
+	APIKey      string
+	Model       string
+	BaseURL     string
+	Temperature float64
 }
 
 const (
@@ -41,9 +42,10 @@ func Load() Config {
 		DataSource:         expandDataSource(os.Getenv("DATA_SOURCE")),
 		HTTPTimeout:        parseDurationEnv("HTTP_TIMEOUT", defaultHTTPTimeout),
 		OpenAI: OpenAIConfig{
-			APIKey:  os.Getenv("OPENAI_API_KEY"),
-			Model:   os.Getenv("OPENAI_MODEL"),
-			BaseURL: os.Getenv("OPENAI_BASE_URL"),
+			APIKey:      os.Getenv("OPENAI_API_KEY"),
+			Model:       os.Getenv("OPENAI_MODEL"),
+			BaseURL:     os.Getenv("OPENAI_BASE_URL"),
+			Temperature: parseFloatEnv("OPENAI_TEMPERATURE", 0),
 		},
 	}
 	if cfg.DataSource == "" {
@@ -69,6 +71,17 @@ func parseDurationEnv(key string, fallback time.Duration) time.Duration {
 	}
 	if seconds, err := strconv.Atoi(raw); err == nil {
 		return time.Duration(seconds) * time.Second
+	}
+	return fallback
+}
+
+func parseFloatEnv(key string, fallback float64) float64 {
+	raw, ok := os.LookupEnv(key)
+	if !ok || raw == "" {
+		return fallback
+	}
+	if parsed, err := strconv.ParseFloat(raw, 64); err == nil {
+		return parsed
 	}
 	return fallback
 }

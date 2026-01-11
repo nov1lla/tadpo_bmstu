@@ -2,8 +2,7 @@
   <div class="app">
     <header class="app-header">
       <div class="title-block">
-        <h1>PPO Checkers</h1>
-        <p class="subtitle">Web practice UI for the modular lab</p>
+        <h1>My Checkers</h1>
       </div>
       <nav class="nav">
         <RouterLink to="/" class="nav-link" active-class="nav-link--active">Menu</RouterLink>
@@ -95,11 +94,6 @@ watch(error, (value) => {
   letter-spacing: 0.02em;
 }
 
-.subtitle {
-  margin: 4px 0 0;
-  color: var(--muted-color);
-  font-size: 14px;
-}
 
 .nav {
   display: inline-flex;

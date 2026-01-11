@@ -146,6 +146,12 @@ func (r *MoveRepository) ListByGame(ctx context.Context, id domain.GameID) ([]do
 	return moves, nil
 }
 
+func (r *MoveRepository) DeleteByGame(ctx context.Context, id domain.GameID) error {
+	const query = `DELETE FROM moves WHERE game_id=$1`
+	_, err := r.db.ExecContext(ctx, query, id)
+	return err
+}
+
 type persistedPosition struct {
 	Row int `json:"row"`
 	Col int `json:"col"`

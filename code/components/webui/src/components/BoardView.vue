@@ -31,7 +31,7 @@
             }"
             :style="pieceStyle(piece)"
           >
-            <span class="piece-id">{{ piece.id }}</span>
+            <span class="piece-id">{{ formatPieceId(piece.id) }}</span>
           </div>
         </div>
       </div>
@@ -113,6 +113,14 @@ function pieceStyle(piece: Piece) {
     height: `${PIECE_SIZE}px`,
     transform: `translate(${x}px, ${y}px)`
   };
+}
+
+function formatPieceId(id: string) {
+  const match = id.match(/(\d{1,2})$/);
+  if (match) {
+    return match[1].padStart(2, '0');
+  }
+  return id;
 }
 </script>
 

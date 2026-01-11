@@ -32,6 +32,7 @@ type GameUseCase interface {
 	ProcessMove(ctx context.Context, cmd ProcessMoveCommand) (domain.Move, error)
 	FinishGame(ctx context.Context, cmd FinishGameCommand) (domain.Game, error)
 	UpdateBoardState(ctx context.Context, id domain.GameID, state domain.BoardState) error
+	Delete(ctx context.Context, id domain.GameID) error
 }
 
 type CreateGameCommand struct {

@@ -71,6 +71,7 @@ func NewBusinessProvider(data component.DataProvider, cfg component.BusinessConf
 			openai.WithHTTPClient(httpClient),
 			openai.WithModel(cfg.OpenAIModel),
 			openai.WithBaseURL(cfg.OpenAIBaseURL),
+			openai.WithTemperature(cfg.OpenAITemperature),
 		)
 		if err != nil {
 			return nil, fmt.Errorf("openai client: %w", err)

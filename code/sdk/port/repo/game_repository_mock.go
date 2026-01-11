@@ -11,6 +11,7 @@ type GameRepositoryMock struct {
 	ListByUserFunc       func(ctx context.Context, userID domain.UserID) ([]domain.Game, error)
 	SaveFunc             func(ctx context.Context, game domain.Game) error
 	UpdateFunc           func(ctx context.Context, game domain.Game) error
+	DeleteFunc           func(ctx context.Context, id domain.GameID) error
 	BoardStateFunc       func(ctx context.Context, id domain.GameID) (domain.BoardState, error)
 	UpdateBoardStateFunc func(ctx context.Context, id domain.GameID, state domain.BoardState) error
 }
@@ -39,6 +40,13 @@ func (m *GameRepositoryMock) Save(ctx context.Context, game domain.Game) error {
 func (m *GameRepositoryMock) Update(ctx context.Context, game domain.Game) error {
 	if m.UpdateFunc != nil {
 		return m.UpdateFunc(ctx, game)
+	}
+	return nil
+}
+
+func (m *GameRepositoryMock) Delete(ctx context.Context, id domain.GameID) error {
+	if m.DeleteFunc != nil {
+		return m.DeleteFunc(ctx, id)
 	}
 	return nil
 }

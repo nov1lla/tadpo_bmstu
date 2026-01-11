@@ -73,10 +73,11 @@ func loadDataProvider(path, source string) (component.DataProvider, func()) {
 func loadBusinessProvider(path string, timeout time.Duration, openai config.OpenAIConfig, data component.DataProvider) (component.BusinessProvider, func()) {
 	factory := lookupBusinessFactory(path)
 	businessCfg := component.BusinessConfig{
-		OpenAIKey:     openai.APIKey,
-		OpenAIModel:   openai.Model,
-		OpenAIBaseURL: openai.BaseURL,
-		HTTPTimeout:   timeout,
+		OpenAIKey:         openai.APIKey,
+		OpenAIModel:       openai.Model,
+		OpenAIBaseURL:     openai.BaseURL,
+		OpenAITemperature: openai.Temperature,
+		HTTPTimeout:       timeout,
 	}
 	provider, err := factory(data, businessCfg)
 	if err != nil {

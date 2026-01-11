@@ -10,6 +10,7 @@ const (
 	DefaultPostgresDSN        = "postgres://admin:admin123@localhost:5432/ppo_cource?sslmode=disable"
 	DefaultOpenAIModel        = "gpt-4o-mini"
 	DefaultOpenAIBaseURL      = "https://api.openai.com/v1/chat/completions"
+	DefaultOpenAITemperature  = 0.1
 	DefaultHTTPTimeout        = 10 * time.Second
 	DefaultUIOperationTimeout = 5 * time.Second
 	DefaultAnimationDelay     = 500 * time.Millisecond
@@ -23,9 +24,10 @@ type Config struct {
 }
 
 type OpenAIConfig struct {
-	APIKey  string
-	Model   string
-	BaseURL string
+	APIKey       string
+	Model        string
+	BaseURL      string
+	Temperature  float64
 }
 
 type UIConfig struct {
@@ -39,9 +41,10 @@ func Load() Config {
 		PostgresDSN: getenv("POSTGRES_DSN", DefaultPostgresDSN),
 		HTTPTimeout: parseDurationEnv("HTTP_TIMEOUT", DefaultHTTPTimeout),
 		OpenAI: OpenAIConfig{
-			APIKey:  os.Getenv("OPENAI_API_KEY"),
-			Model:   getenv("OPENAI_MODEL", DefaultOpenAIModel),
-			BaseURL: getenv("OPENAI_BASE_URL", DefaultOpenAIBaseURL),
+			APIKey:      os.Getenv("OPENAI_API_KEY"),
+			Model:       getenv("OPENAI_MODEL", DefaultOpenAIModel),
+			BaseURL:     getenv("OPENAI_BASE_URL", DefaultOpenAIBaseURL),
+			Temperature: parseFloatEnv("OPENAI_TEMPERATURE", DefaultOpenAITemperature),
 		},
 		UI: UIConfig{
 			OperationTimeout: parseDurationEnv("UI_OPERATION_TIMEOUT", DefaultUIOperationTimeout),
@@ -69,6 +72,17 @@ func parseDurationEnv(key string, fallback time.Duration) time.Duration {
 	}
 	if seconds, err := strconv.Atoi(raw); err == nil {
 		return time.Duration(seconds) * time.Second
+	}
+	return fallback
+}
+
+func parseFloatEnv(key string, fallback float64) float64 {
+	raw, ok := os.LookupEnv(key)
+	if !ok || raw == "" {
+		return fallback
+	}
+	if parsed, err := strconv.ParseFloat(raw, 64); err == nil {
+		return parsed
 	}
 	return fallback
 }
