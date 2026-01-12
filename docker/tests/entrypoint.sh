@@ -7,11 +7,28 @@ RUN_TRAFFIC_CAPTURE="${RUN_TRAFFIC_CAPTURE:-0}"
 
 if [ -n "${REPO_URL}" ]; then
   if [ ! -d "/workspace/.git" ]; then
-    git clone "${REPO_URL}" /workspace
-  fi
-  if [ -n "${REPO_REF}" ]; then
-    git -C /workspace fetch --all
-    git -C /workspace checkout "${REPO_REF}"
+    tmp_dir="$(mktemp -d)"
+    git clone "${REPO_URL}" "${tmp_dir}"
+    if [ -n "${REPO_REF}" ]; then
+      git -C "${tmp_dir}" fetch --all
+      git -C "${tmp_dir}" checkout "${REPO_REF}"
+    fi
+    if [ -d "/workspace" ]; then
+      find /workspace -mindepth 1 -maxdepth 1 ! -name code -exec rm -rf {} +
+      if [ -d "/workspace/code" ]; then
+        find /workspace/code -mindepth 1 -maxdepth 1 ! -name product -exec rm -rf {} +
+      fi
+      if [ -d "/workspace/code/product" ]; then
+        find /workspace/code/product -mindepth 1 -maxdepth 1 ! -name test-report -exec rm -rf {} +
+      fi
+    fi
+    tar -C "${tmp_dir}" --exclude './code/product/test-report' -cf - . | tar -C /workspace -xf -
+    rm -rf "${tmp_dir}"
+  else
+    if [ -n "${REPO_REF}" ]; then
+      git -C /workspace fetch --all
+      git -C /workspace checkout "${REPO_REF}"
+    fi
   fi
 fi
 

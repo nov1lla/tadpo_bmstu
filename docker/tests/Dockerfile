@@ -6,13 +6,16 @@ RUN apt-get update \
     curl \
     tcpdump \
     postgresql-client \
-    nodejs \
-    npm \
+    default-jre-headless \
+    python3 \
+  && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+  && apt-get install -y --no-install-recommends nodejs \
   && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g allure-commandline
 RUN go install github.com/jstemmer/go-junit-report/v2@latest
 
 WORKDIR /workspace
+COPY . /workspace
 COPY docker/tests/entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

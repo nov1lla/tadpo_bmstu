@@ -1,0 +1,151 @@
+{
+  "606cc535-4ac4-458e-941f-085fc5f43457": {
+    "size": 8,
+    "pieces": {
+      "dark-01": {
+        "row": 0,
+        "col": 1,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-02": {
+        "row": 0,
+        "col": 3,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-03": {
+        "row": 0,
+        "col": 5,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-04": {
+        "row": 0,
+        "col": 7,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-05": {
+        "row": 1,
+        "col": 0,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-06": {
+        "row": 1,
+        "col": 2,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-07": {
+        "row": 1,
+        "col": 4,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-08": {
+        "row": 1,
+        "col": 6,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-09": {
+        "row": 2,
+        "col": 1,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-10": {
+        "row": 3,
+        "col": 4,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-11": {
+        "row": 2,
+        "col": 5,
+        "color": "dark",
+        "kind": "man"
+      },
+      "dark-12": {
+        "row": 2,
+        "col": 7,
+        "color": "dark",
+        "kind": "man"
+      },
+      "light-01": {
+        "row": 4,
+        "col": 1,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-02": {
+        "row": 5,
+        "col": 2,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-03": {
+        "row": 5,
+        "col": 4,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-04": {
+        "row": 5,
+        "col": 6,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-05": {
+        "row": 6,
+        "col": 1,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-06": {
+        "row": 6,
+        "col": 3,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-07": {
+        "row": 6,
+        "col": 5,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-08": {
+        "row": 6,
+        "col": 7,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-09": {
+        "row": 7,
+        "col": 0,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-10": {
+        "row": 7,
+        "col": 2,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-11": {
+        "row": 7,
+        "col": 4,
+        "color": "light",
+        "kind": "man"
+      },
+      "light-12": {
+        "row": 7,
+        "col": 6,
+        "color": "light",
+        "kind": "man"
+      }
+    }
+  }
+}

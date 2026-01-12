@@ -1,0 +1,36 @@
+{
+  "4e568274-bad0-4dc5-a057-1c731ca93663": {
+    "id": "4e568274-bad0-4dc5-a057-1c731ca93663",
+    "game_id": "606cc535-4ac4-458e-941f-085fc5f43457",
+    "piece_id": "light-01",
+    "number": 1,
+    "start": {
+      "row": 5,
+      "col": 0
+    },
+    "trajectory": [
+      {
+        "row": 4,
+        "col": 1
+      }
+    ],
+    "created_at": "2025-09-24T15:11:53.328204496Z"
+  },
+  "688dee67-9483-4b60-81ea-65249abdb433": {
+    "id": "688dee67-9483-4b60-81ea-65249abdb433",
+    "game_id": "606cc535-4ac4-458e-941f-085fc5f43457",
+    "piece_id": "dark-10",
+    "number": 2,
+    "start": {
+      "row": 2,
+      "col": 3
+    },
+    "trajectory": [
+      {
+        "row": 3,
+        "col": 4
+      }
+    ],
+    "created_at": "2025-09-24T15:12:43.377091419Z"
+  }
+}

@@ -1,0 +1,10 @@
+.git
+.github
+code/components/webui/node_modules
+code/components/webui/dist
+code/product/test-report
+code/product/traffic
+code/product/build
+code/apps/webapp/build
+code/apps/webapp/runtime
+ppo_project_backup.tar.gz

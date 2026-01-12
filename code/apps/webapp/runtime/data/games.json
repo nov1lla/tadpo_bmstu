@@ -1,0 +1,11 @@
+{
+  "606cc535-4ac4-458e-941f-085fc5f43457": {
+    "id": "606cc535-4ac4-458e-941f-085fc5f43457",
+    "user_id": "bd66933f-f771-4a2e-aede-07026d3a913c",
+    "start": "2025-09-24T15:11:43.860459253Z",
+    "status": "in_progress",
+    "player_color": "light",
+    "is_player_first": true,
+    "board_size": 8
+  }
+}

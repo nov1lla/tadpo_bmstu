@@ -28,7 +28,7 @@ WEBAPP_BIN="${BUILD_DIR}/webapp"
 (cd "${ROOT_DIR}/code/components/business" && go build -tags plugin -buildmode=plugin -o "${BUSINESS_PLUGIN}" ./cmd/plugin)
 (cd "${ROOT_DIR}/code/apps/webapp" && go build -o "${WEBAPP_BIN}" ./cmd/webapp)
 
-PORT="$(python - <<'PY'
+PORT="$(python3 - <<'PY'
 import socket
 s = socket.socket()
 s.bind(("127.0.0.1", 0))
@@ -66,7 +66,7 @@ done
 USER_JSON="$(curl -s -X POST "http://${ADDR}/api/users" \
   -H "Content-Type: application/json" \
   -d '{"name":"Traffic User"}')"
-USER_ID="$(python - <<PY
+USER_ID="$(python3 - <<PY
 import json
 print(json.loads('''${USER_JSON}''')["id"])
 PY
@@ -77,7 +77,7 @@ curl -s "http://${ADDR}/api/users/${USER_ID}" >/dev/null
 GAME_JSON="$(curl -s -X POST "http://${ADDR}/api/games" \
   -H "Content-Type: application/json" \
   -d '{"userId":"'"${USER_ID}"'","playerColor":"light","isPlayerFirst":true}')"
-GAME_ID="$(python - <<PY
+GAME_ID="$(python3 - <<PY
 import json
 print(json.loads('''${GAME_JSON}''')["game"]["id"])
 PY
