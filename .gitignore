@@ -1,12 +1,3 @@
-.env
-**/.env
-node_modules/
-**/node_modules/
-code/components/webui/dist/
-code/components/webui/.vite/
-code/apps/webapp/build/
-code/apps/webapp/runtime/
-*.so
-*.db
-*.tar.gz
-*.log
+code/product/test-report/
+code/product/traffic/
+code/product/build/

@@ -20,12 +20,12 @@ func (g fixedIDGen) NewID() string {
 
 func TestUserUseCaseUpdateFields(t *testing.T) {
 	repoMock := &repo.UserRepositoryMock{}
-	initial := domain.User{
-		ID:        "user-1",
-		Name:      "Alice",
-		Rating:    1200,
-		WinStreak: 3,
-	}
+	initial := NewUserBuilder().
+		WithID("user-1").
+		WithName("Alice").
+		WithRating(1200).
+		WithWinStreak(3).
+		Build()
 
 	repoMock.GetByIDFunc = func(ctx context.Context, id domain.UserID) (domain.User, error) {
 		if id != initial.ID {
@@ -85,18 +85,12 @@ func TestUserUseCasePropagatesUpdateError(t *testing.T) {
 	}
 }
 
-func TestUserUseCaseCreateAndGet(t *testing.T) {
+func TestUserUseCaseCreate(t *testing.T) {
 	repository := &repo.UserRepositoryMock{}
 	var captured domain.User
 	repository.SaveFunc = func(ctx context.Context, user domain.User) error {
 		captured = user
 		return nil
-	}
-	repository.GetByIDFunc = func(ctx context.Context, id domain.UserID) (domain.User, error) {
-		if id != captured.ID {
-			t.Fatalf("unexpected id %s", id)
-		}
-		return captured, nil
 	}
 
 	uc := NewUserUseCase(repository, fixedIDGen{id: "user-create"})
@@ -108,17 +102,93 @@ func TestUserUseCaseCreateAndGet(t *testing.T) {
 	if created.ID != "user-create" || created.Name != cmd.Name {
 		t.Fatalf("unexpected created user: %+v", created)
 	}
+	if captured.ID != created.ID {
+		t.Fatalf("expected saved user to match created user")
+	}
+}
 
-	loaded, err := uc.Get(context.Background(), created.ID)
+func TestUserUseCaseCreateRequiresIDGenerator(t *testing.T) {
+	uc := NewUserUseCase(&repo.UserRepositoryMock{}, nil)
+
+	_, err := uc.Create(context.Background(), sdkusecase.CreateUserCommand{Name: "Alice"})
+
+	if err == nil {
+		t.Fatalf("expected error when id generator is missing")
+	}
+}
+
+func TestUserUseCaseCreateRejectsInvalidData(t *testing.T) {
+	uc := NewUserUseCase(&repo.UserRepositoryMock{}, fixedIDGen{id: "ignored"})
+
+	_, err := uc.Create(context.Background(), sdkusecase.CreateUserCommand{})
+
+	if !errors.Is(err, ErrInvalidUserData) {
+		t.Fatalf("expected ErrInvalidUserData, got %v", err)
+	}
+}
+
+func TestUserUseCaseGet(t *testing.T) {
+	repository := &repo.UserRepositoryMock{}
+	expected := NewUserBuilder().WithID("user-42").WithName("Carol").Build()
+	repository.GetByIDFunc = func(ctx context.Context, id domain.UserID) (domain.User, error) {
+		if id != expected.ID {
+			t.Fatalf("unexpected id %s", id)
+		}
+		return expected, nil
+	}
+
+	uc := NewUserUseCase(repository, fixedIDGen{id: "ignored"})
+	loaded, err := uc.Get(context.Background(), expected.ID)
 	if err != nil {
 		t.Fatalf("get returned error: %v", err)
 	}
-	if loaded.ID != created.ID {
+	if loaded.ID != expected.ID {
 		t.Fatalf("unexpected loaded user: %+v", loaded)
 	}
+}
 
-	_, err = uc.Create(context.Background(), sdkusecase.CreateUserCommand{})
-	if !errors.Is(err, ErrInvalidUserData) {
-		t.Fatalf("expected ErrInvalidUserData, got %v", err)
+func TestUserUseCaseGetReturnsRepositoryError(t *testing.T) {
+	expected := errors.New("missing user")
+	repository := &repo.UserRepositoryMock{
+		GetByIDFunc: func(ctx context.Context, id domain.UserID) (domain.User, error) {
+			return domain.User{}, expected
+		},
+	}
+	uc := NewUserUseCase(repository, fixedIDGen{id: "ignored"})
+
+	_, err := uc.Get(context.Background(), "user-1")
+
+	if !errors.Is(err, expected) {
+		t.Fatalf("expected %v, got %v", expected, err)
+	}
+}
+
+func TestUserUseCaseCreate_Classic(t *testing.T) {
+	repository := newInMemoryUserRepo()
+	uc := NewUserUseCase(repository, fixedIDGen{id: "user-classic"})
+
+	created, err := uc.Create(context.Background(), sdkusecase.CreateUserCommand{Name: "Classic"})
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if created.ID != "user-classic" {
+		t.Fatalf("unexpected user: %+v", created)
+	}
+}
+
+func TestUserUseCaseGet_Classic(t *testing.T) {
+	repository := newInMemoryUserRepo()
+	user := NewUserBuilder().WithID("user-classic").WithName("Classic").Build()
+	if err := repository.Save(context.Background(), user); err != nil {
+		t.Fatalf("save: %v", err)
+	}
+	uc := NewUserUseCase(repository, fixedIDGen{id: "ignored"})
+
+	loaded, err := uc.Get(context.Background(), user.ID)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if loaded.ID != user.ID {
+		t.Fatalf("unexpected user: %+v", loaded)
 	}
 }

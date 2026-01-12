@@ -1,4 +1,4 @@
-package postgres
+package testsupport
 
 import (
 	"context"
@@ -16,11 +16,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type testEnv struct {
-	DB *sql.DB
+type PostgresEnv struct {
+	DSN     string
+	DBName  string
+	Cleanup func()
 }
 
-func SetupTestDB(t *testing.T) testEnv {
+func SetupPostgres(t *testing.T) PostgresEnv {
 	t.Helper()
 	dsn := os.Getenv("POSTGRES_DSN")
 	if dsn == "" {
@@ -33,18 +35,17 @@ func SetupTestDB(t *testing.T) testEnv {
 
 	admin, err := sql.Open("postgres", adminDSN)
 	if err != nil {
-		t.Skipf("cannot open postgres admin: %v", err)
+		t.Skipf("open postgres admin: %v", err)
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := admin.PingContext(ctx); err != nil {
 		_ = admin.Close()
-		t.Skipf("cannot connect to postgres admin: %v", err)
+		t.Skipf("connect postgres admin: %v", err)
 	}
-
 	if err := createDatabase(ctx, admin, dbName); err != nil {
 		_ = admin.Close()
-		t.Skipf("cannot create test db: %v", err)
+		t.Skipf("create test db: %v", err)
 	}
 	_ = admin.Close()
 
@@ -52,14 +53,14 @@ func SetupTestDB(t *testing.T) testEnv {
 	if err != nil {
 		t.Fatalf("open test db: %v", err)
 	}
-
-	t.Cleanup(func() {
-		_ = db.Close()
-		_ = dropDatabase(dsn, dbName)
-	})
-
 	runMigrations(t, db)
-	return testEnv{DB: db}
+	_ = db.Close()
+
+	cleanup := func() {
+		_ = dropDatabase(dsn, dbName)
+	}
+
+	return PostgresEnv{DSN: testDSN, DBName: dbName, Cleanup: cleanup}
 }
 
 func deriveTestDSN(dsn string) (string, string, string, error) {
@@ -150,18 +151,11 @@ func runMigrations(t *testing.T, db *sql.DB) {
 	}
 }
 
-func truncateAll(t *testing.T, db *sql.DB) {
-	t.Helper()
-	if _, err := db.Exec(`TRUNCATE moves, game_board_states, games, user_credentials, users RESTART IDENTITY`); err != nil {
-		t.Fatalf("truncate tables: %v", err)
-	}
-}
-
 func projectRoot(t *testing.T) string {
 	t.Helper()
 	_, file, _, ok := runtime.Caller(0)
 	if !ok {
 		t.Fatalf("cannot determine caller")
 	}
-	return filepath.Clean(filepath.Join(filepath.Dir(file), "..", "..", ".."))
+	return filepath.Clean(filepath.Join(filepath.Dir(file), ".."))
 }

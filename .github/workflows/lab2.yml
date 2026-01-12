@@ -1,0 +1,51 @@
+name: lab-02-tests
+
+on:
+  push:
+    branches: ["lab_02"]
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download Allure history
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          name: allure-history
+          path: code/product/test-report/allure-history
+
+      - name: Prepare report dir
+        run: |
+          mkdir -p code/product/test-report
+
+      - name: Run tests in Docker
+        env:
+          REPO_URL: https://github.com/robodanill/TADPO.git
+          REPO_REF: ${{ github.sha }}
+          RUN_TRAFFIC_CAPTURE: 1
+        run: |
+          docker compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner
+
+      - name: Shutdown containers
+        if: always()
+        run: |
+          docker compose -f docker/docker-compose.test.yml down -v
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: code/product/test-report
+
+      - name: Upload Allure history
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-history
+          path: code/product/test-report/allure-history
