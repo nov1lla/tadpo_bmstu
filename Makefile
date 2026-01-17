@@ -5,6 +5,10 @@ ENV_FILE := code/product/.env
 SERVER_DIR := code/apps/webapp
 export WEBAPP_ADDR ?= :9765
 export DATA_SOURCE ?=
+ROOT_DIR := $(CURDIR)
+TEST_REPORT_DIR := code/product/test-report
+ALLURE_RESULTS_DIR := $(TEST_REPORT_DIR)/allure-results
+ALLURE_REPORT_DIR := $(TEST_REPORT_DIR)/allure-report
 
 .PHONY: run
 run:
@@ -48,3 +52,71 @@ run-local:
 	DATA_SOURCE=./config/data_local.json DATA_PLUGIN_PATH=./build/data.so BUSINESS_PLUGIN_PATH=./build/business.so \
 		OPENAI_MODEL="$$OPENAI_MODEL" OPENAI_API_KEY="$$OPENAI_API_KEY" OPENAI_BASE_URL="$$OPENAI_BASE_URL" \
 		go run ./cmd/webapp
+
+.PHONY: test-business
+test-business:
+	cd code/components/business
+	go test ./... -count=1
+
+.PHONY: test-data
+test-data:
+	cd code/components/data
+	go test ./... -count=1
+
+.PHONY: test-sdk
+test-sdk:
+	cd code/sdk
+	go test ./... -count=1
+
+.PHONY: test-unit
+test-unit: test-business test-data test-sdk
+
+.PHONY: test-unit-shuffle
+test-unit-shuffle:
+	cd code/components/business
+	go test ./... -count=1 -shuffle=on
+	cd ../data
+	go test ./... -count=1 -shuffle=on
+	cd ../sdk
+	go test ./... -count=1 -shuffle=on
+
+.PHONY: test-unit-offline
+test-unit-offline:
+	cd code/components/business
+	GONOSUMDB='*' GOPROXY=off go test ./... -count=1
+	cd ../data
+	GONOSUMDB='*' GOPROXY=off go test ./... -count=1
+	cd ../sdk
+	GONOSUMDB='*' GOPROXY=off go test ./... -count=1
+
+.PHONY: test-unit-serial
+test-unit-serial:
+	cd code/components/business
+	go test ./... -count=1 -p=1
+	cd ../data
+	go test ./... -count=1 -p=1
+	cd ../sdk
+	go test ./... -count=1 -p=1
+
+.PHONY: test-junit
+test-junit:
+	mkdir -p $(ALLURE_RESULTS_DIR)
+	cd code/components/business
+	go run gotest.tools/gotestsum@latest --format standard-quiet --junitfile $(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/unit-business-junit.xml -- -count=1 ./...
+	cd ../data
+	go run gotest.tools/gotestsum@latest --format standard-quiet --junitfile $(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/unit-data-junit.xml -- -count=1 ./...
+	cd ../sdk
+	go run gotest.tools/gotestsum@latest --format standard-quiet --junitfile $(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/unit-sdk-junit.xml -- -count=1 ./...
+
+.PHONY: allure-generate
+allure-generate:
+	rm -rf $(ALLURE_RESULTS_DIR)/*
+	rm -rf $(ALLURE_REPORT_DIR)
+	$(MAKE) test-junit
+	command -v allure >/dev/null || { echo "Install Allure CLI (https://github.com/allure-framework/allure2)."; exit 1; }
+	allure generate $(ALLURE_RESULTS_DIR) -o $(ALLURE_REPORT_DIR) --clean
+
+.PHONY: allure-open
+allure-open:
+	cd $(ALLURE_REPORT_DIR)
+	python3 -m http.server 8080
