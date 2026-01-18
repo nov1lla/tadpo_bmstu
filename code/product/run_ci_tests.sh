@@ -9,6 +9,8 @@ ALLURE_HISTORY_SRC="${REPORT_DIR}/allure-history"
 
 mkdir -p "${REPORT_DIR}"
 mkdir -p "${ALLURE_RESULTS_DIR}"
+mkdir -p "${ALLURE_HISTORY_SRC}"
+touch "${ALLURE_HISTORY_SRC}/.keep"
 
 copy_history() {
   if [ -d "${ALLURE_HISTORY_SRC}" ]; then
@@ -93,9 +95,11 @@ fi
 if command -v allure >/dev/null 2>&1; then
   allure generate "${ALLURE_RESULTS_DIR}" --clean -o "${ALLURE_REPORT_DIR}"
   rm -rf "${ALLURE_HISTORY_SRC}"
+  mkdir -p "${ALLURE_HISTORY_SRC}"
   if [ -d "${ALLURE_REPORT_DIR}/history" ]; then
     cp -R "${ALLURE_REPORT_DIR}/history" "${ALLURE_HISTORY_SRC}"
   fi
+  touch "${ALLURE_HISTORY_SRC}/.keep"
   echo "Allure report generated at ${ALLURE_REPORT_DIR}"
 else
   echo "Allure CLI not found. Install with: npm install -g allure-commandline"
