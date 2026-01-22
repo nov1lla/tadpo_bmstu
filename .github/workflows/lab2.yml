@@ -16,35 +16,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check Allure history artifact
-        id: allure_history
-        continue-on-error: true
-        uses: actions/github-script@v7
-        with:
-          script: |
-            try {
-              const { data } = await github.rest.actions.listArtifactsForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                per_page: 100,
-              });
-              const found = data.artifacts.find(a => a.name === "allure-history" && !a.expired);
-              core.setOutput("found", found ? "true" : "false");
-            } catch (err) {
-              core.setOutput("found", "false");
-              core.notice(`Allure history check skipped: ${err.message}`);
-            }
-
       - name: Download Allure history
-        uses: actions/download-artifact@v4
-        if: steps.allure_history.outputs.found == 'true'
+        uses: dawidd6/action-download-artifact@v4
         with:
+          workflow: lab2.yml
           name: allure-history
           path: code/product/test-report/allure-history
+          if_no_artifact_found: warn
 
       - name: Prepare report dir
         run: |
           mkdir -p code/product/test-report
+          mkdir -p code/product/test-report/allure-history
 
       - name: Run tests in Docker
         env:
@@ -58,6 +41,14 @@ jobs:
         if: always()
         run: |
           docker compose -f docker/docker-compose.test.yml down -v
+
+      - name: Ensure report artifacts
+        if: always()
+        run: |
+          mkdir -p code/product/test-report/allure-history
+          touch code/product/test-report/allure-history/.keep
+          mkdir -p code/product/test-report
+          touch code/product/test-report/.keep
 
       - name: Upload test report
         if: always()
