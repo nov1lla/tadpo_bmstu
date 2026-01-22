@@ -5,6 +5,10 @@ on:
     branches: ["lab_02"]
   workflow_dispatch: {}
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -14,16 +18,22 @@ jobs:
 
       - name: Check Allure history artifact
         id: allure_history
+        continue-on-error: true
         uses: actions/github-script@v7
         with:
           script: |
-            const { data } = await github.rest.actions.listArtifactsForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              per_page: 100,
-            });
-            const found = data.artifacts.find(a => a.name === "allure-history" && !a.expired);
-            core.setOutput("found", found ? "true" : "false");
+            try {
+              const { data } = await github.rest.actions.listArtifactsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                per_page: 100,
+              });
+              const found = data.artifacts.find(a => a.name === "allure-history" && !a.expired);
+              core.setOutput("found", found ? "true" : "false");
+            } catch (err) {
+              core.setOutput("found", "false");
+              core.notice(`Allure history check skipped: ${err.message}`);
+            }
 
       - name: Download Allure history
         uses: actions/download-artifact@v4
