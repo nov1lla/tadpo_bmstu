@@ -45,6 +45,7 @@ jobs:
       - name: Ensure report artifacts
         if: always()
         run: |
+          sudo chown -R "$USER":"$USER" code/product/test-report || true
           mkdir -p code/product/test-report/allure-history
           touch code/product/test-report/allure-history/.keep
           mkdir -p code/product/test-report
