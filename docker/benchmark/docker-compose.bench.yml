@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    cpus: ${POSTGRES_CPUS:-1.0}
+    mem_limit: ${POSTGRES_MEM:-1g}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  db-migrate:
+    image: postgres:13.3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_HOST: postgres
+    volumes:
+      - ../../code/components/data/migrations:/migrations:ro
+      - ./migrate.sh:/migrate.sh:ro
+    command: ["/bin/bash", "/migrate.sh"]
+
+  webapp:
+    image: ${WEBAPP_IMAGE}
+    depends_on:
+      db-migrate:
+        condition: service_completed_successfully
+    environment:
+      WEBAPP_ADDR: :8080
+      WEBAPP_STATIC_DIR: /app/static
+      DATA_PLUGIN_PATH: /app/plugins/data.so
+      BUSINESS_PLUGIN_PATH: /app/plugins/business.so
+      DATA_SOURCE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+    cpus: ${WEBAPP_CPUS:-1.0}
+    mem_limit: ${WEBAPP_MEM:-1g}
+    ports:
+      - "${WEBAPP_PORT}:8080"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    command:
+      - "--housekeeping_interval=1s"
+
+  prometheus:
+    image: prom/prometheus:v2.49.1
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "${PROMETHEUS_PORT}:9090"
+    depends_on:
+      - cadvisor

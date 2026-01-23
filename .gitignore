@@ -3,5 +3,6 @@ code/product/traffic/
 code/product/build/
 code/components/webui/node_modules/
 code/components/webui/dist/assets/
-benchmark/
+benchmark/results/
+benchmark/.venv/
 ppo_project_backup.tar.gz
