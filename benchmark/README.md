@@ -39,6 +39,10 @@ WEBAPP_CPUS=1.0 WEBAPP_MEM=1g POSTGRES_CPUS=1.0 POSTGRES_MEM=1g K6_CPUS=1.0 K6_M
   RUNS=100 ./benchmark/run_benchmarks.sh
 ```
 
+## Ускорение сборки (кэш Go)
+Для ускорения сборки используется Docker BuildKit и кеш слоёв/модулей.
+Кеш хранится в `benchmark/.docker-cache` и не меняет требование \"отдельный образ на каждый прогон\".
+
 ## Артефакты
 - `benchmark/results/run_*/k6.json` — сырые метрики k6
 - `benchmark/results/run_*/summary.json` — сводка по прогонам

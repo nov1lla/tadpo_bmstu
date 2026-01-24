@@ -14,18 +14,19 @@
 1) **Не менее 100 испытаний и статистика**
 - Где: `benchmark/run_benchmarks.sh` (переменная `RUNS=100` по умолчанию)
 - Как показать:
-  - `RUNS=100 ./benchmark/run_benchmarks.sh`
-  - Итоговый агрегат: `benchmark/results/summary/summary.json`
+  - запусти `RUNS=100 ./benchmark/run_benchmarks.sh`
+  - в `benchmark/results/summary/summary.json` есть агрегированная статистика по 100 прогонам
 
 2) **Несколько сценариев (degradation/peak/recovery)**
 - Где: `benchmark/k6/scenarios.js`
 - Как показать:
-  - в файле есть `scenarios: degradation/peak/recovery`
+  - в блоке `export const options` описаны `degradation`, `peak`, `recovery`
 
 3) **Отдельный docker‑образ на прогон, одна конфигурация**
 - Где: `benchmark/run_benchmarks.sh`, `docker/benchmark/Dockerfile`
 - Как показать:
-  - каждый прогон строит image с уникальным тегом и `BENCH_RUN_ID`
+  - в `run_benchmarks.sh` для каждого прогона создается `WEBAPP_IMAGE=tadpo-bench-webapp:<run_id>`
+  - в `docker/benchmark/Dockerfile` есть `ARG BENCH_RUN_ID` и `LABEL bench.run_id=...`
 
 4) **График во времени, перцентили, гистограмма (0.5/0.75/0.9/0.95/0.99)**
 - Где: `benchmark/scripts/analyze_run.py`
@@ -33,6 +34,7 @@
   - `benchmark/results/run_*/latency_timeseries.png`
   - `benchmark/results/run_*/latency_percentiles.png`
   - `benchmark/results/run_*/latency_histogram.png`
+  - в `summary.json` есть `p50/p75/p90/p95/p99`
 
 5) **2–3 параметра**
 - Где: `benchmark/k6/scenarios.js` (endpoint tags)
@@ -40,7 +42,7 @@
   - низкая нагрузка/серилизация: `users.create`
   - средняя: `games.move`
   - тяжелая: `games.create`, `games.moves`
-  - per‑endpoint статистика в `benchmark/results/run_*/summary.json`
+  - per‑endpoint статистика в `benchmark/results/run_*/summary.json` (секция `endpoints`)
 
 6) **Снятие ресурсов CPU/RAM/IO + графики + JSON**
 - Где: `docker/benchmark/docker-compose.bench.yml` (cAdvisor + Prometheus),
@@ -52,29 +54,31 @@
 7) **Готовый инструмент нагрузки**
 - Где: `benchmark/k6/scenarios.js`
 - Как показать:
-  - `k6` контейнер запускается в `benchmark/run_benchmarks.sh`
+  - `k6` контейнер запускается в `benchmark/run_benchmarks.sh` (образ `grafana/k6`)
 
 8) **Свой генератор — допустимо**
-- Не используется, т.к. выбран k6
+- Не используется, выбран k6 (см. пункт 7)
 
 9) **Не использовать готовый бенчмарк «из коробки»**
-- Реализован свой сценарий в `benchmark/k6/scenarios.js`
+- Где: `benchmark/k6/scenarios.js`
+- Как показать:
+  - сценарий свой, основан на наших API (`/api/users`, `/api/games`, `/moves`)
 
 10) **Один хост, фиксированные ресурсы**
 - Где: `benchmark/run_benchmarks.sh`, `docker/benchmark/docker-compose.bench.yml`
 - Как показать:
-  - `WEBAPP_CPUS/WEBAPP_MEM` и `POSTGRES_CPUS/POSTGRES_MEM` фиксируют ресурсы
-  - `K6_CPUS/K6_MEM` для генератора нагрузки
+  - запустить с `WEBAPP_CPUS/WEBAPP_MEM` и `POSTGRES_CPUS/POSTGRES_MEM`
+  - `K6_CPUS/K6_MEM` фиксирует генератор нагрузки
 
 11) **Ожидаемый способ использования (a–f)**
 - Где: `benchmark/run_benchmarks.sh`
 - Как показать:
-  a. Поднять docker‑образ: `docker/benchmark/Dockerfile` (build)
-  b. Запустить тесты: `k6 run ...`
+  a. Поднять docker‑образ: `docker/benchmark/Dockerfile` (build на каждый прогон)
+  b. Запустить тесты: `k6 run ...` (внутри `benchmark/run_benchmarks.sh`)
   c. Собрать статистику: `k6.json`, `resources.json`, `summary.json`
   d. Повторить 100 раз: `RUNS=100`
   e. Итоговый отчет: `benchmark/results/summary/summary.json`, `p95_trend.png`
-  f. Альтернативный объект: заменить Dockerfile/образ и повторить
+  f. Альтернативный объект: подменить `WEBAPP_IMAGE` на другой образ и повторить те же шаги
 
 ## Быстрый показ
 

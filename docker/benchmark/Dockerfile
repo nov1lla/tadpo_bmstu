@@ -1,6 +1,17 @@
 FROM golang:1.20-bullseye AS build
 
 WORKDIR /src
+
+COPY code/components/data/go.mod code/components/data/go.sum code/components/data/
+COPY code/components/business/go.mod code/components/business/go.sum code/components/business/
+COPY code/apps/webapp/go.mod code/apps/webapp/
+COPY code/sdk/go.mod code/sdk/
+
+RUN set -eu; \
+    cd code/components/data && go mod download; \
+    cd /src/code/components/business && go mod download; \
+    cd /src/code/apps/webapp && go mod download
+
 COPY . .
 ARG BENCH_RUN_ID=default
 LABEL bench.run_id=${BENCH_RUN_ID}

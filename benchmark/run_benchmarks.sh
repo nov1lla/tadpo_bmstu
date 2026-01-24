@@ -12,6 +12,7 @@ K6_CPUS=${K6_CPUS:-1.0}
 K6_MEM=${K6_MEM:-512m}
 
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+VENV_DIR=${VENV_DIR:-"${ROOT_DIR}/benchmark/.venv"}
 
 mkdir -p "${RESULTS_DIR}"
 
@@ -21,7 +22,19 @@ else
   COMPOSE_CMD=(docker-compose)
 fi
 
-python3 - <<'PY' 2>/dev/null || python3 -m pip install -r "${ROOT_DIR}/benchmark/scripts/requirements.txt"
+if docker buildx version >/dev/null 2>&1; then
+  BUILDKIT_AVAILABLE=1
+else
+  BUILDKIT_AVAILABLE=0
+fi
+
+if [ ! -x "${VENV_DIR}/bin/python" ]; then
+  python3 -m venv "${VENV_DIR}"
+fi
+
+PYTHON="${VENV_DIR}/bin/python"
+
+${PYTHON} - <<'PY' 2>/dev/null || ${PYTHON} -m pip install -r "${ROOT_DIR}/benchmark/scripts/requirements.txt"
 import matplotlib
 print("matplotlib available")
 PY
@@ -48,11 +61,22 @@ for i in $(seq -w 1 "${RUNS}"); do
   chmod 777 "${RUN_DIR}"
 
   echo "==> ${RUN_ID}: building image ${WEBAPP_IMAGE}"
-  docker build \
-    -f "${ROOT_DIR}/docker/benchmark/Dockerfile" \
-    --build-arg BENCH_RUN_ID="${RUN_ID}" \
-    -t "${WEBAPP_IMAGE}" \
-    "${ROOT_DIR}"
+  if [ "${BUILDKIT_AVAILABLE}" -eq 1 ]; then
+    DOCKER_BUILDKIT=1 docker build \
+      -f "${ROOT_DIR}/docker/benchmark/Dockerfile" \
+      --build-arg BENCH_RUN_ID="${RUN_ID}" \
+      --cache-from type=local,src="${ROOT_DIR}/benchmark/.docker-cache" \
+      --cache-to type=local,dest="${ROOT_DIR}/benchmark/.docker-cache",mode=max \
+      -t "${WEBAPP_IMAGE}" \
+      "${ROOT_DIR}"
+  else
+    echo "BuildKit/buildx not available; building without cache."
+    DOCKER_BUILDKIT=0 docker build \
+      -f "${ROOT_DIR}/docker/benchmark/Dockerfile" \
+      --build-arg BENCH_RUN_ID="${RUN_ID}" \
+      -t "${WEBAPP_IMAGE}" \
+      "${ROOT_DIR}"
+  fi
 
   export WEBAPP_IMAGE
   export WEBAPP_PORT

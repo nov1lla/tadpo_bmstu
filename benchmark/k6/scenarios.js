@@ -65,6 +65,11 @@ function deleteGame(gameID) {
   check(res, { 'games.delete status 204': (r) => r.status === 204 });
 }
 
+// Нагрузка и сценарии:
+// - degradation: плавный рост нагрузки
+// - peak: удержание максимальной нагрузки
+// - recovery: спад после перегруза
+// Сохраняем метрики latency и перцентили по всем запросам и по каждому endpoint (через tags).
 export const options = {
   systemTags: ['status', 'method', 'name', 'scenario'],
   scenarios: {

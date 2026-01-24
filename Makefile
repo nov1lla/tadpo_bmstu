@@ -163,3 +163,15 @@ test-ci-docker-down:
 	else \
 		docker-compose -f docker/docker-compose.test.yml down -v; \
 	fi
+
+.PHONY: bench
+bench:
+	RUNS=1 ./benchmark/run_benchmarks.sh
+
+.PHONY: bench-100
+bench-100:
+	RUNS=100 ./benchmark/run_benchmarks.sh
+
+.PHONY: bench-clean
+bench-clean:
+	rm -rf benchmark/results
