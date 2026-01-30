@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-RUNS=${RUNS:-100}
+RUNS=${RUNS:-15}
+START_AT=${START_AT:-1}
 RESULTS_DIR=${RESULTS_DIR:-benchmark/results}
 PROJECT_PREFIX=${PROJECT_PREFIX:-bench}
 WEBAPP_CPUS=${WEBAPP_CPUS:-1.0}
@@ -10,6 +11,11 @@ POSTGRES_CPUS=${POSTGRES_CPUS:-1.0}
 POSTGRES_MEM=${POSTGRES_MEM:-1g}
 K6_CPUS=${K6_CPUS:-1.0}
 K6_MEM=${K6_MEM:-512m}
+CLEAN_DOCKER=${CLEAN_DOCKER:-1}
+# Extra safety to prevent disk from filling up on long benchmark sessions.
+# These options never touch benchmark results; they only clean Docker artifacts.
+PRUNE_DOCKER=${PRUNE_DOCKER:-1}
+MIN_FREE_GB=${MIN_FREE_GB:-5}
 
 ROOT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
 VENV_DIR=${VENV_DIR:-"${ROOT_DIR}/benchmark/.venv"}
@@ -49,7 +55,41 @@ s.close()
 PY
 }
 
-for i in $(seq -w 1 "${RUNS}"); do
+free_gb() {
+  # df output format: ... Available 1K-blocks ...; convert to GB.
+  df -Pk "${ROOT_DIR}" | awk 'NR==2 {printf "%.2f\n", $4/1024/1024}'
+}
+
+ensure_free_space() {
+  local free
+  free=$(free_gb)
+  # Compare floats via python to avoid bc dependency.
+  "${PYTHON}" - <<PY
+free = float("${free}")
+min_free = float("${MIN_FREE_GB}")
+raise SystemExit(0 if free >= min_free else 1)
+PY
+}
+
+prune_docker_artifacts() {
+  if [ "${PRUNE_DOCKER}" -ne 1 ]; then
+    return 0
+  fi
+
+  # Safe-ish pruning: removes only *stopped* containers and *dangling* images.
+  # This prevents the machine from slowly filling up with leftovers between runs.
+  docker container prune -f >/dev/null 2>&1 || true
+  docker image prune -f >/dev/null 2>&1 || true
+}
+
+END_AT=$((START_AT + RUNS - 1))
+for i in $(seq -w "${START_AT}" "${END_AT}"); do
+  if ! ensure_free_space; then
+    echo "Not enough free disk space to continue (need >= ${MIN_FREE_GB}GB). Free now: $(free_gb)GB" >&2
+    echo "Hint: run 'make bench-prune-docker' (or set PRUNE_DOCKER=1) and retry." >&2
+    exit 1
+  fi
+
   RUN_ID="run_${i}_$(date +%s)"
   PROJECT_NAME="${PROJECT_PREFIX}_${USER:-user}_${i}_${RANDOM}"
   WEBAPP_IMAGE="tadpo-bench-webapp:${RUN_ID}"
@@ -91,6 +131,10 @@ for i in $(seq -w 1 "${RUNS}"); do
 
   cleanup() {
     "${COMPOSE_CMD[@]}" -f "${ROOT_DIR}/docker/benchmark/docker-compose.bench.yml" -p "${PROJECT_NAME}" down -v >/dev/null 2>&1 || true
+    if [ "${CLEAN_DOCKER}" -eq 1 ]; then
+      docker image rm -f "${WEBAPP_IMAGE}" >/dev/null 2>&1 || true
+    fi
+    prune_docker_artifacts
   }
   trap cleanup EXIT
 

@@ -92,6 +92,74 @@ func (uc *moveUseCase) AddUserMove(ctx context.Context, cmd sdkusecase.AddUserMo
 	return move, nil
 }
 
+func (uc *moveUseCase) AddOpponentMove(ctx context.Context, cmd sdkusecase.AddOpponentMoveCommand) (domain.Move, error) {
+	if uc.ids == nil {
+		return domain.Move{}, errors.New("id generator not configured")
+	}
+	if cmd.GameID == "" {
+		return domain.Move{}, errors.New("game id is required")
+	}
+	game, err := uc.gameRepo.GetByID(ctx, cmd.GameID)
+	if err != nil {
+		return domain.Move{}, err
+	}
+
+	board, err := uc.gameRepo.BoardState(ctx, cmd.GameID)
+	if err != nil {
+		return domain.Move{}, err
+	}
+	allMoves, err := uc.moveRepo.ListByGame(ctx, cmd.GameID)
+	if err != nil {
+		return domain.Move{}, err
+	}
+	currentTurn := determineTurnColor(game, len(allMoves))
+	opponentColor := game.PlayerColor.Opponent()
+	if currentTurn != opponentColor {
+		return domain.Move{}, errors.New("not opponent's turn")
+	}
+	piece, ok := board.PieceAt(cmd.StartPosition)
+	if !ok {
+		return domain.Move{}, errors.New("no piece at specified start position")
+	}
+	if piece.Color != opponentColor {
+		return domain.Move{}, errors.New("cannot move player piece")
+	}
+	trajectory, err := buildTrajectory(uc.rules, board, piece, cmd.Trajectory, cmd.EndPosition, true)
+	if err != nil {
+		return domain.Move{}, err
+	}
+	number := domain.MoveNumber(len(allMoves) + 1)
+	createdAt := timestampOrNow(cmd.PerformedAt)
+	moveID := domain.MoveID(uc.ids.NewID())
+	move, err := domain.NewMove(moveID, cmd.GameID, piece.ID, number, piece.Position, trajectory, createdAt)
+	if err != nil {
+		return domain.Move{}, err
+	}
+	updatedBoard, _, err := uc.rules.ValidateAndApplyMove(board, piece, trajectory, opponentColor)
+	if err != nil {
+		return domain.Move{}, err
+	}
+
+	if err := uc.moveRepo.Add(ctx, move); err != nil {
+		return domain.Move{}, err
+	}
+	if err := uc.gameRepo.UpdateBoardState(ctx, game.ID, updatedBoard); err != nil {
+		return domain.Move{}, err
+	}
+
+	game, err = startGameIfNeeded(ctx, game, uc.gameRepo)
+	if err != nil {
+		return domain.Move{}, err
+	}
+	if isVictory(updatedBoard, opponentColor.Opponent()) {
+		if err := finishGame(ctx, uc.gameRepo, game); err != nil {
+			return domain.Move{}, err
+		}
+	}
+
+	return move, nil
+}
+
 func (uc *moveUseCase) GetOpponentMove(ctx context.Context, cmd sdkusecase.GetOpponentMoveCommand) (domain.Move, error) {
 	if uc.ids == nil {
 		return domain.Move{}, errors.New("id generator not configured")

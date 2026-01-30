@@ -301,6 +301,12 @@ func (s *Server) handleGameByID(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		s.applyOpponentMove(w, r, gameID)
+	case "opponent-move-manual":
+		if r.Method != http.MethodPost {
+			writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
+			return
+		}
+		s.applyManualOpponentMove(w, r, gameID)
 	default:
 		writeError(w, http.StatusNotFound, errors.New("unknown game resource"))
 	}
@@ -412,6 +418,56 @@ func (s *Server) applyOpponentMove(w http.ResponseWriter, r *http.Request, id do
 		return
 	}
 	move, err := s.moves.GetOpponentMove(r.Context(), sdkusecase.GetOpponentMoveCommand{GameID: id, Difficulty: difficulty})
+	if err != nil {
+		writeError(w, http.StatusBadRequest, err)
+		return
+	}
+	board, err := s.games.GetChessboard(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+	opponentAnimation := s.buildAnimation(preBoard, move)
+	history, err := s.games.GenerateHistory(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, moveOutcomeDTO{
+		OpponentMove: newMoveDTOPtr(move),
+		Board:        newBoardDTO(board),
+		History:      newMovesDTO(history),
+		OpponentAnim: opponentAnimation,
+	})
+}
+
+func (s *Server) applyManualOpponentMove(w http.ResponseWriter, r *http.Request, id domain.GameID) {
+	var req userMoveRequest
+	if err := decodeJSON(r.Context(), r.Body, &req); err != nil {
+		writeError(w, http.StatusBadRequest, err)
+		return
+	}
+	if len(req.Steps) == 0 {
+		writeError(w, http.StatusBadRequest, errors.New("move steps required"))
+		return
+	}
+	trajectory := make([]domain.Position, 0, len(req.Steps))
+	for _, step := range req.Steps {
+		trajectory = append(trajectory, domain.Position{Row: domain.Coordinate(step.Row), Col: domain.Coordinate(step.Col)})
+	}
+	end := trajectory[len(trajectory)-1]
+	preBoard, err := s.games.GetChessboard(r.Context(), id)
+	if err != nil {
+		writeError(w, http.StatusInternalServerError, err)
+		return
+	}
+	cmd := sdkusecase.AddOpponentMoveCommand{
+		GameID:        id,
+		StartPosition: domain.Position{Row: domain.Coordinate(req.Start.Row), Col: domain.Coordinate(req.Start.Col)},
+		Trajectory:    trajectory,
+		EndPosition:   &end,
+	}
+	move, err := s.moves.AddOpponentMove(r.Context(), cmd)
 	if err != nil {
 		writeError(w, http.StatusBadRequest, err)
 		return

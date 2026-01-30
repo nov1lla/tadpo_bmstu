@@ -57,10 +57,19 @@ type FinishGameCommand struct {
 
 type MoveUseCase interface {
 	AddUserMove(ctx context.Context, cmd AddUserMoveCommand) (domain.Move, error)
+	AddOpponentMove(ctx context.Context, cmd AddOpponentMoveCommand) (domain.Move, error)
 	GetOpponentMove(ctx context.Context, cmd GetOpponentMoveCommand) (domain.Move, error)
 }
 
 type AddUserMoveCommand struct {
+	GameID        domain.GameID
+	StartPosition domain.Position
+	Trajectory    []domain.Position
+	EndPosition   *domain.Position
+	PerformedAt   *domain.Timestamp
+}
+
+type AddOpponentMoveCommand struct {
 	GameID        domain.GameID
 	StartPosition domain.Position
 	Trajectory    []domain.Position

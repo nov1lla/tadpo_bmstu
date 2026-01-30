@@ -7,4 +7,7 @@ code/product/traffic
 code/product/build
 code/apps/webapp/build
 code/apps/webapp/runtime
+benchmark/results
+benchmark/.venv
+benchmark/.docker-cache
 ppo_project_backup.tar.gz

@@ -168,10 +168,28 @@ test-ci-docker-down:
 bench:
 	RUNS=1 ./benchmark/run_benchmarks.sh
 
+.PHONY: bench-15
+bench-15:
+	RUNS=15 ./benchmark/run_benchmarks.sh
+
+.PHONY: bench-resume
+bench-resume:
+	@if [ -z "$$START_AT" ]; then echo "Usage: make bench-resume START_AT=13 RUNS=3"; exit 1; fi
+	@RUNS=$${RUNS:-15} START_AT=$$START_AT ./benchmark/run_benchmarks.sh
+
 .PHONY: bench-100
 bench-100:
 	RUNS=100 ./benchmark/run_benchmarks.sh
 
-.PHONY: bench-clean
-bench-clean:
+.PHONY: bench-prune-docker
+bench-prune-docker:
+	# Safe cleanup: no benchmark results are touched.
+	@docker container prune -f >/dev/null 2>&1 || true
+	@docker image prune -f >/dev/null 2>&1 || true
+	@docker image ls --format '{{.Repository}}:{{.Tag}}' | rg '^tadpo-bench-webapp:' | xargs -r docker image rm -f >/dev/null 2>&1 || true
+	@echo "Docker cleanup done."
+
+.PHONY: bench-clean-results
+bench-clean-results:
+	@echo "WARNING: this deletes benchmark results in ./benchmark/results"
 	rm -rf benchmark/results

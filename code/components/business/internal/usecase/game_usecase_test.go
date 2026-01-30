@@ -36,6 +36,10 @@ func (m *moveUseCaseStub) AddUserMove(ctx context.Context, cmd sdkusecase.AddUse
 	return m.move, m.err
 }
 
+func (m *moveUseCaseStub) AddOpponentMove(ctx context.Context, cmd sdkusecase.AddOpponentMoveCommand) (domain.Move, error) {
+	return domain.Move{}, errors.New("not implemented")
+}
+
 func (m *moveUseCaseStub) GetOpponentMove(ctx context.Context, cmd sdkusecase.GetOpponentMoveCommand) (domain.Move, error) {
 	return domain.Move{}, errors.New("not implemented")
 }
