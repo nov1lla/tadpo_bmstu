@@ -77,7 +77,7 @@ test-unit-shuffle:
 	go test ./... -count=1 -shuffle=on
 	cd ../data
 	go test ./... -count=1 -shuffle=on
-	cd ../sdk
+	cd ../../sdk
 	go test ./... -count=1 -shuffle=on
 
 .PHONY: test-unit-offline
@@ -86,7 +86,7 @@ test-unit-offline:
 	GONOSUMDB='*' GOPROXY=off go test ./... -count=1
 	cd ../data
 	GONOSUMDB='*' GOPROXY=off go test ./... -count=1
-	cd ../sdk
+	cd ../../sdk
 	GONOSUMDB='*' GOPROXY=off go test ./... -count=1
 
 .PHONY: test-unit-serial
@@ -95,7 +95,7 @@ test-unit-serial:
 	go test ./... -count=1 -p=1
 	cd ../data
 	go test ./... -count=1 -p=1
-	cd ../sdk
+	cd ../../sdk
 	go test ./... -count=1 -p=1
 
 .PHONY: test-junit
@@ -105,7 +105,7 @@ test-junit:
 	go run gotest.tools/gotestsum@latest --format standard-quiet --junitfile $(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/unit-business-junit.xml -- -count=1 ./...
 	cd ../data
 	go run gotest.tools/gotestsum@latest --format standard-quiet --junitfile $(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/unit-data-junit.xml -- -count=1 ./...
-	cd ../sdk
+	cd ../../sdk
 	go run gotest.tools/gotestsum@latest --format standard-quiet --junitfile $(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/unit-sdk-junit.xml -- -count=1 ./...
 
 .PHONY: test-integration-junit

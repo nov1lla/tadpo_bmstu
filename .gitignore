@@ -7,3 +7,6 @@ benchmark/results/
 benchmark/.venv/
 benchmark/.docker-cache/
 ppo_project_backup.tar.gz
+
+# local build artifacts
+code/apps/webapp/webapp
