@@ -175,25 +175,11 @@ func findCaptureSequence(board domain.BoardState, piece domain.BoardPiece) ([]do
 		found := false
 		directions := []struct{ dr, dc int }{{2, 2}, {2, -2}, {-2, 2}, {-2, -2}}
 		for _, dir := range directions {
-			if current.Kind == domain.PieceKindMan && dir.dr/2 != current.Color.ForwardDirection() {
+			landing, victim, ok := captureCandidate(state, current, dir.dr, dir.dc)
+			if !ok {
 				continue
 			}
-			landing := domain.Position{Row: current.Position.Row + domain.Coordinate(dir.dr), Col: current.Position.Col + domain.Coordinate(dir.dc)}
-			if !landing.IsInside(state.Size) {
-				continue
-			}
-			if _, occupied := state.PieceAt(landing); occupied {
-				continue
-			}
-			middle := domain.Position{Row: current.Position.Row + domain.Coordinate(dir.dr/2), Col: current.Position.Col + domain.Coordinate(dir.dc/2)}
-			victim, ok := state.PieceAt(middle)
-			if !ok || victim.Color == current.Color {
-				continue
-			}
-			newBoard := state.RemovePiece(current.ID).RemovePiece(victim.ID)
-			newPiece := current
-			newPiece.Position = landing
-			newBoard = newBoard.WithPiece(newPiece)
+			newBoard, newPiece := applyCapture(state, current, victim, landing)
 			newPath := append(path, landing)
 			if dfs(newBoard, newPiece, newPath) {
 				return true
@@ -213,6 +199,33 @@ func findCaptureSequence(board domain.BoardState, piece domain.BoardPiece) ([]do
 		return result, true
 	}
 	return nil, false
+}
+
+func captureCandidate(state domain.BoardState, current domain.BoardPiece, dr, dc int) (domain.Position, domain.BoardPiece, bool) {
+	if current.Kind == domain.PieceKindMan && dr/2 != current.Color.ForwardDirection() {
+		return domain.Position{}, domain.BoardPiece{}, false
+	}
+	landing := domain.Position{Row: current.Position.Row + domain.Coordinate(dr), Col: current.Position.Col + domain.Coordinate(dc)}
+	if !landing.IsInside(state.Size) {
+		return domain.Position{}, domain.BoardPiece{}, false
+	}
+	if _, occupied := state.PieceAt(landing); occupied {
+		return domain.Position{}, domain.BoardPiece{}, false
+	}
+	middle := domain.Position{Row: current.Position.Row + domain.Coordinate(dr/2), Col: current.Position.Col + domain.Coordinate(dc/2)}
+	victim, ok := state.PieceAt(middle)
+	if !ok || victim.Color == current.Color {
+		return domain.Position{}, domain.BoardPiece{}, false
+	}
+	return landing, victim, true
+}
+
+func applyCapture(state domain.BoardState, current domain.BoardPiece, victim domain.BoardPiece, landing domain.Position) (domain.BoardState, domain.BoardPiece) {
+	newBoard := state.RemovePiece(current.ID).RemovePiece(victim.ID)
+	newPiece := current
+	newPiece.Position = landing
+	newBoard = newBoard.WithPiece(newPiece)
+	return newBoard, newPiece
 }
 
 func findSimpleMove(rules domain.CheckersRules, board domain.BoardState, mover domain.PlayerColor) (domain.BoardPiece, []domain.Position, bool) {

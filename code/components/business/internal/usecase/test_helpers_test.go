@@ -54,11 +54,11 @@ func (b *UserBuilder) Build() domain.User {
 }
 
 type GameBuilder struct {
-	id           domain.GameID
-	userID       domain.UserID
-	color        domain.PlayerColor
+	id            domain.GameID
+	userID        domain.UserID
+	color         domain.PlayerColor
 	isPlayerFirst bool
-	start        domain.Timestamp
+	start         domain.Timestamp
 }
 
 func NewGameBuilder() *GameBuilder {
@@ -101,24 +101,24 @@ func (b *GameBuilder) Build() domain.Game {
 }
 
 type MoveBuilder struct {
-	id        domain.MoveID
-	gameID    domain.GameID
-	pieceID   domain.PieceID
-	number    domain.MoveNumber
-	start     domain.Position
+	id         domain.MoveID
+	gameID     domain.GameID
+	pieceID    domain.PieceID
+	number     domain.MoveNumber
+	start      domain.Position
 	trajectory []domain.Position
-	createdAt domain.Timestamp
+	createdAt  domain.Timestamp
 }
 
 func NewMoveBuilder() *MoveBuilder {
 	return &MoveBuilder{
-		id:        "move-default",
-		gameID:    "game-default",
-		pieceID:   "piece-default",
-		number:    1,
-		start:     domain.Position{Row: 5, Col: 0},
+		id:         "move-default",
+		gameID:     "game-default",
+		pieceID:    "piece-default",
+		number:     1,
+		start:      domain.Position{Row: 5, Col: 0},
 		trajectory: []domain.Position{{Row: 4, Col: 1}},
-		createdAt: domain.NewTimestamp(time.Date(2024, 1, 1, 10, 5, 0, 0, time.UTC)),
+		createdAt:  domain.NewTimestamp(time.Date(2024, 1, 1, 10, 5, 0, 0, time.UTC)),
 	}
 }
 

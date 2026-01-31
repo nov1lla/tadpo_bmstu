@@ -31,30 +31,8 @@ func Setup(ctx context.Context, cfg Config) (func(context.Context) error, error)
 	if cfg.OTLPEndpoint == "" {
 		return nil, errors.New("OTLP endpoint is empty")
 	}
-	if cfg.ServiceName == "" {
-		cfg.ServiceName = "webapp"
-	}
-	if cfg.SampleRatio <= 0 {
-		cfg.SampleRatio = 1.0
-	}
-
-	endpoint := strings.TrimSpace(cfg.OTLPEndpoint)
-	var opts []otlptracehttp.Option
-	opts = append(opts, otlptracehttp.WithTimeout(5*time.Second))
-
-	if parsed, err := url.Parse(endpoint); err == nil && parsed.Host != "" {
-		opts = append(opts, otlptracehttp.WithEndpoint(parsed.Host))
-		if strings.EqualFold(parsed.Scheme, "http") {
-			opts = append(opts, otlptracehttp.WithInsecure())
-		}
-		if parsed.Path != "" && parsed.Path != "/" {
-			opts = append(opts, otlptracehttp.WithURLPath(parsed.Path))
-		}
-	} else {
-		// Accept plain "host:port" too.
-		opts = append(opts, otlptracehttp.WithEndpoint(endpoint))
-		opts = append(opts, otlptracehttp.WithInsecure())
-	}
+	cfg = normalizeConfig(cfg)
+	opts := buildOTLPTraceOptions(cfg.OTLPEndpoint)
 
 	exporter, err := otlptracehttp.New(ctx, opts...)
 	if err != nil {
@@ -83,6 +61,50 @@ func Setup(ctx context.Context, cfg Config) (func(context.Context) error, error)
 	))
 
 	return tp.Shutdown, nil
+}
+
+func normalizeConfig(cfg Config) Config {
+	if cfg.ServiceName == "" {
+		cfg.ServiceName = "webapp"
+	}
+	if cfg.SampleRatio <= 0 {
+		cfg.SampleRatio = 1.0
+	}
+	return cfg
+}
+
+func buildOTLPTraceOptions(endpoint string) []otlptracehttp.Option {
+	endpoint = strings.TrimSpace(endpoint)
+
+	opts := []otlptracehttp.Option{
+		otlptracehttp.WithTimeout(5 * time.Second),
+	}
+
+	parsed, err := url.Parse(endpoint)
+	if err == nil && parsed.Host != "" {
+		return append(opts, otlpOptionsFromURL(*parsed)...)
+	}
+
+	// Accept plain "host:port" too.
+	opts = append(opts, otlptracehttp.WithEndpoint(endpoint))
+	opts = append(opts, otlptracehttp.WithInsecure())
+	return opts
+}
+
+func otlpOptionsFromURL(parsed url.URL) []otlptracehttp.Option {
+	opts := []otlptracehttp.Option{
+		otlptracehttp.WithEndpoint(parsed.Host),
+	}
+
+	if strings.EqualFold(parsed.Scheme, "http") {
+		opts = append(opts, otlptracehttp.WithInsecure())
+	}
+
+	if parsed.Path != "" && parsed.Path != "/" {
+		opts = append(opts, otlptracehttp.WithURLPath(parsed.Path))
+	}
+
+	return opts
 }
 
 func WrapHandler(next http.Handler, enabled bool) http.Handler {

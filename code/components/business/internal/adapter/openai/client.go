@@ -34,10 +34,10 @@ func (e APIError) Error() string {
 }
 
 type Client struct {
-	httpClient *http.Client
-	baseURL    string
-	model      string
-	apiKey     string
+	httpClient  *http.Client
+	baseURL     string
+	model       string
+	apiKey      string
 	temperature float64
 	hasTemp     bool
 }
@@ -105,15 +105,26 @@ func (c *Client) SuggestMove(ctx context.Context, req port.OpponentMoveRequest) 
 	if err != nil {
 		return domain.Move{}, err
 	}
-
-	body, err := json.Marshal(payload)
+	completion, err := c.sendChatCompletion(ctx, payload)
 	if err != nil {
 		return domain.Move{}, err
+	}
+	move, err := c.parseMoveFromCompletion(completion)
+	if err != nil {
+		return domain.Move{}, err
+	}
+	return c.toDomainMove(req, move)
+}
+
+func (c *Client) sendChatCompletion(ctx context.Context, payload chatCompletionRequest) (completionResponse, error) {
+	body, err := json.Marshal(payload)
+	if err != nil {
+		return completionResponse{}, err
 	}
 
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.baseURL, bytes.NewReader(body))
 	if err != nil {
-		return domain.Move{}, err
+		return completionResponse{}, err
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
 	httpReq.Header.Set("Authorization", fmt.Sprintf("Bearer %s", c.apiKey))
@@ -121,19 +132,19 @@ func (c *Client) SuggestMove(ctx context.Context, req port.OpponentMoveRequest) 
 	start := time.Now()
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
-		return domain.Move{}, err
+		return completionResponse{}, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= http.StatusMultipleChoices {
 		bodyBytes, _ := io.ReadAll(resp.Body)
 		log.Printf("openai request failed: model=%s status=%d duration=%s", c.model, resp.StatusCode, time.Since(start))
-		return domain.Move{}, APIError{Status: resp.StatusCode, Body: string(bodyBytes)}
+		return completionResponse{}, APIError{Status: resp.StatusCode, Body: string(bodyBytes)}
 	}
 
 	var completion completionResponse
 	if err := json.NewDecoder(resp.Body).Decode(&completion); err != nil {
-		return domain.Move{}, err
+		return completionResponse{}, err
 	}
 	log.Printf("openai request done: model=%s status=%d duration=%s", c.model, resp.StatusCode, time.Since(start))
 	if completion.Usage != nil {
@@ -145,26 +156,28 @@ func (c *Client) SuggestMove(ctx context.Context, req port.OpponentMoveRequest) 
 			completion.Usage.TotalTokens,
 		)
 	}
+	return completion, nil
+}
+
+func (c *Client) parseMoveFromCompletion(completion completionResponse) (aiMoveResponse, error) {
 	if len(completion.Choices) == 0 {
-		return domain.Move{}, ErrEmptyResponse
+		return aiMoveResponse{}, ErrEmptyResponse
 	}
-
 	content := completion.Choices[0].Message.Content
-	var move aiMoveResponse
-	if err := json.Unmarshal([]byte(content), &move); err != nil {
 
-		move, err = parseJSONFromContent(content)
-		if err != nil {
-			return domain.Move{}, fmt.Errorf("%w: %v", ErrMalformedJSON, err)
-		}
+	move, err := parseJSONFromContent(content)
+	if err != nil {
+		return aiMoveResponse{}, fmt.Errorf("%w: %v", ErrMalformedJSON, err)
 	}
-
 	if err := move.validate(); err != nil {
-		return domain.Move{}, err
+		return aiMoveResponse{}, err
 	}
+	return move, nil
+}
 
+func (c *Client) toDomainMove(req port.OpponentMoveRequest, move aiMoveResponse) (domain.Move, error) {
 	trajectory := move.toTrajectory()
-	domainMove, err := domain.NewMove(
+	return domain.NewMove(
 		domain.MoveID(uuid.NewString()),
 		req.Game.ID,
 		domain.PieceID(move.PieceID),
@@ -173,10 +186,6 @@ func (c *Client) SuggestMove(ctx context.Context, req port.OpponentMoveRequest) 
 		trajectory,
 		domain.NewTimestamp(time.Now()),
 	)
-	if err != nil {
-		return domain.Move{}, err
-	}
-	return domainMove, nil
 }
 
 func (c *Client) buildRequest(req port.OpponentMoveRequest) (chatCompletionRequest, error) {
@@ -358,28 +367,46 @@ func colorLabel(color domain.PlayerColor) string {
 }
 
 func parseJSONFromContent(content string) (aiMoveResponse, error) {
-	trimmed := strings.TrimSpace(content)
-	var move aiMoveResponse
-
-	if err := json.Unmarshal([]byte(trimmed), &move); err == nil {
+	if move, ok := tryUnmarshalJSON(strings.TrimSpace(content)); ok {
 		return move, nil
 	}
-
-	if strings.HasPrefix(trimmed, "```") {
-		trimmed = strings.TrimPrefix(trimmed, "```")
-		trimmed = strings.TrimSpace(trimmed)
-		if idx := strings.IndexByte(trimmed, '\n'); idx != -1 {
-
-			trimmed = strings.TrimSpace(trimmed[idx+1:])
-		}
-		if endFence := strings.LastIndex(trimmed, "```"); endFence != -1 {
-			trimmed = trimmed[:endFence]
-		}
-		if err := json.Unmarshal([]byte(trimmed), &move); err == nil {
-			return move, nil
-		}
+	if move, ok := tryUnmarshalFencedJSON(content); ok {
+		return move, nil
 	}
+	move, err := extractFirstJSONObject(content)
+	if err != nil {
+		return aiMoveResponse{}, err
+	}
+	return move, nil
+}
 
+func tryUnmarshalJSON(raw string) (aiMoveResponse, bool) {
+	var move aiMoveResponse
+	if raw == "" {
+		return aiMoveResponse{}, false
+	}
+	if err := json.Unmarshal([]byte(raw), &move); err != nil {
+		return aiMoveResponse{}, false
+	}
+	return move, true
+}
+
+func tryUnmarshalFencedJSON(content string) (aiMoveResponse, bool) {
+	trimmed := strings.TrimSpace(content)
+	if !strings.HasPrefix(trimmed, "```") {
+		return aiMoveResponse{}, false
+	}
+	trimmed = strings.TrimSpace(strings.TrimPrefix(trimmed, "```"))
+	if idx := strings.IndexByte(trimmed, '\n'); idx != -1 {
+		trimmed = strings.TrimSpace(trimmed[idx+1:])
+	}
+	if endFence := strings.LastIndex(trimmed, "```"); endFence != -1 {
+		trimmed = trimmed[:endFence]
+	}
+	return tryUnmarshalJSON(strings.TrimSpace(trimmed))
+}
+
+func extractFirstJSONObject(content string) (aiMoveResponse, error) {
 	depth := 0
 	start := -1
 	var lastErr error
@@ -391,20 +418,21 @@ func parseJSONFromContent(content string) (aiMoveResponse, error) {
 			}
 			depth++
 		case '}':
-			if depth > 0 {
-				depth--
-				if depth == 0 && start != -1 {
-					fragment := content[start : i+1]
-					if err := json.Unmarshal([]byte(fragment), &move); err == nil {
-						return move, nil
-					} else {
-						lastErr = err
-					}
+			if depth == 0 {
+				continue
+			}
+			depth--
+			if depth == 0 && start != -1 {
+				fragment := content[start : i+1]
+				var move aiMoveResponse
+				if err := json.Unmarshal([]byte(fragment), &move); err == nil {
+					return move, nil
+				} else {
+					lastErr = err
 				}
 			}
 		}
 	}
-
 	if lastErr != nil {
 		return aiMoveResponse{}, lastErr
 	}

@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
+	"ppo/business/internal/adapter/openai"
 	"ppo/sdk/domain"
 	"ppo/sdk/port"
-	"ppo/business/internal/adapter/openai"
 )
 
 func TestClientSuggestMoveSuccess(t *testing.T) {

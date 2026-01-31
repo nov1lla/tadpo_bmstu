@@ -148,6 +148,20 @@ allure-open:
 test-ci:
 	./code/product/run_ci_tests.sh
 
+.PHONY: tools
+tools:
+	@echo "Installing golangci-lint..."
+	@GOTOOLCHAIN=local go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.55.2
+
+.PHONY: lint
+lint:
+	./code/product/run_static_checks.sh
+
+.PHONY: hooks-install
+hooks-install:
+	git config core.hooksPath .githooks
+	@echo "Git hooks installed (core.hooksPath=.githooks)"
+
 .PHONY: test-ci-docker
 test-ci-docker:
 	if docker compose version >/dev/null 2>&1; then \

@@ -1,0 +1,50 @@
+name: lab-06-static-analysis
+
+on:
+  push:
+    branches: ["lab_06"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  checks-and-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.x"
+
+      - name: Install tools
+        run: |
+          make tools
+
+      - name: Static checks (style + complexity + Halstead report)
+        run: |
+          make lint
+
+      - name: Run tests in Docker
+        env:
+          REPO_URL: https://${{ secrets.REPO_READ_TOKEN }}@github.com/robodanill/TADPO.git
+          REPO_REF: ${{ github.sha }}
+          RUN_TRAFFIC_CAPTURE: 1
+        run: |
+          docker compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner
+
+      - name: Shutdown containers
+        if: always()
+        run: |
+          docker compose -f docker/docker-compose.test.yml down -v
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: code/product/test-report
+

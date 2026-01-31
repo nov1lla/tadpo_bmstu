@@ -24,10 +24,10 @@ type Config struct {
 }
 
 type OpenAIConfig struct {
-	APIKey       string
-	Model        string
-	BaseURL      string
-	Temperature  float64
+	APIKey      string
+	Model       string
+	BaseURL     string
+	Temperature float64
 }
 
 type UIConfig struct {

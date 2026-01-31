@@ -7,9 +7,9 @@ import (
 )
 
 type MoveRepositoryMock struct {
-	GetByIDFunc    func(ctx context.Context, id domain.MoveID) (domain.Move, error)
-	AddFunc        func(ctx context.Context, move domain.Move) error
-	ListByGameFunc func(ctx context.Context, id domain.GameID) ([]domain.Move, error)
+	GetByIDFunc      func(ctx context.Context, id domain.MoveID) (domain.Move, error)
+	AddFunc          func(ctx context.Context, move domain.Move) error
+	ListByGameFunc   func(ctx context.Context, id domain.GameID) ([]domain.Move, error)
 	DeleteByGameFunc func(ctx context.Context, id domain.GameID) error
 }
 

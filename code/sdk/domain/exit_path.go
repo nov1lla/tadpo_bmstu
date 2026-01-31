@@ -9,14 +9,21 @@ func ComputeCaptureExitPath(start Position, boardSize BoardSize, owner PlayerCol
 		return []Position{start}
 	}
 
-	directionRow := -1
-	if owner == PlayerColorLight {
-		directionRow = 1
-	}
-
+	directionRow := captureDirectionRow(owner)
 	leftPath, leftRow, leftLen := captureExitPath(start, boardSize, directionRow, -1)
 	rightPath, rightRow, rightLen := captureExitPath(start, boardSize, directionRow, 1)
 
+	return chooseCaptureExitPath(owner, leftPath, rightPath, leftRow, rightRow, leftLen, rightLen)
+}
+
+func captureDirectionRow(owner PlayerColor) int {
+	if owner == PlayerColorLight {
+		return 1
+	}
+	return -1
+}
+
+func chooseCaptureExitPath(owner PlayerColor, leftPath []Position, rightPath []Position, leftRow int, rightRow int, leftLen int, rightLen int) []Position {
 	if len(leftPath) == 0 {
 		return rightPath
 	}
@@ -24,6 +31,18 @@ func ComputeCaptureExitPath(start Position, boardSize BoardSize, owner PlayerCol
 		return leftPath
 	}
 
+	preferred := compareCaptureExitLastInsideRow(owner, leftPath, rightPath, leftRow, rightRow)
+	if preferred != nil {
+		return preferred
+	}
+
+	if leftLen <= rightLen {
+		return leftPath
+	}
+	return rightPath
+}
+
+func compareCaptureExitLastInsideRow(owner PlayerColor, leftPath []Position, rightPath []Position, leftRow int, rightRow int) []Position {
 	if owner == PlayerColorDark {
 		if leftRow < rightRow {
 			return leftPath
@@ -31,19 +50,16 @@ func ComputeCaptureExitPath(start Position, boardSize BoardSize, owner PlayerCol
 		if rightRow < leftRow {
 			return rightPath
 		}
-	} else {
-		if leftRow > rightRow {
-			return leftPath
-		}
-		if rightRow > leftRow {
-			return rightPath
-		}
+		return nil
 	}
 
-	if leftLen <= rightLen {
+	if leftRow > rightRow {
 		return leftPath
 	}
-	return rightPath
+	if rightRow > leftRow {
+		return rightPath
+	}
+	return nil
 }
 
 func captureExitPath(start Position, boardSize BoardSize, directionRow int, directionCol int) ([]Position, int, int) {

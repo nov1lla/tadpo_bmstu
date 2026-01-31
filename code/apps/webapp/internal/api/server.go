@@ -295,65 +295,111 @@ func (s *Server) handleGames(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) handleGameByID(w http.ResponseWriter, r *http.Request) {
-	path := strings.TrimPrefix(r.URL.Path, "/api/games/")
-	if path == "" {
-		writeError(w, http.StatusNotFound, errors.New("game not specified"))
+	gameID, resource, err := parseGameResourcePath(r.URL.Path)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err)
 		return
 	}
+
+	if resource == "" {
+		s.handleGameRoot(w, r, gameID)
+		return
+	}
+
+	if handled := s.handleGameSubresource(w, r, gameID, resource); handled {
+		return
+	}
+
+	writeError(w, http.StatusNotFound, errors.New("unknown game resource"))
+}
+
+func parseGameResourcePath(urlPath string) (domain.GameID, string, error) {
+	path := strings.TrimPrefix(urlPath, "/api/games/")
+	if path == "" {
+		return "", "", errors.New("game not specified")
+	}
+
 	parts := strings.SplitN(path, "/", 2)
 	gameID := domain.GameID(parts[0])
 	if len(parts) == 1 {
-		switch r.Method {
-		case http.MethodGet:
-			s.getGameState(w, r, gameID)
-		case http.MethodDelete:
-			s.deleteGame(w, r, gameID)
-		default:
-			writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
-		}
+		return gameID, "", nil
+	}
+	return gameID, parts[1], nil
+}
+
+func (s *Server) handleGameRoot(w http.ResponseWriter, r *http.Request, gameID domain.GameID) {
+	switch r.Method {
+	case http.MethodGet:
+		s.getGameState(w, r, gameID)
+	case http.MethodDelete:
+		s.deleteGame(w, r, gameID)
+	default:
+		writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
+	}
+}
+
+func (s *Server) handleGameSubresource(w http.ResponseWriter, r *http.Request, gameID domain.GameID, resource string) bool {
+	switch resource {
+	case "board":
+		s.handleGameBoard(w, r, gameID)
+		return true
+	case "moves":
+		s.handleGameMoves(w, r, gameID)
+		return true
+	case "opponent-move":
+		s.handleGameOpponentMove(w, r, gameID)
+		return true
+	case "opponent-move-manual":
+		s.handleGameOpponentMoveManual(w, r, gameID)
+		return true
+	default:
+		return false
+	}
+}
+
+func (s *Server) handleGameBoard(w http.ResponseWriter, r *http.Request, gameID domain.GameID) {
+	if r.Method != http.MethodGet {
+		writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
 		return
 	}
-	switch parts[1] {
-	case "board":
-		if r.Method != http.MethodGet {
-			writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
-			return
-		}
-		board, err := s.games.GetChessboard(r.Context(), gameID)
+	board, err := s.games.GetChessboard(r.Context(), gameID)
+	if err != nil {
+		writeError(w, http.StatusNotFound, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, newBoardDTO(board))
+}
+
+func (s *Server) handleGameMoves(w http.ResponseWriter, r *http.Request, gameID domain.GameID) {
+	switch r.Method {
+	case http.MethodGet:
+		history, err := s.games.GenerateHistory(r.Context(), gameID)
 		if err != nil {
 			writeError(w, http.StatusNotFound, err)
 			return
 		}
-		writeJSON(w, http.StatusOK, newBoardDTO(board))
-	case "moves":
-		switch r.Method {
-		case http.MethodGet:
-			history, err := s.games.GenerateHistory(r.Context(), gameID)
-			if err != nil {
-				writeError(w, http.StatusNotFound, err)
-				return
-			}
-			writeJSON(w, http.StatusOK, newMovesDTO(history))
-		case http.MethodPost:
-			s.applyUserMove(w, r, gameID)
-		default:
-			writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
-		}
-	case "opponent-move":
-		if r.Method != http.MethodPost {
-			writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
-			return
-		}
-		s.applyOpponentMove(w, r, gameID)
-	case "opponent-move-manual":
-		if r.Method != http.MethodPost {
-			writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
-			return
-		}
-		s.applyManualOpponentMove(w, r, gameID)
+		writeJSON(w, http.StatusOK, newMovesDTO(history))
+	case http.MethodPost:
+		s.applyUserMove(w, r, gameID)
 	default:
-		writeError(w, http.StatusNotFound, errors.New("unknown game resource"))
+		writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
 	}
+}
+
+func (s *Server) handleGameOpponentMove(w http.ResponseWriter, r *http.Request, gameID domain.GameID) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
+		return
+	}
+	s.applyOpponentMove(w, r, gameID)
+}
+
+func (s *Server) handleGameOpponentMoveManual(w http.ResponseWriter, r *http.Request, gameID domain.GameID) {
+	if r.Method != http.MethodPost {
+		writeError(w, http.StatusMethodNotAllowed, errors.New("unsupported method"))
+		return
+	}
+	s.applyManualOpponentMove(w, r, gameID)
 }
 
 func (s *Server) getGameState(w http.ResponseWriter, r *http.Request, id domain.GameID) {

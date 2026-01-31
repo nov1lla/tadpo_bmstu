@@ -33,40 +33,27 @@ func NewAuthUseCase(users sdkrepo.UserRepository, creds sdkrepo.UserCredentialsR
 }
 
 func (uc *authUseCase) Register(ctx context.Context, cmd sdkusecase.RegisterCommand) (domain.User, error) {
-	login := normalizeLogin(cmd.Login)
-	if login == "" || strings.TrimSpace(cmd.Password) == "" {
-		return domain.User{}, ErrInvalidAuthData
+	login, password, err := validateAuthInput(cmd.Login, cmd.Password)
+	if err != nil {
+		return domain.User{}, err
 	}
-	if uc.ids == nil || uc.users == nil || uc.creds == nil {
-		return domain.User{}, ErrAuthNotConfigured
+	if err := uc.ensureRegisterConfigured(); err != nil {
+		return domain.User{}, err
 	}
-	_, err := uc.creds.GetByLogin(ctx, login)
-	if err == nil {
-		return domain.User{}, ErrLoginAlreadyTaken
-	}
-	if !errors.Is(err, sdkrepo.ErrNotFound) {
+	if err := uc.ensureLoginAvailable(ctx, login); err != nil {
 		return domain.User{}, err
 	}
 
 	id := domain.UserID(uc.ids.NewID())
-	user := domain.User{
-		ID:        id,
-		Name:      domain.UserName(login),
-		Rating:    0,
-		WinStreak: 0,
-	}
+	user := domain.User{ID: id, Name: domain.UserName(login), Rating: 0, WinStreak: 0}
 	if err := uc.users.Save(ctx, user); err != nil {
 		return domain.User{}, err
 	}
-	hash, err := bcrypt.GenerateFromPassword([]byte(cmd.Password), bcrypt.DefaultCost)
+	creds, err := buildCredentials(id, login, password)
 	if err != nil {
-		return domain.User{}, fmt.Errorf("hash password: %w", err)
+		return domain.User{}, err
 	}
-	if err := uc.creds.Save(ctx, domain.UserCredentials{
-		UserID:       id,
-		Login:        login,
-		PasswordHash: domain.PasswordHash(string(hash)),
-	}); err != nil {
+	if err := uc.creds.Save(ctx, creds); err != nil {
 		return domain.User{}, err
 	}
 	return user, nil
@@ -96,4 +83,43 @@ func (uc *authUseCase) Login(ctx context.Context, cmd sdkusecase.LoginCommand) (
 
 func normalizeLogin(login domain.Login) domain.Login {
 	return domain.Login(strings.TrimSpace(strings.ToLower(string(login))))
+}
+
+func validateAuthInput(login domain.Login, password string) (domain.Login, string, error) {
+	normalized := normalizeLogin(login)
+	trimmedPassword := strings.TrimSpace(password)
+	if normalized == "" || trimmedPassword == "" {
+		return "", "", ErrInvalidAuthData
+	}
+	return normalized, trimmedPassword, nil
+}
+
+func (uc *authUseCase) ensureRegisterConfigured() error {
+	if uc.ids == nil || uc.users == nil || uc.creds == nil {
+		return ErrAuthNotConfigured
+	}
+	return nil
+}
+
+func (uc *authUseCase) ensureLoginAvailable(ctx context.Context, login domain.Login) error {
+	_, err := uc.creds.GetByLogin(ctx, login)
+	if err == nil {
+		return ErrLoginAlreadyTaken
+	}
+	if !errors.Is(err, sdkrepo.ErrNotFound) {
+		return err
+	}
+	return nil
+}
+
+func buildCredentials(id domain.UserID, login domain.Login, password string) (domain.UserCredentials, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return domain.UserCredentials{}, fmt.Errorf("hash password: %w", err)
+	}
+	return domain.UserCredentials{
+		UserID:       id,
+		Login:        login,
+		PasswordHash: domain.PasswordHash(string(hash)),
+	}, nil
 }
