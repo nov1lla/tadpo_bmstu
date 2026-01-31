@@ -13,17 +13,54 @@ services:
       timeout: 5s
       retries: 10
 
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.92.0
+    user: "0:0"
+    volumes:
+      - ../code/product/test-report:/test-report
+      - ./tests/otel-collector.yml:/etc/otelcol-contrib/config.yaml:ro
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.2
+    privileged: true
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    command:
+      - "--housekeeping_interval=1s"
+
+  prometheus:
+    image: prom/prometheus:v2.49.1
+    volumes:
+      - ./tests/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - cadvisor
+
   test-runner:
     build:
       context: ..
       dockerfile: docker/tests/Dockerfile
     environment:
       POSTGRES_DSN: postgres://admin:admin123@postgres:5432/ppo_cource?sslmode=disable
+      OTEL_ENABLED: ${OTEL_ENABLED:-1}
+      OTEL_SERVICE_NAME: webapp-ci
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SAMPLE_RATIO: ${OTEL_SAMPLE_RATIO:-1.0}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_HTTP_BODY: ${LOG_HTTP_BODY:-0}
+      LOG_MAX_BODY_BYTES: ${LOG_MAX_BODY_BYTES:-65536}
       REPO_URL: ${REPO_URL:-}
       REPO_REF: ${REPO_REF:-}
       RUN_TRAFFIC_CAPTURE: ${RUN_TRAFFIC_CAPTURE:-1}
     depends_on:
       postgres:
         condition: service_healthy
+      otel-collector:
+        condition: service_started
+      prometheus:
+        condition: service_started
     volumes:
       - ../code/product/test-report:/workspace/code/product/test-report

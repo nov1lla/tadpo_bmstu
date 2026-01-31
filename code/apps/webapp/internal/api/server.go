@@ -1,6 +1,7 @@
 package api
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
@@ -9,8 +10,11 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
+
+	"go.opentelemetry.io/otel/trace"
 
 	"ppo/sdk/component"
 	"ppo/sdk/domain"
@@ -27,6 +31,8 @@ type Server struct {
 	moves sdkusecase.MoveUseCase
 	auth  sdkusecase.AuthUseCase
 	anim  sdkusecase.MoveAnimationUseCase
+
+	logCfg httpLogConfig
 }
 
 func NewServer(staticDir string, business component.BusinessProvider) (*Server, error) {
@@ -50,6 +56,7 @@ func NewServer(staticDir string, business component.BusinessProvider) (*Server, 
 		moves:     business.MoveUseCase(),
 		auth:      business.AuthUseCase(),
 		anim:      business.MoveAnimationUseCase(),
+		logCfg:    loadHTTPLogConfigFromEnv(),
 	}
 	srv.registerRoutes()
 	return srv, nil
@@ -57,19 +64,56 @@ func NewServer(staticDir string, business component.BusinessProvider) (*Server, 
 
 func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
-	recorder := &responseRecorder{ResponseWriter: w, status: http.StatusOK}
+
+	var reqBody *limitedBuffer
+	if s.logCfg.logBodies && r.Body != nil {
+		reqBody = newLimitedBuffer(s.logCfg.maxBodyBytes)
+		r.Body = &teeReadCloser{rc: r.Body, dst: reqBody}
+	}
+
+	recorder := &responseRecorder{
+		ResponseWriter: w,
+		status:         http.StatusOK,
+		captureBody:    s.logCfg.logBodies,
+		body:           newLimitedBuffer(s.logCfg.maxBodyBytes),
+	}
 	if strings.HasPrefix(r.URL.Path, "/api/") {
 		s.mux.ServeHTTP(recorder, r)
 	} else {
 		s.serveStatic(recorder, r)
 	}
-	log.Printf(
-		"http %s %s status=%d bytes=%d duration=%s",
+
+	traceID := ""
+	if sc := trace.SpanContextFromContext(r.Context()); sc.IsValid() {
+		traceID = sc.TraceID().String()
+	}
+
+	if s.logCfg.level == "debug" {
+		var reqSnippet string
+		if reqBody != nil {
+			reqSnippet = reqBody.String()
+		}
+		log.Printf(
+			"http %s %s status=%d bytes=%d duration=%s trace_id=%s req=%s resp=%s",
+			r.Method,
+			r.URL.Path,
+			recorder.status,
+			recorder.bytes,
+			time.Since(start),
+			traceID,
+			compactJSON(reqSnippet),
+			compactJSON(recorder.body.String()),
+		)
+		return
+	}
+
+	log.Printf("http %s %s status=%d bytes=%d duration=%s trace_id=%s",
 		r.Method,
 		r.URL.Path,
 		recorder.status,
 		recorder.bytes,
 		time.Since(start),
+		traceID,
 	)
 }
 
@@ -555,8 +599,10 @@ type authResponse struct {
 
 type responseRecorder struct {
 	http.ResponseWriter
-	status int
-	bytes  int
+	status      int
+	bytes       int
+	captureBody bool
+	body        *limitedBuffer
 }
 
 func (r *responseRecorder) WriteHeader(status int) {
@@ -565,9 +611,94 @@ func (r *responseRecorder) WriteHeader(status int) {
 }
 
 func (r *responseRecorder) Write(p []byte) (int, error) {
+	if r.captureBody && r.body != nil {
+		_, _ = r.body.Write(p)
+	}
 	n, err := r.ResponseWriter.Write(p)
 	r.bytes += n
 	return n, err
+}
+
+type httpLogConfig struct {
+	level        string
+	logBodies    bool
+	maxBodyBytes int
+}
+
+func loadHTTPLogConfigFromEnv() httpLogConfig {
+	level := strings.ToLower(strings.TrimSpace(os.Getenv("LOG_LEVEL")))
+	if level == "" {
+		level = "info"
+	}
+	logBodies := strings.ToLower(strings.TrimSpace(os.Getenv("LOG_HTTP_BODY"))) == "1" ||
+		strings.ToLower(strings.TrimSpace(os.Getenv("LOG_HTTP_BODY"))) == "true" ||
+		level == "debug"
+
+	maxBodyBytes := 64 * 1024
+	if raw := strings.TrimSpace(os.Getenv("LOG_MAX_BODY_BYTES")); raw != "" {
+		if parsed, err := strconv.Atoi(raw); err == nil && parsed > 0 {
+			maxBodyBytes = parsed
+		}
+	}
+	return httpLogConfig{level: level, logBodies: logBodies, maxBodyBytes: maxBodyBytes}
+}
+
+type teeReadCloser struct {
+	rc  io.ReadCloser
+	dst io.Writer
+}
+
+func (t *teeReadCloser) Read(p []byte) (int, error) {
+	n, err := t.rc.Read(p)
+	if n > 0 && t.dst != nil {
+		_, _ = t.dst.Write(p[:n])
+	}
+	return n, err
+}
+
+func (t *teeReadCloser) Close() error {
+	return t.rc.Close()
+}
+
+type limitedBuffer struct {
+	buf      bytes.Buffer
+	maxBytes int
+}
+
+func newLimitedBuffer(maxBytes int) *limitedBuffer {
+	return &limitedBuffer{maxBytes: maxBytes}
+}
+
+func (l *limitedBuffer) Write(p []byte) (int, error) {
+	if l.maxBytes <= 0 {
+		return len(p), nil
+	}
+	remaining := l.maxBytes - l.buf.Len()
+	if remaining <= 0 {
+		return len(p), nil
+	}
+	if len(p) > remaining {
+		_, _ = l.buf.Write(p[:remaining])
+		return len(p), nil
+	}
+	_, _ = l.buf.Write(p)
+	return len(p), nil
+}
+
+func (l *limitedBuffer) String() string {
+	return l.buf.String()
+}
+
+func compactJSON(raw string) string {
+	text := strings.TrimSpace(raw)
+	if text == "" {
+		return ""
+	}
+	var buf bytes.Buffer
+	if err := json.Compact(&buf, []byte(text)); err == nil {
+		return buf.String()
+	}
+	return text
 }
 
 type gameDTO struct {

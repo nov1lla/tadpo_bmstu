@@ -42,19 +42,27 @@ def series_summary(series):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--prom-url", required=True)
-    parser.add_argument("--project", required=True)
+    parser.add_argument("--project", default="")
     parser.add_argument("--start", required=True)
     parser.add_argument("--end", required=True)
     parser.add_argument("--step", default="1")
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
 
-    services = ["webapp", "postgres"]
+    # Extendable list: benchmark + CI stacks can include extra monitoring components.
+    # Missing services just result in empty series (min/max/mean = 0).
+    services = ["webapp", "postgres", "otel-collector", "prometheus", "cadvisor", "test-runner"]
+    def selector(service: str) -> str:
+        labels = [f'container_label_com_docker_compose_service=\"{service}\"']
+        if args.project:
+            labels.append(f'container_label_com_docker_compose_project=\"{args.project}\"')
+        return "{" + ",".join(labels) + "}"
+
     metrics = {
-        "cpu": "rate(container_cpu_usage_seconds_total{container_label_com_docker_compose_project=\"%s\",container_label_com_docker_compose_service=\"%s\"}[30s])",
-        "memory": "container_memory_usage_bytes{container_label_com_docker_compose_project=\"%s\",container_label_com_docker_compose_service=\"%s\"}",
-        "read_bytes": "rate(container_fs_reads_bytes_total{container_label_com_docker_compose_project=\"%s\",container_label_com_docker_compose_service=\"%s\"}[30s])",
-        "write_bytes": "rate(container_fs_writes_bytes_total{container_label_com_docker_compose_project=\"%s\",container_label_com_docker_compose_service=\"%s\"}[30s])",
+        "cpu": "rate(container_cpu_usage_seconds_total%s[30s])",
+        "memory": "container_memory_usage_bytes%s",
+        "read_bytes": "rate(container_fs_reads_bytes_total%s[30s])",
+        "write_bytes": "rate(container_fs_writes_bytes_total%s[30s])",
     }
 
     output = {
@@ -72,7 +80,7 @@ def main():
         output["series"][service] = {}
         output["summary"][service] = {}
         for name, template in metrics.items():
-            query = template % (args.project, service)
+            query = template % selector(service)
             result = prom_query_range(args.prom_url, query, args.start, args.end, args.step)
             series = to_series(result)
             output["series"][service][name] = series

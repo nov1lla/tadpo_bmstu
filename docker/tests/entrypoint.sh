@@ -34,10 +34,28 @@ fi
 
 cd /workspace
 
+mkdir -p /workspace/code/product/test-report/otel
+mkdir -p /workspace/code/product/test-report/monitoring
+chmod 777 /workspace/code/product/test-report/otel /workspace/code/product/test-report/monitoring || true
+
+START_TS=$(date +%s)
+
 set +e
 ./code/product/run_ci_tests.sh
 TEST_STATUS=$?
 set -e
+
+END_TS=$(date +%s)
+
+if command -v python3 >/dev/null 2>&1; then
+  python3 /workspace/benchmark/scripts/fetch_resources.py \
+    --prom-url "http://prometheus:9090" \
+    --project "" \
+    --start "${START_TS}" \
+    --end "${END_TS}" \
+    --output "/workspace/code/product/test-report/monitoring/resources.json" \
+    >/workspace/code/product/test-report/monitoring/export.log 2>&1 || true
+fi
 
 if [ "${TEST_STATUS}" -eq 0 ] && [ "${RUN_TRAFFIC_CAPTURE}" -eq 1 ]; then
   ./code/product/e2e_traffic_capture.sh

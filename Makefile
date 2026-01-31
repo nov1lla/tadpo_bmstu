@@ -153,6 +153,9 @@ test-ci-docker:
 	if docker compose version >/dev/null 2>&1; then \
 		docker compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner; \
 	else \
+		# docker-compose v1 can fail to recreate containers on newer Docker versions ("ContainerConfig" KeyError).\n\
+		# A clean down before up makes the run deterministic.\n\
+		docker-compose -f docker/docker-compose.test.yml down -v --remove-orphans >/dev/null 2>&1 || true; \
 		docker-compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner; \
 	fi
 
@@ -188,6 +191,40 @@ bench-prune-docker:
 	@docker image prune -f >/dev/null 2>&1 || true
 	@docker image ls --format '{{.Repository}}:{{.Tag}}' | rg '^tadpo-bench-webapp:' | xargs -r docker image rm -f >/dev/null 2>&1 || true
 	@echo "Docker cleanup done."
+
+.PHONY: bench-lab5-trace-off
+bench-lab5-trace-off:
+	@RUNS=$${RUNS:-15} RESULTS_DIR=benchmark/results/lab5_trace_off OTEL_ENABLED=0 LOG_LEVEL=info ./benchmark/run_benchmarks.sh
+
+.PHONY: bench-lab5-trace-on
+bench-lab5-trace-on:
+	@RUNS=$${RUNS:-15} RESULTS_DIR=benchmark/results/lab5_trace_on OTEL_ENABLED=1 LOG_LEVEL=info ./benchmark/run_benchmarks.sh
+
+.PHONY: bench-lab5-log-default
+bench-lab5-log-default:
+	@RUNS=$${RUNS:-15} RESULTS_DIR=benchmark/results/lab5_log_default OTEL_ENABLED=0 LOG_LEVEL=info LOG_HTTP_BODY=0 ./benchmark/run_benchmarks.sh
+
+.PHONY: bench-lab5-log-debug
+bench-lab5-log-debug:
+	@RUNS=$${RUNS:-15} RESULTS_DIR=benchmark/results/lab5_log_debug OTEL_ENABLED=0 LOG_LEVEL=debug LOG_HTTP_BODY=1 ./benchmark/run_benchmarks.sh
+
+.PHONY: bench-lab5-compare-trace
+bench-lab5-compare-trace:
+	@python3 benchmark/scripts/compare_summaries.py \
+	  --left benchmark/results/lab5_trace_off \
+	  --right benchmark/results/lab5_trace_on \
+	  --left-name "trace_off" \
+	  --right-name "trace_on" \
+	  --output benchmark/results/lab5_compare_trace.md
+
+.PHONY: bench-lab5-compare-logging
+bench-lab5-compare-logging:
+	@python3 benchmark/scripts/compare_summaries.py \
+	  --left benchmark/results/lab5_log_default \
+	  --right benchmark/results/lab5_log_debug \
+	  --left-name "log_default" \
+	  --right-name "log_debug" \
+	  --output benchmark/results/lab5_compare_logging.md
 
 .PHONY: bench-clean-results
 bench-clean-results:

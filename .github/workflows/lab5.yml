@@ -1,0 +1,49 @@
+name: lab-05-observability
+
+on:
+  push:
+    branches: ["lab_05", "lab_06"]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare report dir
+        run: |
+          mkdir -p code/product/test-report
+
+      - name: Run tests in Docker (with monitoring/tracing)
+        env:
+          REPO_URL: https://${{ secrets.REPO_READ_TOKEN }}@github.com/robodanill/TADPO.git
+          REPO_REF: ${{ github.sha }}
+          RUN_TRAFFIC_CAPTURE: 1
+          OTEL_ENABLED: 1
+          LOG_LEVEL: info
+        run: |
+          docker compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner
+
+      - name: Shutdown containers
+        if: always()
+        run: |
+          docker compose -f docker/docker-compose.test.yml down -v
+
+      - name: Ensure report artifacts
+        if: always()
+        run: |
+          sudo chown -R "$USER":"$USER" code/product/test-report || true
+          touch code/product/test-report/.keep
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: code/product/test-report
+

@@ -12,6 +12,12 @@ POSTGRES_MEM=${POSTGRES_MEM:-1g}
 K6_CPUS=${K6_CPUS:-1.0}
 K6_MEM=${K6_MEM:-512m}
 CLEAN_DOCKER=${CLEAN_DOCKER:-1}
+# Lab 5: toggles for tracing & logging modes (used by docker-compose.bench.yml).
+OTEL_ENABLED=${OTEL_ENABLED:-0}
+OTEL_SAMPLE_RATIO=${OTEL_SAMPLE_RATIO:-1.0}
+LOG_LEVEL=${LOG_LEVEL:-info}
+LOG_HTTP_BODY=${LOG_HTTP_BODY:-0}
+LOG_MAX_BODY_BYTES=${LOG_MAX_BODY_BYTES:-65536}
 # Extra safety to prevent disk from filling up on long benchmark sessions.
 # These options never touch benchmark results; they only clean Docker artifacts.
 PRUNE_DOCKER=${PRUNE_DOCKER:-1}
@@ -121,6 +127,13 @@ for i in $(seq -w "${START_AT}" "${END_AT}"); do
   export WEBAPP_IMAGE
   export WEBAPP_PORT
   export PROMETHEUS_PORT
+  export BENCH_RUN_ID="${RUN_ID}"
+  # Path for the collector to write traces, relative to /results mount
+  # (host: ./benchmark/results). Works even when RESULTS_DIR is a subfolder.
+  REL_RUN_DIR="${RUN_DIR#benchmark/results/}"
+  REL_RUN_DIR="${REL_RUN_DIR#benchmark/results}"
+  REL_RUN_DIR="${REL_RUN_DIR#/}"
+  export BENCH_TRACES_PATH="${REL_RUN_DIR}/otel_traces.json"
   export POSTGRES_DB="ppo_bench_${i}"
   export POSTGRES_USER="bench"
   export POSTGRES_PASSWORD="bench"
@@ -128,6 +141,11 @@ for i in $(seq -w "${START_AT}" "${END_AT}"); do
   export WEBAPP_MEM
   export POSTGRES_CPUS
   export POSTGRES_MEM
+  export OTEL_ENABLED
+  export OTEL_SAMPLE_RATIO
+  export LOG_LEVEL
+  export LOG_HTTP_BODY
+  export LOG_MAX_BODY_BYTES
 
   cleanup() {
     "${COMPOSE_CMD[@]}" -f "${ROOT_DIR}/docker/benchmark/docker-compose.bench.yml" -p "${PROJECT_NAME}" down -v >/dev/null 2>&1 || true

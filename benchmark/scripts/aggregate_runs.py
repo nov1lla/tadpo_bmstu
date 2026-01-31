@@ -32,6 +32,8 @@ def main():
     percentiles = ["p50", "p75", "p90", "p95", "p99"]
     aggregate = {p: 0.0 for p in percentiles}
     trend = []
+    resources_sum = {}
+    resources_count = {}
 
     for name, summary in runs:
         p = summary.get("percentiles", {})
@@ -39,13 +41,34 @@ def main():
             aggregate[key] += p.get(key, 0)
         trend.append(p.get("p95", 0))
 
+        resources = summary.get("resources", {}) or {}
+        for service, metrics in resources.items():
+            resources_sum.setdefault(service, {})
+            resources_count[service] = resources_count.get(service, 0) + 1
+            for metric_name, stats in (metrics or {}).items():
+                resources_sum[service].setdefault(metric_name, {"min": 0.0, "max": 0.0, "mean": 0.0})
+                for stat in ["min", "max", "mean"]:
+                    resources_sum[service][metric_name][stat] += float((stats or {}).get(stat, 0))
+
     count = len(runs)
     for key in percentiles:
         aggregate[key] = aggregate[key] / count
 
+    avg_resources = {}
+    for service, metrics in resources_sum.items():
+        divisor = resources_count.get(service, count) or 1
+        avg_resources[service] = {}
+        for metric_name, stats in metrics.items():
+            avg_resources[service][metric_name] = {
+                "min": stats["min"] / divisor,
+                "max": stats["max"] / divisor,
+                "mean": stats["mean"] / divisor,
+            }
+
     output = {
         "runs": count,
         "average_percentiles": aggregate,
+        "average_resources": avg_resources,
     }
 
     with open(os.path.join(args.output_dir, "summary.json"), "w", encoding="utf-8") as handle:

@@ -35,16 +35,36 @@ services:
     depends_on:
       db-migrate:
         condition: service_completed_successfully
+      otel-collector:
+        condition: service_started
     environment:
       WEBAPP_ADDR: :8080
       WEBAPP_STATIC_DIR: /app/static
       DATA_PLUGIN_PATH: /app/plugins/data.so
       BUSINESS_PLUGIN_PATH: /app/plugins/business.so
       DATA_SOURCE: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable
+      # Lab 5: tracing/monitoring + log modes
+      OTEL_ENABLED: ${OTEL_ENABLED:-0}
+      OTEL_SERVICE_NAME: webapp
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4318
+      OTEL_SAMPLE_RATIO: ${OTEL_SAMPLE_RATIO:-1.0}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      LOG_HTTP_BODY: ${LOG_HTTP_BODY:-0}
+      LOG_MAX_BODY_BYTES: ${LOG_MAX_BODY_BYTES:-65536}
     cpus: ${WEBAPP_CPUS:-1.0}
     mem_limit: ${WEBAPP_MEM:-1g}
     ports:
       - "${WEBAPP_PORT}:8080"
+
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.92.0
+    environment:
+      BENCH_RUN_ID: ${BENCH_RUN_ID}
+      BENCH_TRACES_PATH: ${BENCH_TRACES_PATH}
+    volumes:
+      - ./otel-collector.yml:/etc/otelcol-contrib/config.yaml:ro
+      - ../../benchmark/results:/results
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.2

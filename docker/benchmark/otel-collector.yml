@@ -1,0 +1,21 @@
+receivers:
+  otlp:
+    protocols:
+      grpc: {}
+      http: {}
+
+processors:
+  batch: {}
+
+exporters:
+  file:
+    # Write into the per-run directory (created by the benchmark runner with 0777).
+    # BENCH_TRACES_PATH is a path relative to /results (host: ./benchmark/results).
+    path: /results/${env:BENCH_TRACES_PATH}
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file]

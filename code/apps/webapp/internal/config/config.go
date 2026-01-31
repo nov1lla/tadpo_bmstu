@@ -16,6 +16,8 @@ type Config struct {
 	DataSource         string
 	HTTPTimeout        time.Duration
 	OpenAI             OpenAIConfig
+	Observability      ObservabilityConfig
+	Logging            LoggingConfig
 }
 
 type OpenAIConfig struct {
@@ -23,6 +25,19 @@ type OpenAIConfig struct {
 	Model       string
 	BaseURL     string
 	Temperature float64
+}
+
+type ObservabilityConfig struct {
+	Enabled      bool
+	ServiceName  string
+	OTLPEndpoint string
+	SampleRatio  float64
+}
+
+type LoggingConfig struct {
+	Level        string
+	LogHTTPBody  bool
+	MaxBodyBytes int
 }
 
 const (
@@ -46,6 +61,17 @@ func Load() Config {
 			Model:       os.Getenv("OPENAI_MODEL"),
 			BaseURL:     os.Getenv("OPENAI_BASE_URL"),
 			Temperature: parseFloatEnv("OPENAI_TEMPERATURE", 0),
+		},
+		Observability: ObservabilityConfig{
+			Enabled:      parseBoolEnv("OTEL_ENABLED", false),
+			ServiceName:  getenv("OTEL_SERVICE_NAME", "webapp"),
+			OTLPEndpoint: getenv("OTEL_EXPORTER_OTLP_ENDPOINT", "http://localhost:4318"),
+			SampleRatio:  parseFloatEnv("OTEL_SAMPLE_RATIO", 1.0),
+		},
+		Logging: LoggingConfig{
+			Level:        strings.ToLower(getenv("LOG_LEVEL", "info")),
+			LogHTTPBody:  parseBoolEnv("LOG_HTTP_BODY", false),
+			MaxBodyBytes: parseIntEnv("LOG_MAX_BODY_BYTES", 64*1024),
 		},
 	}
 	if cfg.DataSource == "" {
@@ -84,6 +110,32 @@ func parseFloatEnv(key string, fallback float64) float64 {
 		return parsed
 	}
 	return fallback
+}
+
+func parseIntEnv(key string, fallback int) int {
+	raw, ok := os.LookupEnv(key)
+	if !ok || raw == "" {
+		return fallback
+	}
+	if parsed, err := strconv.Atoi(raw); err == nil {
+		return parsed
+	}
+	return fallback
+}
+
+func parseBoolEnv(key string, fallback bool) bool {
+	raw, ok := os.LookupEnv(key)
+	if !ok || raw == "" {
+		return fallback
+	}
+	switch strings.ToLower(strings.TrimSpace(raw)) {
+	case "1", "true", "yes", "y", "on":
+		return true
+	case "0", "false", "no", "n", "off":
+		return false
+	default:
+		return fallback
+	}
 }
 
 func expandStaticDir(path string) string {

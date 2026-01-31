@@ -1,0 +1,20 @@
+receivers:
+  otlp:
+    protocols:
+      grpc: {}
+      http: {}
+
+processors:
+  batch: {}
+
+exporters:
+  file:
+    # Write to a stable path; CI uploads the whole test-report folder as artifact.
+    path: /test-report/otel_traces.json
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file]

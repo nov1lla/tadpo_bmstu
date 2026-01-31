@@ -16,12 +16,28 @@ import (
 
 	"ppo/webapp/internal/api"
 	"ppo/webapp/internal/config"
+	"ppo/webapp/internal/observability"
 )
 
 func main() {
 	cfg := config.Load()
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer cancel()
+
+	shutdownOtel, err := observability.Setup(ctx, observability.Config{
+		Enabled:      cfg.Observability.Enabled,
+		ServiceName:  cfg.Observability.ServiceName,
+		OTLPEndpoint: cfg.Observability.OTLPEndpoint,
+		SampleRatio:  cfg.Observability.SampleRatio,
+	})
+	if err != nil {
+		log.Fatalf("init observability: %v", err)
+	}
+	defer func() {
+		shutdownCtx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+		_ = shutdownOtel(shutdownCtx)
+	}()
 
 	dataProvider, cleanupData := loadDataProvider(cfg.DataPluginPath, cfg.DataSource)
 	defer cleanupData()
@@ -34,7 +50,8 @@ func main() {
 		log.Fatalf("init server: %v", err)
 	}
 
-	httpServer := &http.Server{Addr: cfg.Address, Handler: server}
+	handler := observability.WrapHandler(server, cfg.Observability.Enabled)
+	httpServer := &http.Server{Addr: cfg.Address, Handler: handler}
 
 	go func() {
 		<-ctx.Done()
