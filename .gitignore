@@ -6,4 +6,6 @@ code/components/webui/dist/assets/
 benchmark/results/
 benchmark/.venv/
 benchmark/.docker-cache/
+__pycache__/
+*.pyc
 ppo_project_backup.tar.gz
