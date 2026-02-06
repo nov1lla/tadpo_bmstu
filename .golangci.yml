@@ -9,7 +9,7 @@ linters:
 
 linters-settings:
   gocyclo:
-    min-complexity: 10
+    min-complexity: 9
 
 issues:
   exclude-rules:
