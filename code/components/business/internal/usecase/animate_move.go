@@ -42,35 +42,21 @@ func NewAnimator(board sdkport.BoardStateReader) AnimationUseCase {
 	return &animator{board: board}
 }
 
-func (a *animator) AnimateMove(cmd AnimateMoveCommand) (domain.Animation, error) {
-	attackerPos, ok := a.board.PositionOf(cmd.PieceID)
-	if !ok {
-		return domain.Animation{}, ErrPieceNotFound
-	}
+type captureInfo struct {
+	enabled bool
+	id      domain.PieceID
+	pos     domain.Position
+}
 
-	path, err := domain.NewPath(cmd.Path, attackerPos)
+func (a *animator) AnimateMove(cmd AnimateMoveCommand) (domain.Animation, error) {
+	attackerPos, path, pathPositions, err := a.buildMovePath(cmd)
 	if err != nil {
 		return domain.Animation{}, err
 	}
-
-	pathPositions := path.Positions()
-
-	var (
-		capture        bool
-		capturedID     domain.PieceID
-		capturedPos    domain.Position
-		capturedExists bool
-	)
-
-	if cmd.CapturedPieceID != nil {
-		capture = true
-		capturedID = *cmd.CapturedPieceID
-		capturedPos, capturedExists = a.board.PositionOf(capturedID)
-		if !capturedExists {
-			return domain.Animation{}, ErrCapturedPieceNotFound
-		}
+	capture, err := a.resolveCapture(cmd)
+	if err != nil {
+		return domain.Animation{}, err
 	}
-
 	boardSize := a.board.BoardSize()
 	pathSet := make(map[domain.Position]struct{}, len(pathPositions))
 	for _, pos := range pathPositions {
@@ -80,45 +66,23 @@ func (a *animator) AnimateMove(cmd AnimateMoveCommand) (domain.Animation, error)
 	occupancy := make(map[domain.Position]*domain.PieceID)
 	setOccupant(occupancy, attackerPos, cmd.PieceID)
 
-	if capture {
-		setOccupant(occupancy, capturedPos, capturedID)
+	if capture.enabled {
+		setOccupant(occupancy, capture.pos, capture.id)
 	}
 
-	preSteps := make([]domain.AnimationStep, 0, len(pathPositions))
-	postSteps := make([]domain.AnimationStep, 0, len(pathPositions))
-
-	for idx, next := range pathPositions {
-		if !next.IsInside(boardSize) {
-
-			return domain.Animation{}, ErrPathLeavesBoard
-		}
-
-		occupant, occupied := a.lookupOccupant(occupancy, next)
-		isFinalStep := idx == len(pathPositions)-1
-		if occupied {
-			if capture && next == capturedPos && isFinalStep {
-				if occupant != capturedID {
-					return domain.Animation{}, ErrTargetOccupied
-				}
-			} else {
-				moved, returns, err := a.moveBlockingPiece(occupancy, occupant, next, boardSize, pathSet)
-				if err != nil {
-					return domain.Animation{}, err
-				}
-				preSteps = append(preSteps, moved...)
-				postSteps = append(returns, postSteps...)
-			}
-		}
+	preSteps, postSteps, err := a.planObstacleMoves(pathPositions, capture, occupancy, boardSize, pathSet)
+	if err != nil {
+		return domain.Animation{}, err
 	}
 
-	if capture && path.Last() != capturedPos {
+	if err := validateCaptureDestination(capture, path); err != nil {
 		return domain.Animation{}, ErrCaptureDestinationMismatch
 	}
 
 	steps := make([]domain.AnimationStep, 0, len(pathPositions)+len(preSteps)+len(postSteps)+4)
 
-	if capture {
-		stepsRemoval, err := a.animateRemoval(capturedID, capturedPos, boardSize, occupancy)
+	if capture.enabled {
+		stepsRemoval, err := a.animateRemoval(capture.id, capture.pos, boardSize, occupancy)
 		if err != nil {
 			return domain.Animation{}, err
 		}
@@ -142,6 +106,93 @@ func (a *animator) AnimateMove(cmd AnimateMoveCommand) (domain.Animation, error)
 	steps = append(steps, postSteps...)
 
 	return domain.Animation{Steps: steps}, nil
+}
+
+func (a *animator) buildMovePath(cmd AnimateMoveCommand) (domain.Position, domain.Path, []domain.Position, error) {
+	attackerPos, ok := a.board.PositionOf(cmd.PieceID)
+	if !ok {
+		return domain.Position{}, domain.Path{}, nil, ErrPieceNotFound
+	}
+
+	path, err := domain.NewPath(cmd.Path, attackerPos)
+	if err != nil {
+		return domain.Position{}, domain.Path{}, nil, err
+	}
+
+	return attackerPos, path, path.Positions(), nil
+}
+
+func (a *animator) resolveCapture(cmd AnimateMoveCommand) (captureInfo, error) {
+	if cmd.CapturedPieceID == nil {
+		return captureInfo{}, nil
+	}
+
+	id := *cmd.CapturedPieceID
+	pos, ok := a.board.PositionOf(id)
+	if !ok {
+		return captureInfo{}, ErrCapturedPieceNotFound
+	}
+
+	return captureInfo{enabled: true, id: id, pos: pos}, nil
+}
+
+func validateCaptureDestination(capture captureInfo, path domain.Path) error {
+	if !capture.enabled {
+		return nil
+	}
+	if path.Last() == capture.pos {
+		return nil
+	}
+	return ErrCaptureDestinationMismatch
+}
+
+func (a *animator) planObstacleMoves(pathPositions []domain.Position, capture captureInfo, occupancy map[domain.Position]*domain.PieceID, boardSize domain.BoardSize, pathSet map[domain.Position]struct{}) ([]domain.AnimationStep, []domain.AnimationStep, error) {
+	preSteps := make([]domain.AnimationStep, 0, len(pathPositions))
+	postSteps := make([]domain.AnimationStep, 0, len(pathPositions))
+
+	for idx, next := range pathPositions {
+		if err := ensureInside(next, boardSize); err != nil {
+			return nil, nil, err
+		}
+
+		isFinalStep := idx == len(pathPositions)-1
+		moved, returns, err := a.resolveOccupancyForStep(occupancy, capture, next, isFinalStep, boardSize, pathSet)
+		if err != nil {
+			return nil, nil, err
+		}
+		preSteps = append(preSteps, moved...)
+		postSteps = append(returns, postSteps...)
+	}
+
+	return preSteps, postSteps, nil
+}
+
+func ensureInside(pos domain.Position, boardSize domain.BoardSize) error {
+	if pos.IsInside(boardSize) {
+		return nil
+	}
+	return ErrPathLeavesBoard
+}
+
+func (a *animator) resolveOccupancyForStep(occupancy map[domain.Position]*domain.PieceID, capture captureInfo, next domain.Position, isFinalStep bool, boardSize domain.BoardSize, pathSet map[domain.Position]struct{}) ([]domain.AnimationStep, []domain.AnimationStep, error) {
+	occupant, occupied := a.lookupOccupant(occupancy, next)
+	if !occupied {
+		return nil, nil, nil
+	}
+
+	if capture.enabled && next == capture.pos && isFinalStep {
+		if occupant != capture.id {
+			return nil, nil, ErrTargetOccupied
+		}
+		return nil, nil, nil
+	}
+
+	moved, returns, err := a.moveBlockingPiece(occupancy, occupant, next, boardSize, pathSet)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return moved, returns, nil
 }
 
 func (a *animator) animateRemoval(pieceID domain.PieceID, start domain.Position, boardSize domain.BoardSize, occupancy map[domain.Position]*domain.PieceID) ([]domain.AnimationStep, error) {

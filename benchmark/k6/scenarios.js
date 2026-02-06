@@ -266,11 +266,7 @@ function resetGame() {
   return state.gameID;
 }
 
-// Нагрузка и сценарии:
-// - degradation: плавный рост нагрузки
-// - peak: удержание максимальной нагрузки
-// - recovery: спад после перегруза
-// Сохраняем метрики latency и перцентили по всем запросам и по каждому endpoint (через tags).
+
 export const options = {
   systemTags: ['status', 'method', 'name', 'scenario'],
   scenarios: {
@@ -314,8 +310,6 @@ export default function () {
   const userID = ensureUser();
   ensureGame();
 
-  // UI pattern: a move -> refresh state; opponent move is usually requested automatically,
-  // but here we simulate it via a manual endpoint to avoid OpenAI latency.
   const stateResp = getGameState(state.gameID);
   const game = stateResp.game;
   const movesCount = (stateResp.moves || []).length;
