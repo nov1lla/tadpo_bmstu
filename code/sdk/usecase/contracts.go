@@ -94,6 +94,8 @@ type MoveAnimationCommand struct {
 type AuthUseCase interface {
 	Register(ctx context.Context, cmd RegisterCommand) (domain.User, error)
 	Login(ctx context.Context, cmd LoginCommand) (domain.User, error)
+	ChangePassword(ctx context.Context, cmd ChangePasswordCommand) error
+	ResetPassword(ctx context.Context, cmd ResetPasswordCommand) error
 }
 
 type RegisterCommand struct {
@@ -104,4 +106,15 @@ type RegisterCommand struct {
 type LoginCommand struct {
 	Login    domain.Login
 	Password string
+}
+
+type ChangePasswordCommand struct {
+	Login       domain.Login
+	OldPassword string
+	NewPassword string
+}
+
+type ResetPasswordCommand struct {
+	Login       domain.Login
+	NewPassword string
 }

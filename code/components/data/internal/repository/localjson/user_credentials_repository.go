@@ -78,3 +78,31 @@ func (r *UserCredentialsRepository) Save(ctx context.Context, creds domain.UserC
 	}
 	return r.storage.files.persistCredentials(credentials)
 }
+
+func (r *UserCredentialsRepository) UpdatePasswordHash(ctx context.Context, login domain.Login, hash domain.PasswordHash) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if login == "" {
+		return fmt.Errorf("login empty: %w", ErrInvalidData)
+	}
+	if hash == "" {
+		return fmt.Errorf("password hash empty: %w", ErrInvalidData)
+	}
+
+	r.storage.files.mu.Lock()
+	defer r.storage.files.mu.Unlock()
+
+	credentials, err := r.storage.files.loadCredentials()
+	if err != nil {
+		return err
+	}
+	key := string(login)
+	entry, ok := credentials[key]
+	if !ok {
+		return fmt.Errorf("login %s: %w", login, ErrNotFound)
+	}
+	entry.PasswordHash = string(hash)
+	credentials[key] = entry
+	return r.storage.files.persistCredentials(credentials)
+}

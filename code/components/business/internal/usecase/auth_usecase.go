@@ -20,6 +20,7 @@ var (
 	ErrLoginAlreadyTaken  = errors.New("login already taken")
 	ErrLoginNotRegistered = errors.New("login not registered")
 	ErrAuthNotConfigured  = errors.New("auth not configured")
+	ErrPasswordUnchanged  = errors.New("password unchanged")
 )
 
 type authUseCase struct {
@@ -92,6 +93,63 @@ func (uc *authUseCase) Login(ctx context.Context, cmd sdkusecase.LoginCommand) (
 		return domain.User{}, ErrInvalidCredentials
 	}
 	return uc.users.GetByID(ctx, creds.UserID)
+}
+
+func (uc *authUseCase) ChangePassword(ctx context.Context, cmd sdkusecase.ChangePasswordCommand) error {
+	login := normalizeLogin(cmd.Login)
+	oldPassword := strings.TrimSpace(cmd.OldPassword)
+	newPassword := strings.TrimSpace(cmd.NewPassword)
+	if login == "" || oldPassword == "" || newPassword == "" {
+		return ErrInvalidAuthData
+	}
+	if newPassword == oldPassword {
+		return ErrPasswordUnchanged
+	}
+	if uc.creds == nil {
+		return ErrAuthNotConfigured
+	}
+
+	creds, err := uc.creds.GetByLogin(ctx, login)
+	if err != nil {
+		if errors.Is(err, sdkrepo.ErrNotFound) {
+			return ErrLoginNotRegistered
+		}
+		return err
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(creds.PasswordHash), []byte(oldPassword)); err != nil {
+		return ErrInvalidCredentials
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("hash password: %w", err)
+	}
+	return uc.creds.UpdatePasswordHash(ctx, login, domain.PasswordHash(string(hash)))
+}
+
+func (uc *authUseCase) ResetPassword(ctx context.Context, cmd sdkusecase.ResetPasswordCommand) error {
+	login := normalizeLogin(cmd.Login)
+	newPassword := strings.TrimSpace(cmd.NewPassword)
+	if login == "" || newPassword == "" {
+		return ErrInvalidAuthData
+	}
+	if uc.creds == nil {
+		return ErrAuthNotConfigured
+	}
+
+	_, err := uc.creds.GetByLogin(ctx, login)
+	if err != nil {
+		if errors.Is(err, sdkrepo.ErrNotFound) {
+			return ErrLoginNotRegistered
+		}
+		return err
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("hash password: %w", err)
+	}
+	return uc.creds.UpdatePasswordHash(ctx, login, domain.PasswordHash(string(hash)))
 }
 
 func normalizeLogin(login domain.Login) domain.Login {

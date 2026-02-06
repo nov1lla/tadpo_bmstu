@@ -122,6 +122,12 @@ test-e2e-junit:
 	cd code/tests/e2e
 	go run gotest.tools/gotestsum@latest --format standard-quiet --junitfile $(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/e2e-webapp-junit.xml -- -count=1 -tags e2e ./...
 
+.PHONY: test-bdd-e2e-junit
+test-bdd-e2e-junit:
+	mkdir -p $(ALLURE_RESULTS_DIR)
+	cd code/tests/bdd
+	go run github.com/cucumber/godog/cmd/godog@v0.12.6 --format junit:$(ROOT_DIR)/$(ALLURE_RESULTS_DIR)/e2e-bdd-auth-junit.xml
+
 .PHONY: allure-generate
 allure-generate:
 	rm -rf $(ALLURE_RESULTS_DIR)/*
@@ -129,6 +135,7 @@ allure-generate:
 	$(MAKE) test-junit
 	$(MAKE) test-integration-junit
 	$(MAKE) test-e2e-junit
+	$(MAKE) test-bdd-e2e-junit
 	if [ -d "$(TEST_REPORT_DIR)/allure-history" ]; then \
 		cp -R "$(TEST_REPORT_DIR)/allure-history" "$(ALLURE_RESULTS_DIR)/history"; \
 	fi
@@ -153,6 +160,9 @@ test-ci-docker:
 	if docker compose version >/dev/null 2>&1; then \
 		docker compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner; \
 	else \
+		# docker-compose v1 can fail to recreate containers on newer Docker versions ("ContainerConfig" KeyError).\n\
+		# A clean down before up makes the run deterministic.\n\
+		docker-compose -f docker/docker-compose.test.yml down -v --remove-orphans >/dev/null 2>&1 || true; \
 		docker-compose -f docker/docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from test-runner; \
 	fi
 

@@ -53,3 +53,22 @@ func (r *UserCredentialsRepository) Save(ctx context.Context, creds domain.UserC
 	}
 	return nil
 }
+
+func (r *UserCredentialsRepository) UpdatePasswordHash(ctx context.Context, login domain.Login, hash domain.PasswordHash) error {
+	if login == "" {
+		return fmt.Errorf("login empty: %w", ErrInvalidData)
+	}
+	if hash == "" {
+		return fmt.Errorf("password hash empty: %w", ErrInvalidData)
+	}
+	const query = `UPDATE user_credentials SET password_hash = $2 WHERE login = $1`
+	res, err := r.db.ExecContext(ctx, query, login, hash)
+	if err != nil {
+		return err
+	}
+	affected, err := res.RowsAffected()
+	if err == nil && affected == 0 {
+		return fmt.Errorf("login %s: %w", login, ErrNotFound)
+	}
+	return err
+}

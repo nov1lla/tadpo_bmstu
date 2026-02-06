@@ -241,3 +241,16 @@ func (r *inMemoryCredsRepo) Save(ctx context.Context, creds domain.UserCredentia
 	r.entries[creds.Login] = creds
 	return nil
 }
+
+func (r *inMemoryCredsRepo) UpdatePasswordHash(ctx context.Context, login domain.Login, hash domain.PasswordHash) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	entry, ok := r.entries[login]
+	if !ok {
+		return repo.ErrNotFound
+	}
+	entry.PasswordHash = hash
+	r.entries[login] = entry
+	return nil
+}

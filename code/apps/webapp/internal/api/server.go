@@ -27,6 +27,9 @@ type Server struct {
 	moves sdkusecase.MoveUseCase
 	auth  sdkusecase.AuthUseCase
 	anim  sdkusecase.MoveAnimationUseCase
+
+	authFlow *authFlow
+	testMode bool
 }
 
 func NewServer(staticDir string, business component.BusinessProvider) (*Server, error) {
@@ -51,6 +54,9 @@ func NewServer(staticDir string, business component.BusinessProvider) (*Server, 
 		auth:      business.AuthUseCase(),
 		anim:      business.MoveAnimationUseCase(),
 	}
+	srv.testMode = envBool("WEBAPP_TEST_MODE", false)
+	outbox := newMemoryOutbox()
+	srv.authFlow = newAuthFlowFromEnv(srv.auth, outbox)
 	srv.registerRoutes()
 	return srv, nil
 }
@@ -94,6 +100,14 @@ func (s *Server) registerRoutes() {
 	s.mux.HandleFunc("/api/games/", s.handleGameByID)
 	s.mux.HandleFunc("/api/auth/register", s.handleRegister)
 	s.mux.HandleFunc("/api/auth/login", s.handleLogin)
+	s.mux.HandleFunc("/api/auth/login/verify", s.handleLoginVerify)
+	s.mux.HandleFunc("/api/auth/password/change/request", s.handlePasswordChangeRequest)
+	s.mux.HandleFunc("/api/auth/password/change/confirm", s.handlePasswordChangeConfirm)
+	s.mux.HandleFunc("/api/auth/recover/request", s.handleRecoveryRequest)
+	s.mux.HandleFunc("/api/auth/recover/confirm", s.handleRecoveryConfirm)
+	if s.testMode {
+		s.mux.HandleFunc("/api/test/outbox", s.handleTestOutbox)
+	}
 }
 
 func (s *Server) handleRegister(w http.ResponseWriter, r *http.Request) {
@@ -127,15 +141,16 @@ func (s *Server) handleLogin(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, err)
 		return
 	}
-	user, err := s.auth.Login(r.Context(), sdkusecase.LoginCommand{
-		Login:    domain.Login(req.Login),
-		Password: req.Password,
-	})
+	result, err := s.authFlow.StartLogin(r.Context(), domain.Login(req.Login), req.Password)
 	if err != nil {
-		writeError(w, http.StatusUnauthorized, err)
+		writeError(w, authHTTPStatus(err), err)
 		return
 	}
-	writeJSON(w, http.StatusOK, authResponse{User: newUserDTO(user)})
+	writeJSON(w, http.StatusAccepted, authChallengeResponse{
+		User:        newUserDTO(result.User),
+		ChallengeID: result.ChallengeID,
+		TwoFactor:   true,
+	})
 }
 
 func (s *Server) handleUsers(w http.ResponseWriter, r *http.Request) {

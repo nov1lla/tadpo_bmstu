@@ -92,6 +92,17 @@ else
   write_skipped "e2e" "webapp"
 fi
 
+bdd_failed=0
+if [ "${unit_failed}" -eq 0 ] && [ "${integration_failed}" -eq 0 ] && [ "${e2e_failed}" -eq 0 ]; then
+  echo "==> e2e/bdd-auth"
+  (
+    cd "${ROOT_DIR}/code/tests/bdd"
+    go run github.com/cucumber/godog/cmd/godog@v0.12.6 --format "junit:${ALLURE_RESULTS_DIR}/e2e-bdd-auth-junit.xml"
+  ) || bdd_failed=1
+else
+  write_skipped "e2e" "bdd-auth"
+fi
+
 if command -v allure >/dev/null 2>&1; then
   allure generate "${ALLURE_RESULTS_DIR}" --clean -o "${ALLURE_REPORT_DIR}"
   rm -rf "${ALLURE_HISTORY_SRC}"
@@ -108,5 +119,9 @@ fi
 echo "Reports saved to ${REPORT_DIR}"
 
 if [ "${unit_failed}" -ne 0 ] || [ "${integration_failed}" -ne 0 ] || [ "${e2e_failed}" -ne 0 ]; then
+  exit 1
+fi
+
+if [ "${bdd_failed}" -ne 0 ]; then
   exit 1
 fi
