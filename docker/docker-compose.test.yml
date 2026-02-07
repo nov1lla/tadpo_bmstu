@@ -22,6 +22,9 @@ services:
       REPO_URL: ${REPO_URL:-}
       REPO_REF: ${REPO_REF:-}
       RUN_TRAFFIC_CAPTURE: ${RUN_TRAFFIC_CAPTURE:-1}
+      BDD_TECH_PASSWORD: ${BDD_TECH_PASSWORD:-}
+      BDD_TECH_LOGIN_DOMAIN: ${BDD_TECH_LOGIN_DOMAIN:-}
+      BDD_TECH_LOGIN_PREFIX: ${BDD_TECH_LOGIN_PREFIX:-}
     depends_on:
       postgres:
         condition: service_healthy

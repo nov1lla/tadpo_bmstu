@@ -66,9 +66,23 @@ func InitializeScenario(ctx *godog.ScenarioContext) {
 	state := &scenarioState{app: globalApp}
 
 	ctx.Before(func(ctx context.Context, _ *godog.Scenario) (context.Context, error) {
-		// fresh credentials per scenario (technical user), no plaintext in repo/feature files.
-		state.login = fmt.Sprintf("tech_%d@example.test", time.Now().UnixNano())
-		state.password = randomPassword()
+		// Fresh technical user per scenario, but with a fixed password coming from env/CI secrets.
+		// This keeps credentials out of the repo while still demonstrating secrets usage in CI.
+		state.password = strings.TrimSpace(os.Getenv("BDD_TECH_PASSWORD"))
+		if state.password == "" {
+			return ctx, errors.New("BDD_TECH_PASSWORD env is required (set GitHub Secret / local export)")
+		}
+
+		domain := strings.TrimSpace(os.Getenv("BDD_TECH_LOGIN_DOMAIN"))
+		if domain == "" {
+			domain = "example.test"
+		}
+		prefix := strings.TrimSpace(os.Getenv("BDD_TECH_LOGIN_PREFIX"))
+		if prefix == "" {
+			prefix = "tech_"
+		}
+		state.login = fmt.Sprintf("%s%d@%s", prefix, time.Now().UnixNano(), domain)
+
 		state.newPassword = ""
 		state.challengeID = ""
 		state.code = ""
