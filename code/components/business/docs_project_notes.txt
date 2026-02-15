@@ -1,0 +1,1 @@
+Refer to ../../product/docs_project_notes.txt for shared project notes.

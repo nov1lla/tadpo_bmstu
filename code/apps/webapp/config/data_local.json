@@ -1,0 +1,6 @@
+{
+  "backend": "local",
+  "local": {
+    "directory": "../runtime/data"
+  }
+}
