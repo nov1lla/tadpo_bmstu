@@ -1,0 +1,82 @@
+# Project Quick Notes (keep this in sync)
+
+## Vision & Scope
+- Проект: система визуализации ходов в игре (шашки/шахматы) с AI-партнером и анимацией перемещения на виртуальной доске.
+- Поток: пользователь вводит ход → `GameUseCase` валидирует/сохраняет → `MoveUseCase` запрашивает ход у AI (OpenAI) → `AnimationUseCase` строит пошаговую анимацию.
+- Текущая задача (Lab4/5): технологический UI, работающий поверх тех же use-case, что и будущий GUI, плюс покрытие всех сценариев из ТЗ.
+  * Правило “обязательное взятие”: если на доске есть возможное взятие для текущего игрока — он обязан бить.
+  * Правило “обязательное продолжение взятия”: если после взятия у той же фигуры есть ещё взятие — ход обязан продолжаться цепочкой до исчерпания взятий.
+  * Король (king) ходит и бьет только на 1/2 клетки по диагонали в любую сторону (без “дальних” ходов).
+
+## Архитектурные уровни
+- **Domain**: структуры `User`, `Game`, `Move`, `BoardState`, `Position`, `Animation`, константы (например `domain.DefaultBoardSize`). Инварианты внутри конструкторов (`NewMove`, `Game.Finish`).
+- **Use Cases**:
+  - `UserUseCase`: `Create`, `Get`, `UpdateFields`.
+    * `Create` теперь сам генерирует `UserID`, рейтинг/серия побед стартуют с 0.
+  - `GameUseCase`: `New`, `ProcessMove`, `FinishGame`, `GenerateHistory`, `GetChessboard`, `UpdateBoardState`.
+    * `New` и `ProcessMove` генерируют идентификаторы партий/ходов и считают номера ходов.
+  - `MoveUseCase`: `AddUserMove`, `GetOpponentMove`.
+    * Формируют номера ходов, обновляют статус игры `pending → in_progress`.
+    * Для ответов ИИ включено логирование (std log) и fallback-построение траектории, если LLM прислал промежуточные клетки жертвы.
+  - `AnimationUseCase`: `AnimateMove` (обработка блокирующих фигур, вывоз жертвы).
+- **Ports**:
+  - Репозитории (`internal/port/repo`): `UserRepository`, `GameRepository`, `MoveRepository`.
+  - `BoardStateReader` (для анимации).
+  - `OpponentMoveProvider` (OpenAI / mock).
+  - `IDGenerator` — источник уникальных идентификаторов (реализация на UUID).
+- **Infrastructure**:
+  - PostgreSQL (реализация в `internal/repository/postgres`, транзакции на `Save`/`UpdateBoardState`).
+  - Локальное JSON-хранилище (`internal/repository/localjson`) — репозитории поверх файлов, включаются через конфиг `DATA_SOURCE` и не требуют БД.
+  - OpenAI клиент (`internal/adapter/openai`) — требует явного `model`/`base URL` из конфига, возвращает `domain.Move`, различает `APIError`, `ErrEmptyResponse`, `ErrMalformedJSON`.
+    * Промпт жёстко описывает правила (цвет ИИ, индексация, формат path с landing squares).
+  - Плагины (`plugins/data`, `plugins/business`) позволяют собрать приложение динамически через `buildmode=plugin`; интерфейсы объявлены в `internal/component`.
+  - DI (`internal/app`) — строит приложение по конфигу (`internal/config`).
+  - Генератор идентификаторов (`internal/service/idgen`) — `UUIDGenerator`, внедряется во все use case.
+- **Config** (`internal/config/config.go`): читает `POSTGRES_DSN`, `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_BASE_URL`, `HTTP_TIMEOUT` (дефолт 10s).
+
+## База данных
+- SQL-схема: `code/components/data/migrations/001_init.sql` (таблицы `users`, `games`, `game_board_states`, `moves`).
+- Миграция для логина/пароля: `code/components/data/migrations/002_add_user_credentials.sql` (таблица `user_credentials`).
+- В тестах используется `SetupTestDB` (mutex, миграции, TRUNCATE после теста).
+
+## Интеграционные тесты
+- Репозитории: `internal/repository/postgres/*_test.go` (CRUD + ограничения).
+- Сквозной сценарий игры и AI (mock OpenAI): `internal/integration/game_flow_test.go`.
+- Живой запрос к OpenAI (опционально, `RUN_OPENAI_LIVE_TEST=1`): `internal/integration/openai_live_test.go`.
+- Команда для воспроизводимого запуска: `POSTGRES_DSN=postgres://admin:admin123@localhost:5432/ppo_cource?sslmode=disable go test ./... -v -count=1` (детальный вывод, без кеша).
+
+## Технологический UI (Lab5)
+- Консольное приложение (`cmd/techui`, пакет `internal/techui`):
+  - Меню покрывает все use case: CRUD пользователя, жизненный цикл игры (создание, ход, история, доска, обновление состояния, завершение), операции с ходами и анимация.
+  - UI опирается на интерфейсы `UserUseCase`, `GameUseCase`, `MoveUseCase`; анимация построена на `usecase.NewAnimator` с адаптером снимка доски.
+  - Пользователь вводит только бизнес-данные (имя, фигура, координаты). Идентификаторы и номера ходов генерирует серверная логика, UI сразу печатает сгенерированные значения.
+  - ASCII-рендерер (`renderer.go`) рисует доску с координатами и легендой по фигурам (`w/W` для белых, `b/B` для чёрных).
+  - `AnimationPlayer` воспроизводит шаги с поддержкой очистки экрана и задержки между кадрами.
+  - Форматирование сущностей (`formatter.go`) и универсальный терминал (`console.go`) отделены от бизнес-логики.
+  - Настройки UI: `UI_OPERATION_TIMEOUT`, `ANIMATION_DELAY_MS`, `UI_CLEAR_SCREEN` (раздел `Config.UI`).
+  - Юнит-тесты: `internal/techui/renderer_test.go`, `internal/techui/animation_test.go`.
+- Запуск: `go run ./cmd/techui` (предварительно сконфигурировать БД и окружение).
+
+## Анимация захвата (физическая доска)
+- Для отображения захвата: сначала “сбрасываем” побитую шашку с доски по неиграбельным клеткам в сторону её игрока, затем передвигаем атакующую шашку на клетку побитой, и только потом — на клетку приземления.
+- Если за ход несколько взятий, повторяем последовательность по каждому взятию.
+- На бэке есть usecase, который принимает ход + снимок доски и возвращает список шагов перемещений (для пошагового воспроизведения на фронте).
+
+## Полезные сценарии запуска
+- Все тесты (verbose, без кеша):
+  `POSTGRES_DSN=postgres://admin:admin123@localhost:5432/ppo_cource?sslmode=disable go test ./... -v -count=1`
+- Только репозитории: `go test ./internal/repository/postgres -v -count=1`
+- Интеграция + live OpenAI:
+  `RUN_OPENAI_LIVE_TEST=1 OPENAI_API_KEY=... OPENAI_MODEL=gpt-4o-mini go test ./internal/integration -run TestLiveOpenAIIntegration -v -count=1`
+- Сборка через плагины:
+  `go build -tags plugin -buildmode=plugin -o build/data.so ./plugins/data`
+  `go build -tags plugin -buildmode=plugin -o build/business.so ./plugins/business`
+  `go build -o build/techui_modular ./cmd/techui_modular`
+  Запуск: `DATA_PLUGIN_PATH=build/data.so BUSINESS_PLUGIN_PATH=build/business.so DATA_SOURCE=./config/data_postgres.json ./build/techui_modular`
+  Для локального режима: `DATA_SOURCE=./config/data_local.json`.
+
+## Напоминания
+- Соблюдать SOLID: интерфейсы → зависимости, DI, композиция, никаких глобальных синглтонов.
+- Любые «магические» числа/строки → константы, конфиги.
+- Всегда оборачивать ошибки с контекстом для UI.
+- При добавлении нового слоя/фичи — обновить этот файл.

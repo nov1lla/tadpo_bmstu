@@ -1,0 +1,6 @@
+{
+  "backend": "postgres",
+  "postgres": {
+    "dsn": "postgres://admin:admin123@localhost:5432/ppo_cource?sslmode=disable"
+  }
+}
