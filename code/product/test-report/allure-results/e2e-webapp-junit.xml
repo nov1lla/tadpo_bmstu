@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="1" failures="0" errors="0" time="3.804945">
-	<testsuite tests="1" failures="0" time="3.805000" name="ppo/tests/e2e" timestamp="2026-02-20T08:42:39+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-		<testcase classname="ppo/tests/e2e" name="TestWebappE2EFlow" time="3.800000"></testcase>
+<testsuites tests="1">
+	<testsuite name="ppo/tests/e2e" tests="1" failures="0" errors="0" id="0" hostname="dbb02bcb5936" time="15.108" timestamp="2026-02-20T08:33:47Z">
+		<testcase name="TestWebappE2EFlow" classname="ppo/tests/e2e" time="15.100">
+			<system-out><![CDATA[2026/02/20 08:33:46 webapp listening on 127.0.0.1:34831
+2026/02/20 08:33:47 http GET /api/users status=405 bytes=31 duration=91.137µs
+2026/02/20 08:33:47 http POST /api/users status=201 bytes=107 duration=15.233476ms
+2026/02/20 08:33:47 http GET /api/users/fa94749b-7104-464e-8ed8-0239280333b0 status=200 bytes=107 duration=1.299427ms
+2026/02/20 08:33:47 http POST /api/games status=201 bytes=1747 duration=7.977419ms
+2026/02/20 08:33:47 http POST /api/games/ff0c69c1-e44c-488f-ac0a-c9fe974eafee/moves status=200 bytes=1974 duration=9.185797ms
+2026/02/20 08:33:47 http GET /api/games/ff0c69c1-e44c-488f-ac0a-c9fe974eafee/moves status=200 bytes=168 duration=292.583µs
+2026/02/20 08:33:47 http DELETE /api/games/ff0c69c1-e44c-488f-ac0a-c9fe974eafee status=204 bytes=0 duration=4.545602ms]]></system-out>
+		</testcase>
 	</testsuite>
 </testsuites>

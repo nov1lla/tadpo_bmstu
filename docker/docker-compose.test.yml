@@ -11,7 +11,7 @@ services:
       test: ["CMD-SHELL", "pg_isready -U admin -d ppo_cource"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 3
 
   test-runner:
     build:
@@ -22,8 +22,8 @@ services:
       REPO_URL: ${REPO_URL:-}
       REPO_REF: ${REPO_REF:-}
       RUN_TRAFFIC_CAPTURE: ${RUN_TRAFFIC_CAPTURE:-1}
-    # depends_on:
-    #   postgres:
-    #     condition: service_healthy
+    depends_on:
+      postgres:
+        condition: service_healthy
     volumes:
-      - ../code/product/test-report:/workspace/code/product/test-report
+      - ${TEST_REPORT_DIR:-../code/product/test-report}:/workspace/code/product/test-report

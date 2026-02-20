@@ -4,6 +4,32 @@ set -euo pipefail
 REPO_URL="${REPO_URL:-}"
 REPO_REF="${REPO_REF:-}"
 RUN_TRAFFIC_CAPTURE="${RUN_TRAFFIC_CAPTURE:-0}"
+POSTGRES_DSN="${POSTGRES_DSN:-}"
+POSTGRES_CONNECT_RETRIES="${POSTGRES_CONNECT_RETRIES:-3}"
+POSTGRES_CONNECT_DELAY_SECONDS="${POSTGRES_CONNECT_DELAY_SECONDS:-2}"
+
+wait_for_postgres() {
+  if [ -z "${POSTGRES_DSN}" ]; then
+    return 0
+  fi
+
+  local attempt=1
+  while [ "${attempt}" -le "${POSTGRES_CONNECT_RETRIES}" ]; do
+    if psql "${POSTGRES_DSN}" -c "select 1" >/dev/null 2>&1; then
+      return 0
+    fi
+    echo "Postgres connection attempt ${attempt}/${POSTGRES_CONNECT_RETRIES} failed"
+    attempt=$((attempt + 1))
+    if [ "${attempt}" -le "${POSTGRES_CONNECT_RETRIES}" ]; then
+      sleep "${POSTGRES_CONNECT_DELAY_SECONDS}"
+    fi
+  done
+
+  echo "ERROR: unable to connect to Postgres after ${POSTGRES_CONNECT_RETRIES} attempts" >&2
+  return 1
+}
+
+wait_for_postgres
 
 if [ -n "${REPO_URL}" ]; then
   if [ ! -d "/workspace/.git" ]; then

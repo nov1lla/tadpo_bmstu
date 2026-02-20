@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-REPORT_DIR="${ROOT_DIR}/code/product/test-report"
+REPORT_DIR="${TEST_REPORT_DIR:-${ROOT_DIR}/code/product/test-report}"
 ALLURE_RESULTS_DIR="${REPORT_DIR}/allure-results"
 ALLURE_REPORT_DIR="${REPORT_DIR}/allure-report"
 ALLURE_HISTORY_SRC="${REPORT_DIR}/allure-history"

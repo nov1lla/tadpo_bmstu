@@ -1,81 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="53" failures="0" errors="0" time="0.713812">
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/data/internal/config" timestamp="2026-02-20T08:42:38+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
+<testsuites tests="53">
+	<testsuite name="ppo/data/internal/config" tests="0" failures="0" errors="0" id="0" hostname="dbb02bcb5936" time="0.000" timestamp="2026-02-20T08:45:34Z"></testsuite>
+	<testsuite name="ppo/data/internal/repository/localjson" tests="50" failures="0" errors="0" id="1" hostname="dbb02bcb5936" time="0.033" timestamp="2026-02-20T08:45:34Z">
+		<testcase name="TestGameRepositorySave_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositorySave_RejectsInvalidID" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryGetByID_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryListByUser_OK" classname="ppo/data/internal/repository/localjson" time="0.010"></testcase>
+		<testcase name="TestGameRepositoryListByUser_ContextCanceled" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdate_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdate_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryDelete_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryDelete_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryBoardState_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryBoardState_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdateBoardState_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdateBoardState_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositorySaveAndGetByID" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositorySaveRejectsDuplicate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositoryUpdate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositoryUpdateMissing" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositoryGetByIDMissing" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositorySave" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositorySaveRejectsDuplicate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryGetByID" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryGetByIDMissing" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryListByUserOrdersByStart" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryListByUserEmpty" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryBoardState" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryBoardStateMissing" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdateBoardState" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdateBoardStateMissing" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestGameRepositoryUpdateMissing" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryAddAndGetByID" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryAddRejectsDuplicate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryGetByIDMissing" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryListByGame" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryListByGameEmpty" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryAdd_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryAdd_RejectsDuplicate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryGetByID_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryListByGame_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryListByGame_ContextCanceled" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryDeleteByGame_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestMoveRepositoryDeleteByGame_ContextCanceled" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserCredentialsRepositorySave_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserCredentialsRepositorySave_RejectsDuplicate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserCredentialsRepositoryGetByLogin_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositorySave_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositorySave_RejectsDuplicate" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositoryGetByID_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositoryUpdate_OK" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
+		<testcase name="TestUserRepositoryUpdate_NotFound" classname="ppo/data/internal/repository/localjson" time="0.000"></testcase>
 	</testsuite>
-	<testsuite tests="50" failures="0" time="0.026000" name="ppo/data/internal/repository/localjson" timestamp="2026-02-20T08:42:38+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositorySave_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositorySave_RejectsInvalidID" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryGetByID_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryListByUser_OK" time="0.010000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryListByUser_ContextCanceled" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdate_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdate_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryDelete_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryDelete_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryBoardState_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryBoardState_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdateBoardState_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdateBoardState_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositorySaveAndGetByID" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositorySaveRejectsDuplicate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryUpdate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryUpdateMissing" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryGetByIDMissing" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositorySave" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositorySaveRejectsDuplicate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryGetByID" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryGetByIDMissing" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryListByUserOrdersByStart" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryListByUserEmpty" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryBoardState" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryBoardStateMissing" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdateBoardState" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdateBoardStateMissing" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositoryUpdateMissing" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryAddAndGetByID" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryAddRejectsDuplicate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryGetByIDMissing" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryListByGame" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryListByGameEmpty" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryAdd_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryAdd_RejectsDuplicate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryGetByID_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryListByGame_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryListByGame_ContextCanceled" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryDeleteByGame_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryDeleteByGame_ContextCanceled" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserCredentialsRepositorySave_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserCredentialsRepositorySave_RejectsDuplicate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserCredentialsRepositoryGetByLogin_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositorySave_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositorySave_RejectsDuplicate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryGetByID_NotFound" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryUpdate_OK" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryUpdate_NotFound" time="0.000000"></testcase>
-	</testsuite>
-	<testsuite tests="3" failures="0" time="0.531000" name="ppo/data/internal/repository/postgres" timestamp="2026-02-20T08:42:38+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-		<testcase classname="ppo/data/internal/repository/postgres" name="TestGameRepository_Postgres" time="0.180000"></testcase>
-		<testcase classname="ppo/data/internal/repository/postgres" name="TestMoveRepository_Postgres" time="0.180000"></testcase>
-		<testcase classname="ppo/data/internal/repository/postgres" name="TestUserRepository_Postgres" time="0.170000"></testcase>
-	</testsuite>
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/data/provider" timestamp="2026-02-20T08:42:38+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-	</testsuite>
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/data/testsupport" timestamp="2026-02-20T08:42:38+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
+	<testsuite name="ppo/data/provider" tests="0" failures="0" errors="0" id="2" hostname="dbb02bcb5936" time="0.000" timestamp="2026-02-20T08:45:34Z"></testsuite>
+	<testsuite name="ppo/data/testsupport" tests="0" failures="0" errors="0" id="3" hostname="dbb02bcb5936" time="0.000" timestamp="2026-02-20T08:45:34Z"></testsuite>
+	<testsuite name="ppo/data/internal/repository/postgres" tests="3" failures="0" errors="0" id="4" hostname="dbb02bcb5936" time="0.489" timestamp="2026-02-20T08:45:34Z">
+		<testcase name="TestGameRepository_Postgres" classname="ppo/data/internal/repository/postgres" time="0.160"></testcase>
+		<testcase name="TestMoveRepository_Postgres" classname="ppo/data/internal/repository/postgres" time="0.160"></testcase>
+		<testcase name="TestUserRepository_Postgres" classname="ppo/data/internal/repository/postgres" time="0.160"></testcase>
 	</testsuite>
 </testsuites>

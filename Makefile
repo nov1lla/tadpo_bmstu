@@ -10,6 +10,9 @@ ROOT_DIR := $(CURDIR)
 TEST_REPORT_DIR := code/product/test-report
 ALLURE_RESULTS_DIR := $(TEST_REPORT_DIR)/allure-results
 ALLURE_REPORT_DIR := $(TEST_REPORT_DIR)/allure-report
+TEST_RUN_ID ?= default
+TEST_REPORT_DIR_EFFECTIVE := $(if $(filter default,$(TEST_RUN_ID)),$(ROOT_DIR)/$(TEST_REPORT_DIR),$(ROOT_DIR)/$(TEST_REPORT_DIR)-$(TEST_RUN_ID))
+COMPOSE_PROJECT_NAME ?= $(if $(filter default,$(TEST_RUN_ID)),test-ci,test-ci-$(TEST_RUN_ID))
 
 .PHONY: run
 run:
@@ -152,15 +155,19 @@ test-ci:
 .PHONY: test-ci-docker
 test-ci-docker:
 	if docker compose version >/dev/null 2>&1; then \
-		docker compose -f docker/docker-compose.test.yml up --build --exit-code-from test-runner; \
+		TEST_REPORT_DIR="$(TEST_REPORT_DIR_EFFECTIVE)" COMPOSE_PROJECT_NAME="$(COMPOSE_PROJECT_NAME)" \
+			docker compose -p "$(COMPOSE_PROJECT_NAME)" -f docker/docker-compose.test.yml up; \
 	else \
-		docker-compose -f docker/docker-compose.test.yml up --build --exit-code-from test-runner; \
+		TEST_REPORT_DIR="$(TEST_REPORT_DIR_EFFECTIVE)" COMPOSE_PROJECT_NAME="$(COMPOSE_PROJECT_NAME)" \
+			docker-compose -p "$(COMPOSE_PROJECT_NAME)" -f docker/docker-compose.test.yml up; \
 	fi
 
 .PHONY: test-ci-docker-down
 test-ci-docker-down:
 	if docker compose version >/dev/null 2>&1; then \
-		docker compose -f docker/docker-compose.test.yml down -v; \
+		TEST_REPORT_DIR="$(TEST_REPORT_DIR_EFFECTIVE)" COMPOSE_PROJECT_NAME="$(COMPOSE_PROJECT_NAME)" \
+			docker compose -p "$(COMPOSE_PROJECT_NAME)" -f docker/docker-compose.test.yml down -v; \
 	else \
-		docker-compose -f docker/docker-compose.test.yml down -v; \
+		TEST_REPORT_DIR="$(TEST_REPORT_DIR_EFFECTIVE)" COMPOSE_PROJECT_NAME="$(COMPOSE_PROJECT_NAME)" \
+			docker-compose -p "$(COMPOSE_PROJECT_NAME)" -f docker/docker-compose.test.yml down -v; \
 	fi

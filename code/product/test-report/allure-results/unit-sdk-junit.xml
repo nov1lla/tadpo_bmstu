@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="5" failures="0" errors="0" time="0.135094">
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/component" timestamp="2026-02-20T08:42:35+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-	</testsuite>
-	<testsuite tests="5" failures="0" time="0.004000" name="ppo/sdk/domain" timestamp="2026-02-20T08:42:36+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-		<testcase classname="ppo/sdk/domain" name="TestCheckersRules_MustCaptureWhenAvailable" time="0.000000"></testcase>
-		<testcase classname="ppo/sdk/domain" name="TestCheckersRules_MustContinueCaptureWhilePossible" time="0.000000"></testcase>
-		<testcase classname="ppo/sdk/domain" name="TestNewPathValidatesAdjacency" time="0.000000"></testcase>
-		<testcase classname="ppo/sdk/domain" name="TestNewPathRejectsNonAdjacentHop" time="0.000000"></testcase>
-		<testcase classname="ppo/sdk/domain" name="TestComputeExitPathLeavesBoard" time="0.000000"></testcase>
-	</testsuite>
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/port" timestamp="2026-02-20T08:42:36+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-	</testsuite>
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/port/repo" timestamp="2026-02-20T08:42:36+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
-	</testsuite>
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/usecase" timestamp="2026-02-20T08:42:36+03:00">
-		<properties>
-			<property name="go.version" value="go1.25.7 linux/amd64"></property>
-		</properties>
+<testsuites tests="5">
+	<testsuite name="ppo/sdk/component" tests="0" failures="0" errors="0" id="0" hostname="dbb02bcb5936" time="0.000" timestamp="2026-02-20T08:45:32Z"></testsuite>
+	<testsuite name="ppo/sdk/port" tests="0" failures="0" errors="0" id="1" hostname="dbb02bcb5936" time="0.000" timestamp="2026-02-20T08:45:32Z"></testsuite>
+	<testsuite name="ppo/sdk/port/repo" tests="0" failures="0" errors="0" id="2" hostname="dbb02bcb5936" time="0.000" timestamp="2026-02-20T08:45:32Z"></testsuite>
+	<testsuite name="ppo/sdk/usecase" tests="0" failures="0" errors="0" id="3" hostname="dbb02bcb5936" time="0.000" timestamp="2026-02-20T08:45:32Z"></testsuite>
+	<testsuite name="ppo/sdk/domain" tests="5" failures="0" errors="0" id="4" hostname="dbb02bcb5936" time="0.004" timestamp="2026-02-20T08:45:32Z">
+		<testcase name="TestCheckersRules_MustCaptureWhenAvailable" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestCheckersRules_MustContinueCaptureWhilePossible" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestNewPathValidatesAdjacency" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestNewPathRejectsNonAdjacentHop" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestComputeExitPathLeavesBoard" classname="ppo/sdk/domain" time="0.000"></testcase>
 	</testsuite>
 </testsuites>

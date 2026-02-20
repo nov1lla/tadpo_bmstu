@@ -1,0 +1,229 @@
+{"Time":"2026-02-20T08:20:20.221336901Z","Action":"start","Package":"ppo/data/internal/config"}
+{"Time":"2026-02-20T08:20:20.221407619Z","Action":"output","Package":"ppo/data/internal/config","Output":"?   \tppo/data/internal/config\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:20.221425307Z","Action":"skip","Package":"ppo/data/internal/config","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.342457245Z","Action":"start","Package":"ppo/data/internal/repository/localjson"}
+{"Time":"2026-02-20T08:20:20.344063591Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_OK"}
+{"Time":"2026-02-20T08:20:20.344086926Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_OK","Output":"=== RUN   TestGameRepositorySave_OK\n"}
+{"Time":"2026-02-20T08:20:20.344910877Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_OK","Output":"--- PASS: TestGameRepositorySave_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.344926564Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.344939267Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_RejectsInvalidID"}
+{"Time":"2026-02-20T08:20:20.344942297Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_RejectsInvalidID","Output":"=== RUN   TestGameRepositorySave_RejectsInvalidID\n"}
+{"Time":"2026-02-20T08:20:20.34524621Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_RejectsInvalidID","Output":"--- PASS: TestGameRepositorySave_RejectsInvalidID (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.345276513Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave_RejectsInvalidID","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.345282203Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID_NotFound"}
+{"Time":"2026-02-20T08:20:20.345284655Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID_NotFound","Output":"=== RUN   TestGameRepositoryGetByID_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.346222987Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID_NotFound","Output":"--- PASS: TestGameRepositoryGetByID_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.346251775Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.346259336Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_OK"}
+{"Time":"2026-02-20T08:20:20.34626247Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_OK","Output":"=== RUN   TestGameRepositoryListByUser_OK\n"}
+{"Time":"2026-02-20T08:20:20.351638462Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_OK","Output":"--- PASS: TestGameRepositoryListByUser_OK (0.01s)\n"}
+{"Time":"2026-02-20T08:20:20.351667288Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_OK","Elapsed":0.01}
+{"Time":"2026-02-20T08:20:20.351674577Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_ContextCanceled"}
+{"Time":"2026-02-20T08:20:20.351676934Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_ContextCanceled","Output":"=== RUN   TestGameRepositoryListByUser_ContextCanceled\n"}
+{"Time":"2026-02-20T08:20:20.352386953Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_ContextCanceled","Output":"--- PASS: TestGameRepositoryListByUser_ContextCanceled (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.352418175Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUser_ContextCanceled","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.352425523Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_OK"}
+{"Time":"2026-02-20T08:20:20.352430197Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_OK","Output":"=== RUN   TestGameRepositoryUpdate_OK\n"}
+{"Time":"2026-02-20T08:20:20.352941582Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_OK","Output":"--- PASS: TestGameRepositoryUpdate_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.352999821Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.353030725Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_NotFound"}
+{"Time":"2026-02-20T08:20:20.353034165Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_NotFound","Output":"=== RUN   TestGameRepositoryUpdate_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.353410025Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_NotFound","Output":"--- PASS: TestGameRepositoryUpdate_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.353453869Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.353480052Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_OK"}
+{"Time":"2026-02-20T08:20:20.353487885Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_OK","Output":"=== RUN   TestGameRepositoryDelete_OK\n"}
+{"Time":"2026-02-20T08:20:20.354356388Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_OK","Output":"--- PASS: TestGameRepositoryDelete_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.354410956Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.354462945Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_NotFound"}
+{"Time":"2026-02-20T08:20:20.354480399Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_NotFound","Output":"=== RUN   TestGameRepositoryDelete_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.354710216Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_NotFound","Output":"--- PASS: TestGameRepositoryDelete_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.354729559Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryDelete_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.354735239Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_OK"}
+{"Time":"2026-02-20T08:20:20.354738007Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_OK","Output":"=== RUN   TestGameRepositoryBoardState_OK\n"}
+{"Time":"2026-02-20T08:20:20.356205676Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_OK","Output":"--- PASS: TestGameRepositoryBoardState_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.356214792Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.356218433Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_NotFound"}
+{"Time":"2026-02-20T08:20:20.356253094Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_NotFound","Output":"=== RUN   TestGameRepositoryBoardState_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.356275082Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_NotFound","Output":"--- PASS: TestGameRepositoryBoardState_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.356331034Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.356348403Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_OK"}
+{"Time":"2026-02-20T08:20:20.356453328Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_OK","Output":"=== RUN   TestGameRepositoryUpdateBoardState_OK\n"}
+{"Time":"2026-02-20T08:20:20.357087838Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_OK","Output":"--- PASS: TestGameRepositoryUpdateBoardState_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.357113755Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.357119641Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_NotFound"}
+{"Time":"2026-02-20T08:20:20.357125094Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_NotFound","Output":"=== RUN   TestGameRepositoryUpdateBoardState_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.357128516Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_NotFound","Output":"--- PASS: TestGameRepositoryUpdateBoardState_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.357131044Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.357133332Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveAndGetByID"}
+{"Time":"2026-02-20T08:20:20.357135093Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveAndGetByID","Output":"=== RUN   TestUserRepositorySaveAndGetByID\n"}
+{"Time":"2026-02-20T08:20:20.35748167Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveAndGetByID","Output":"--- PASS: TestUserRepositorySaveAndGetByID (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.357493933Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveAndGetByID","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.357498418Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveRejectsDuplicate"}
+{"Time":"2026-02-20T08:20:20.357500917Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveRejectsDuplicate","Output":"=== RUN   TestUserRepositorySaveRejectsDuplicate\n"}
+{"Time":"2026-02-20T08:20:20.357929434Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveRejectsDuplicate","Output":"--- PASS: TestUserRepositorySaveRejectsDuplicate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.357999943Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySaveRejectsDuplicate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.358003172Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate"}
+{"Time":"2026-02-20T08:20:20.358006324Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate","Output":"=== RUN   TestUserRepositoryUpdate\n"}
+{"Time":"2026-02-20T08:20:20.358553492Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate","Output":"--- PASS: TestUserRepositoryUpdate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.35861914Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.358626799Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdateMissing"}
+{"Time":"2026-02-20T08:20:20.358629417Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdateMissing","Output":"=== RUN   TestUserRepositoryUpdateMissing\n"}
+{"Time":"2026-02-20T08:20:20.358792086Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdateMissing","Output":"--- PASS: TestUserRepositoryUpdateMissing (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.358799883Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdateMissing","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.358803717Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByIDMissing"}
+{"Time":"2026-02-20T08:20:20.358805738Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByIDMissing","Output":"=== RUN   TestUserRepositoryGetByIDMissing\n"}
+{"Time":"2026-02-20T08:20:20.3589837Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByIDMissing","Output":"--- PASS: TestUserRepositoryGetByIDMissing (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.358991293Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByIDMissing","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.35899809Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave"}
+{"Time":"2026-02-20T08:20:20.359000646Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave","Output":"=== RUN   TestGameRepositorySave\n"}
+{"Time":"2026-02-20T08:20:20.359467472Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave","Output":"--- PASS: TestGameRepositorySave (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.359555202Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySave","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.359575388Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySaveRejectsDuplicate"}
+{"Time":"2026-02-20T08:20:20.359578981Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySaveRejectsDuplicate","Output":"=== RUN   TestGameRepositorySaveRejectsDuplicate\n"}
+{"Time":"2026-02-20T08:20:20.359931615Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySaveRejectsDuplicate","Output":"--- PASS: TestGameRepositorySaveRejectsDuplicate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.359944245Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositorySaveRejectsDuplicate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.360021913Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID"}
+{"Time":"2026-02-20T08:20:20.360029449Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID","Output":"=== RUN   TestGameRepositoryGetByID\n"}
+{"Time":"2026-02-20T08:20:20.361166148Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID","Output":"--- PASS: TestGameRepositoryGetByID (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.361186239Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByID","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.361191641Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByIDMissing"}
+{"Time":"2026-02-20T08:20:20.361193964Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByIDMissing","Output":"=== RUN   TestGameRepositoryGetByIDMissing\n"}
+{"Time":"2026-02-20T08:20:20.361197577Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByIDMissing","Output":"--- PASS: TestGameRepositoryGetByIDMissing (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.361200167Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryGetByIDMissing","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.361202614Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserOrdersByStart"}
+{"Time":"2026-02-20T08:20:20.361204564Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserOrdersByStart","Output":"=== RUN   TestGameRepositoryListByUserOrdersByStart\n"}
+{"Time":"2026-02-20T08:20:20.361630112Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserOrdersByStart","Output":"--- PASS: TestGameRepositoryListByUserOrdersByStart (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.361679605Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserOrdersByStart","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.361710921Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserEmpty"}
+{"Time":"2026-02-20T08:20:20.361715126Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserEmpty","Output":"=== RUN   TestGameRepositoryListByUserEmpty\n"}
+{"Time":"2026-02-20T08:20:20.362249247Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserEmpty","Output":"--- PASS: TestGameRepositoryListByUserEmpty (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.362293585Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryListByUserEmpty","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.362323186Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState"}
+{"Time":"2026-02-20T08:20:20.362326321Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState","Output":"=== RUN   TestGameRepositoryBoardState\n"}
+{"Time":"2026-02-20T08:20:20.362829028Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState","Output":"--- PASS: TestGameRepositoryBoardState (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.362839154Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardState","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.362843343Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardStateMissing"}
+{"Time":"2026-02-20T08:20:20.362845479Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardStateMissing","Output":"=== RUN   TestGameRepositoryBoardStateMissing\n"}
+{"Time":"2026-02-20T08:20:20.363062225Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardStateMissing","Output":"--- PASS: TestGameRepositoryBoardStateMissing (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.363080084Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryBoardStateMissing","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.36308619Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState"}
+{"Time":"2026-02-20T08:20:20.363088773Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState","Output":"=== RUN   TestGameRepositoryUpdateBoardState\n"}
+{"Time":"2026-02-20T08:20:20.364302466Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState","Output":"--- PASS: TestGameRepositoryUpdateBoardState (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.364375494Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardState","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.364383821Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardStateMissing"}
+{"Time":"2026-02-20T08:20:20.364387131Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardStateMissing","Output":"=== RUN   TestGameRepositoryUpdateBoardStateMissing\n"}
+{"Time":"2026-02-20T08:20:20.364649559Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardStateMissing","Output":"--- PASS: TestGameRepositoryUpdateBoardStateMissing (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.364664124Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateBoardStateMissing","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.364673744Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate"}
+{"Time":"2026-02-20T08:20:20.364678285Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate","Output":"=== RUN   TestGameRepositoryUpdate\n"}
+{"Time":"2026-02-20T08:20:20.36545654Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate","Output":"--- PASS: TestGameRepositoryUpdate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.365615098Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.365621315Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateMissing"}
+{"Time":"2026-02-20T08:20:20.365623662Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateMissing","Output":"=== RUN   TestGameRepositoryUpdateMissing\n"}
+{"Time":"2026-02-20T08:20:20.366071606Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateMissing","Output":"--- PASS: TestGameRepositoryUpdateMissing (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.366076901Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestGameRepositoryUpdateMissing","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.36608197Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddAndGetByID"}
+{"Time":"2026-02-20T08:20:20.366084088Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddAndGetByID","Output":"=== RUN   TestMoveRepositoryAddAndGetByID\n"}
+{"Time":"2026-02-20T08:20:20.366243839Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddAndGetByID","Output":"--- PASS: TestMoveRepositoryAddAndGetByID (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.366253309Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddAndGetByID","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.366257436Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddRejectsDuplicate"}
+{"Time":"2026-02-20T08:20:20.366259151Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddRejectsDuplicate","Output":"=== RUN   TestMoveRepositoryAddRejectsDuplicate\n"}
+{"Time":"2026-02-20T08:20:20.36662972Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddRejectsDuplicate","Output":"--- PASS: TestMoveRepositoryAddRejectsDuplicate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.366633743Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAddRejectsDuplicate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.3666397Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByIDMissing"}
+{"Time":"2026-02-20T08:20:20.36664138Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByIDMissing","Output":"=== RUN   TestMoveRepositoryGetByIDMissing\n"}
+{"Time":"2026-02-20T08:20:20.3668465Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByIDMissing","Output":"--- PASS: TestMoveRepositoryGetByIDMissing (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.366850725Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByIDMissing","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.366855954Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame"}
+{"Time":"2026-02-20T08:20:20.366857557Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame","Output":"=== RUN   TestMoveRepositoryListByGame\n"}
+{"Time":"2026-02-20T08:20:20.367469542Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame","Output":"--- PASS: TestMoveRepositoryListByGame (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.367477608Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.367535276Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGameEmpty"}
+{"Time":"2026-02-20T08:20:20.367548936Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGameEmpty","Output":"=== RUN   TestMoveRepositoryListByGameEmpty\n"}
+{"Time":"2026-02-20T08:20:20.367865895Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGameEmpty","Output":"--- PASS: TestMoveRepositoryListByGameEmpty (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.367870213Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGameEmpty","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.367875407Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_OK"}
+{"Time":"2026-02-20T08:20:20.367877157Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_OK","Output":"=== RUN   TestMoveRepositoryAdd_OK\n"}
+{"Time":"2026-02-20T08:20:20.368253313Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_OK","Output":"--- PASS: TestMoveRepositoryAdd_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.368259046Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.368265557Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_RejectsDuplicate"}
+{"Time":"2026-02-20T08:20:20.368267224Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_RejectsDuplicate","Output":"=== RUN   TestMoveRepositoryAdd_RejectsDuplicate\n"}
+{"Time":"2026-02-20T08:20:20.368661885Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_RejectsDuplicate","Output":"--- PASS: TestMoveRepositoryAdd_RejectsDuplicate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.368684976Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryAdd_RejectsDuplicate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.368691232Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByID_NotFound"}
+{"Time":"2026-02-20T08:20:20.368693893Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByID_NotFound","Output":"=== RUN   TestMoveRepositoryGetByID_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.368884558Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByID_NotFound","Output":"--- PASS: TestMoveRepositoryGetByID_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.368894398Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryGetByID_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.368917198Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_OK"}
+{"Time":"2026-02-20T08:20:20.368920192Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_OK","Output":"=== RUN   TestMoveRepositoryListByGame_OK\n"}
+{"Time":"2026-02-20T08:20:20.369795977Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_OK","Output":"--- PASS: TestMoveRepositoryListByGame_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.369835103Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.369839128Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_ContextCanceled"}
+{"Time":"2026-02-20T08:20:20.369840874Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_ContextCanceled","Output":"=== RUN   TestMoveRepositoryListByGame_ContextCanceled\n"}
+{"Time":"2026-02-20T08:20:20.370037219Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_ContextCanceled","Output":"--- PASS: TestMoveRepositoryListByGame_ContextCanceled (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.370077193Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryListByGame_ContextCanceled","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.370080255Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_OK"}
+{"Time":"2026-02-20T08:20:20.370082207Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_OK","Output":"=== RUN   TestMoveRepositoryDeleteByGame_OK\n"}
+{"Time":"2026-02-20T08:20:20.370731608Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_OK","Output":"--- PASS: TestMoveRepositoryDeleteByGame_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.370739843Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.370744061Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_ContextCanceled"}
+{"Time":"2026-02-20T08:20:20.370746165Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_ContextCanceled","Output":"=== RUN   TestMoveRepositoryDeleteByGame_ContextCanceled\n"}
+{"Time":"2026-02-20T08:20:20.370994915Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_ContextCanceled","Output":"--- PASS: TestMoveRepositoryDeleteByGame_ContextCanceled (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.371001726Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestMoveRepositoryDeleteByGame_ContextCanceled","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.371006472Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_OK"}
+{"Time":"2026-02-20T08:20:20.371008269Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_OK","Output":"=== RUN   TestUserCredentialsRepositorySave_OK\n"}
+{"Time":"2026-02-20T08:20:20.371400755Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_OK","Output":"--- PASS: TestUserCredentialsRepositorySave_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.371405366Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.37141689Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_RejectsDuplicate"}
+{"Time":"2026-02-20T08:20:20.371420855Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_RejectsDuplicate","Output":"=== RUN   TestUserCredentialsRepositorySave_RejectsDuplicate\n"}
+{"Time":"2026-02-20T08:20:20.37176725Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_RejectsDuplicate","Output":"--- PASS: TestUserCredentialsRepositorySave_RejectsDuplicate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.371770164Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositorySave_RejectsDuplicate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.371781588Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositoryGetByLogin_NotFound"}
+{"Time":"2026-02-20T08:20:20.371783806Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositoryGetByLogin_NotFound","Output":"=== RUN   TestUserCredentialsRepositoryGetByLogin_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.371985319Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositoryGetByLogin_NotFound","Output":"--- PASS: TestUserCredentialsRepositoryGetByLogin_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.371988374Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserCredentialsRepositoryGetByLogin_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.371990786Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_OK"}
+{"Time":"2026-02-20T08:20:20.371992313Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_OK","Output":"=== RUN   TestUserRepositorySave_OK\n"}
+{"Time":"2026-02-20T08:20:20.372468937Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_OK","Output":"--- PASS: TestUserRepositorySave_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.372482489Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.372486446Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_RejectsDuplicate"}
+{"Time":"2026-02-20T08:20:20.372488404Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_RejectsDuplicate","Output":"=== RUN   TestUserRepositorySave_RejectsDuplicate\n"}
+{"Time":"2026-02-20T08:20:20.372831391Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_RejectsDuplicate","Output":"--- PASS: TestUserRepositorySave_RejectsDuplicate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.372888358Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositorySave_RejectsDuplicate","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.372890441Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByID_NotFound"}
+{"Time":"2026-02-20T08:20:20.372891782Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByID_NotFound","Output":"=== RUN   TestUserRepositoryGetByID_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.373088523Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByID_NotFound","Output":"--- PASS: TestUserRepositoryGetByID_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.373093896Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryGetByID_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.373098335Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_OK"}
+{"Time":"2026-02-20T08:20:20.373103577Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_OK","Output":"=== RUN   TestUserRepositoryUpdate_OK\n"}
+{"Time":"2026-02-20T08:20:20.373623385Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_OK","Output":"--- PASS: TestUserRepositoryUpdate_OK (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.373656026Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_OK","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.373658986Z","Action":"run","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_NotFound"}
+{"Time":"2026-02-20T08:20:20.373660367Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_NotFound","Output":"=== RUN   TestUserRepositoryUpdate_NotFound\n"}
+{"Time":"2026-02-20T08:20:20.37386182Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_NotFound","Output":"--- PASS: TestUserRepositoryUpdate_NotFound (0.00s)\n"}
+{"Time":"2026-02-20T08:20:20.373866047Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Test":"TestUserRepositoryUpdate_NotFound","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.373869158Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Output":"PASS\n"}
+{"Time":"2026-02-20T08:20:20.374254969Z","Action":"output","Package":"ppo/data/internal/repository/localjson","Output":"ok  \tppo/data/internal/repository/localjson\t0.032s\n"}
+{"Time":"2026-02-20T08:20:20.374260041Z","Action":"pass","Package":"ppo/data/internal/repository/localjson","Elapsed":0.032}
+{"Time":"2026-02-20T08:20:20.508450106Z","Action":"start","Package":"ppo/data/internal/repository/postgres"}
+{"Time":"2026-02-20T08:20:20.508527843Z","Action":"start","Package":"ppo/data/provider"}
+{"Time":"2026-02-20T08:20:20.508543035Z","Action":"output","Package":"ppo/data/provider","Output":"?   \tppo/data/provider\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:20.508549688Z","Action":"skip","Package":"ppo/data/provider","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.508560801Z","Action":"start","Package":"ppo/data/testsupport"}
+{"Time":"2026-02-20T08:20:20.508564394Z","Action":"output","Package":"ppo/data/testsupport","Output":"?   \tppo/data/testsupport\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:20.508567307Z","Action":"skip","Package":"ppo/data/testsupport","Elapsed":0}
+{"Time":"2026-02-20T08:20:20.510444693Z","Action":"run","Package":"ppo/data/internal/repository/postgres","Test":"TestGameRepository_Postgres"}
+{"Time":"2026-02-20T08:20:20.510464744Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Test":"TestGameRepository_Postgres","Output":"=== RUN   TestGameRepository_Postgres\n"}
+{"Time":"2026-02-20T08:20:20.660977575Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Test":"TestGameRepository_Postgres","Output":"--- PASS: TestGameRepository_Postgres (0.15s)\n"}
+{"Time":"2026-02-20T08:20:20.661004696Z","Action":"pass","Package":"ppo/data/internal/repository/postgres","Test":"TestGameRepository_Postgres","Elapsed":0.15}
+{"Time":"2026-02-20T08:20:20.661015656Z","Action":"run","Package":"ppo/data/internal/repository/postgres","Test":"TestMoveRepository_Postgres"}
+{"Time":"2026-02-20T08:20:20.661018897Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Test":"TestMoveRepository_Postgres","Output":"=== RUN   TestMoveRepository_Postgres\n"}
+{"Time":"2026-02-20T08:20:20.787025483Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Test":"TestMoveRepository_Postgres","Output":"--- PASS: TestMoveRepository_Postgres (0.13s)\n"}
+{"Time":"2026-02-20T08:20:20.787055022Z","Action":"pass","Package":"ppo/data/internal/repository/postgres","Test":"TestMoveRepository_Postgres","Elapsed":0.13}
+{"Time":"2026-02-20T08:20:20.787061775Z","Action":"run","Package":"ppo/data/internal/repository/postgres","Test":"TestUserRepository_Postgres"}
+{"Time":"2026-02-20T08:20:20.787064172Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Test":"TestUserRepository_Postgres","Output":"=== RUN   TestUserRepository_Postgres\n"}
+{"Time":"2026-02-20T08:20:20.915387973Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Test":"TestUserRepository_Postgres","Output":"--- PASS: TestUserRepository_Postgres (0.13s)\n"}
+{"Time":"2026-02-20T08:20:20.915415953Z","Action":"pass","Package":"ppo/data/internal/repository/postgres","Test":"TestUserRepository_Postgres","Elapsed":0.13}
+{"Time":"2026-02-20T08:20:20.915423242Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Output":"PASS\n"}
+{"Time":"2026-02-20T08:20:20.915982132Z","Action":"output","Package":"ppo/data/internal/repository/postgres","Output":"ok  \tppo/data/internal/repository/postgres\t0.407s\n"}
+{"Time":"2026-02-20T08:20:20.916003961Z","Action":"pass","Package":"ppo/data/internal/repository/postgres","Elapsed":0.408}

@@ -1,0 +1,36 @@
+{"Time":"2026-02-20T08:20:05.408003929Z","Action":"start","Package":"ppo/sdk/component"}
+{"Time":"2026-02-20T08:20:05.408096734Z","Action":"output","Package":"ppo/sdk/component","Output":"?   \tppo/sdk/component\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:05.408107007Z","Action":"skip","Package":"ppo/sdk/component","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.279639541Z","Action":"start","Package":"ppo/sdk/domain"}
+{"Time":"2026-02-20T08:20:06.279852273Z","Action":"start","Package":"ppo/sdk/port"}
+{"Time":"2026-02-20T08:20:06.279861762Z","Action":"output","Package":"ppo/sdk/port","Output":"?   \tppo/sdk/port\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:06.279865557Z","Action":"skip","Package":"ppo/sdk/port","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.279871216Z","Action":"start","Package":"ppo/sdk/port/repo"}
+{"Time":"2026-02-20T08:20:06.279873756Z","Action":"output","Package":"ppo/sdk/port/repo","Output":"?   \tppo/sdk/port/repo\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:06.279875463Z","Action":"skip","Package":"ppo/sdk/port/repo","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.279878618Z","Action":"start","Package":"ppo/sdk/usecase"}
+{"Time":"2026-02-20T08:20:06.279880645Z","Action":"output","Package":"ppo/sdk/usecase","Output":"?   \tppo/sdk/usecase\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:06.279882212Z","Action":"skip","Package":"ppo/sdk/usecase","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.281373225Z","Action":"run","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustCaptureWhenAvailable"}
+{"Time":"2026-02-20T08:20:06.281389189Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustCaptureWhenAvailable","Output":"=== RUN   TestCheckersRules_MustCaptureWhenAvailable\n"}
+{"Time":"2026-02-20T08:20:06.281399971Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustCaptureWhenAvailable","Output":"--- PASS: TestCheckersRules_MustCaptureWhenAvailable (0.00s)\n"}
+{"Time":"2026-02-20T08:20:06.281403664Z","Action":"pass","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustCaptureWhenAvailable","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.281407629Z","Action":"run","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustContinueCaptureWhilePossible"}
+{"Time":"2026-02-20T08:20:06.281409261Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustContinueCaptureWhilePossible","Output":"=== RUN   TestCheckersRules_MustContinueCaptureWhilePossible\n"}
+{"Time":"2026-02-20T08:20:06.281506976Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustContinueCaptureWhilePossible","Output":"--- PASS: TestCheckersRules_MustContinueCaptureWhilePossible (0.00s)\n"}
+{"Time":"2026-02-20T08:20:06.281558412Z","Action":"pass","Package":"ppo/sdk/domain","Test":"TestCheckersRules_MustContinueCaptureWhilePossible","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.281584538Z","Action":"run","Package":"ppo/sdk/domain","Test":"TestNewPathValidatesAdjacency"}
+{"Time":"2026-02-20T08:20:06.281648515Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestNewPathValidatesAdjacency","Output":"=== RUN   TestNewPathValidatesAdjacency\n"}
+{"Time":"2026-02-20T08:20:06.281664284Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestNewPathValidatesAdjacency","Output":"--- PASS: TestNewPathValidatesAdjacency (0.00s)\n"}
+{"Time":"2026-02-20T08:20:06.281676363Z","Action":"pass","Package":"ppo/sdk/domain","Test":"TestNewPathValidatesAdjacency","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.281895769Z","Action":"run","Package":"ppo/sdk/domain","Test":"TestNewPathRejectsNonAdjacentHop"}
+{"Time":"2026-02-20T08:20:06.281898669Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestNewPathRejectsNonAdjacentHop","Output":"=== RUN   TestNewPathRejectsNonAdjacentHop\n"}
+{"Time":"2026-02-20T08:20:06.281901194Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestNewPathRejectsNonAdjacentHop","Output":"--- PASS: TestNewPathRejectsNonAdjacentHop (0.00s)\n"}
+{"Time":"2026-02-20T08:20:06.281903026Z","Action":"pass","Package":"ppo/sdk/domain","Test":"TestNewPathRejectsNonAdjacentHop","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.281904862Z","Action":"run","Package":"ppo/sdk/domain","Test":"TestComputeExitPathLeavesBoard"}
+{"Time":"2026-02-20T08:20:06.28190606Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestComputeExitPathLeavesBoard","Output":"=== RUN   TestComputeExitPathLeavesBoard\n"}
+{"Time":"2026-02-20T08:20:06.281908548Z","Action":"output","Package":"ppo/sdk/domain","Test":"TestComputeExitPathLeavesBoard","Output":"--- PASS: TestComputeExitPathLeavesBoard (0.00s)\n"}
+{"Time":"2026-02-20T08:20:06.281910158Z","Action":"pass","Package":"ppo/sdk/domain","Test":"TestComputeExitPathLeavesBoard","Elapsed":0}
+{"Time":"2026-02-20T08:20:06.281911581Z","Action":"output","Package":"ppo/sdk/domain","Output":"PASS\n"}
+{"Time":"2026-02-20T08:20:06.281974714Z","Action":"output","Package":"ppo/sdk/domain","Output":"ok  \tppo/sdk/domain\t0.002s\n"}
+{"Time":"2026-02-20T08:20:06.28198988Z","Action":"pass","Package":"ppo/sdk/domain","Elapsed":0.002}
