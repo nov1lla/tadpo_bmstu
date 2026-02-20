@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="30" failures="0" errors="0" time="0.319319">
+	<testsuite tests="6" failures="0" time="0.008000" name="ppo/business/internal/adapter/openai" timestamp="2026-02-20T08:42:33+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+		<testcase classname="ppo/business/internal/adapter/openai" name="TestParseJSONFromContent/plain_json" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/adapter/openai" name="TestParseJSONFromContent/markdown_fenced" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/adapter/openai" name="TestParseJSONFromContent/no_json" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/adapter/openai" name="TestParseJSONFromContent" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/adapter/openai" name="TestClientSuggestMoveSuccess" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/adapter/openai" name="TestClientSuggestMoveAPIError" time="0.000000"></testcase>
+	</testsuite>
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/business/internal/config" timestamp="2026-02-20T08:42:33+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+	</testsuite>
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/business/internal/service/idgen" timestamp="2026-02-20T08:42:33+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+	</testsuite>
+	<testsuite tests="24" failures="0" time="0.319000" name="ppo/business/internal/usecase" timestamp="2026-02-20T08:42:33+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+		<testcase classname="ppo/business/internal/usecase" name="TestAnimatorSimpleMove" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestAnimatorRejectsPathLeavingBoard" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestAuthUseCaseRegisterAndLogin_Classic" time="0.180000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestAuthUseCaseRegisterRejectsInvalidData" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestAuthUseCaseLoginRejectsInvalidCredentials" time="0.130000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestGameUseCaseNewInitialisesBoard" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestGameUseCaseProcessMoveDelegatesToMoveUseCase" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestGameUseCaseProcessMoveRequiresGameID" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestGameUseCaseFinishGame" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestGameUseCaseFinishGameRejectsRepeat" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestGameUseCaseGenerateHistory" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestGameUseCaseGetChessboard" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestMoveUseCaseAddUserMove_SimpleStep" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestMoveUseCaseGetOpponentMove" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestMoveUseCaseGetOpponentMovePropagatesErrors" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseUpdateFields" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCasePropagatesUpdateError" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseCreate" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseCreateRequiresIDGenerator" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseCreateRejectsInvalidData" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseGet" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseGetReturnsRepositoryError" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseCreate_Classic" time="0.000000"></testcase>
+		<testcase classname="ppo/business/internal/usecase" name="TestUserUseCaseGet_Classic" time="0.000000"></testcase>
+	</testsuite>
+</testsuites>

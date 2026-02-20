@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="1" failures="0" errors="0" time="3.804945">
+	<testsuite tests="1" failures="0" time="3.805000" name="ppo/tests/e2e" timestamp="2026-02-20T08:42:39+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+		<testcase classname="ppo/tests/e2e" name="TestWebappE2EFlow" time="3.800000"></testcase>
+	</testsuite>
+</testsuites>

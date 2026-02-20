@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="5" failures="0" errors="0" time="0.135094">
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/component" timestamp="2026-02-20T08:42:35+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+	</testsuite>
+	<testsuite tests="5" failures="0" time="0.004000" name="ppo/sdk/domain" timestamp="2026-02-20T08:42:36+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+		<testcase classname="ppo/sdk/domain" name="TestCheckersRules_MustCaptureWhenAvailable" time="0.000000"></testcase>
+		<testcase classname="ppo/sdk/domain" name="TestCheckersRules_MustContinueCaptureWhilePossible" time="0.000000"></testcase>
+		<testcase classname="ppo/sdk/domain" name="TestNewPathValidatesAdjacency" time="0.000000"></testcase>
+		<testcase classname="ppo/sdk/domain" name="TestNewPathRejectsNonAdjacentHop" time="0.000000"></testcase>
+		<testcase classname="ppo/sdk/domain" name="TestComputeExitPathLeavesBoard" time="0.000000"></testcase>
+	</testsuite>
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/port" timestamp="2026-02-20T08:42:36+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+	</testsuite>
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/port/repo" timestamp="2026-02-20T08:42:36+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+	</testsuite>
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/sdk/usecase" timestamp="2026-02-20T08:42:36+03:00">
+		<properties>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
+		</properties>
+	</testsuite>
+</testsuites>
