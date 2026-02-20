@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="21" failures="0" errors="0" time="0.007316">
-	<testsuite tests="6" failures="0" time="0.008000" name="ppo/business/internal/adapter/openai" timestamp="2026-02-20T08:28:49+03:00">
+<testsuites tests="21" failures="0" errors="0" time="0.008565">
+	<testsuite tests="6" failures="0" time="0.009000" name="ppo/business/internal/adapter/openai" timestamp="2026-02-20T10:10:10+03:00">
 		<properties>
 			<property name="go.version" value="go1.25.7 linux/amd64"></property>
 		</properties>
@@ -11,17 +11,17 @@
 		<testcase classname="ppo/business/internal/adapter/openai" name="TestClientSuggestMoveSuccess" time="0.000000"></testcase>
 		<testcase classname="ppo/business/internal/adapter/openai" name="TestClientSuggestMoveAPIError" time="0.000000"></testcase>
 	</testsuite>
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/business/internal/config" timestamp="2026-02-20T08:28:49+03:00">
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/business/internal/config" timestamp="2026-02-20T10:10:10+03:00">
 		<properties>
 			<property name="go.version" value="go1.25.7 linux/amd64"></property>
 		</properties>
 	</testsuite>
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/business/internal/service/idgen" timestamp="2026-02-20T08:28:49+03:00">
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/business/internal/service/idgen" timestamp="2026-02-20T10:10:10+03:00">
 		<properties>
 			<property name="go.version" value="go1.25.7 linux/amd64"></property>
 		</properties>
 	</testsuite>
-	<testsuite tests="15" failures="0" time="0.004000" name="ppo/business/internal/usecase" timestamp="2026-02-20T08:28:49+03:00">
+	<testsuite tests="15" failures="0" time="0.004000" name="ppo/business/internal/usecase" timestamp="2026-02-20T10:10:10+03:00">
 		<properties>
 			<property name="go.version" value="go1.25.7 linux/amd64"></property>
 		</properties>
