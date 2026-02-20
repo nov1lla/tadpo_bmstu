@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites tests="25" failures="0" errors="0" time="0.213398">
-	<testsuite tests="0" failures="0" time="0.000000" name="ppo/data/internal/config" timestamp="2026-02-15T21:19:05+03:00">
+<testsuites tests="25" failures="0" errors="0" time="0.590411">
+	<testsuite tests="0" failures="0" time="0.000000" name="ppo/data/internal/config" timestamp="2026-02-20T08:28:52+03:00">
 		<properties>
-			<property name="go.version" value="go1.24.4 linux/amd64"></property>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
 		</properties>
 	</testsuite>
-	<testsuite tests="22" failures="0" time="0.004000" name="ppo/data/internal/repository/localjson" timestamp="2026-02-15T21:19:05+03:00">
+	<testsuite tests="22" failures="0" time="0.020000" name="ppo/data/internal/repository/localjson" timestamp="2026-02-20T08:28:52+03:00">
 		<properties>
-			<property name="go.version" value="go1.24.4 linux/amd64"></property>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
 		</properties>
 		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositorySaveAndGetByID" time="0.000000"></testcase>
 		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositorySaveRejectsDuplicate" time="0.000000"></testcase>
-		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryUpdate" time="0.000000"></testcase>
+		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryUpdate" time="0.010000"></testcase>
 		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryUpdateMissing" time="0.000000"></testcase>
 		<testcase classname="ppo/data/internal/repository/localjson" name="TestUserRepositoryGetByIDMissing" time="0.000000"></testcase>
 		<testcase classname="ppo/data/internal/repository/localjson" name="TestGameRepositorySave" time="0.000000"></testcase>
@@ -32,12 +32,12 @@
 		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryListByGame" time="0.000000"></testcase>
 		<testcase classname="ppo/data/internal/repository/localjson" name="TestMoveRepositoryListByGameEmpty" time="0.000000"></testcase>
 	</testsuite>
-	<testsuite tests="3" failures="0" time="0.096000" name="ppo/data/internal/repository/postgres" timestamp="2026-02-15T21:19:05+03:00">
+	<testsuite tests="3" failures="0" time="0.396000" name="ppo/data/internal/repository/postgres" timestamp="2026-02-20T08:28:52+03:00">
 		<properties>
-			<property name="go.version" value="go1.24.4 linux/amd64"></property>
+			<property name="go.version" value="go1.25.7 linux/amd64"></property>
 		</properties>
-		<testcase classname="ppo/data/internal/repository/postgres" name="TestGameRepository_Postgres" time="0.030000"></testcase>
-		<testcase classname="ppo/data/internal/repository/postgres" name="TestMoveRepository_Postgres" time="0.030000"></testcase>
-		<testcase classname="ppo/data/internal/repository/postgres" name="TestUserRepository_Postgres" time="0.030000"></testcase>
+		<testcase classname="ppo/data/internal/repository/postgres" name="TestGameRepository_Postgres" time="0.140000"></testcase>
+		<testcase classname="ppo/data/internal/repository/postgres" name="TestMoveRepository_Postgres" time="0.120000"></testcase>
+		<testcase classname="ppo/data/internal/repository/postgres" name="TestUserRepository_Postgres" time="0.140000"></testcase>
 	</testsuite>
 </testsuites>
