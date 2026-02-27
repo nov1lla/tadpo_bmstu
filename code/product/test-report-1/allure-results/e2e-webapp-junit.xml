@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="1">
+	<testsuite name="ppo/tests/e2e" tests="1" failures="0" errors="0" id="0" hostname="82d7aea47f13" time="15.845" timestamp="2026-02-20T08:20:35Z">
+		<testcase name="TestWebappE2EFlow" classname="ppo/tests/e2e" time="15.840">
+			<system-out><![CDATA[2026/02/20 08:20:35 webapp listening on 127.0.0.1:34093
+2026/02/20 08:20:35 http GET /api/users status=405 bytes=31 duration=135.244µs
+2026/02/20 08:20:35 http POST /api/users status=201 bytes=107 duration=3.659475ms
+2026/02/20 08:20:35 http GET /api/users/2bc08b54-96d3-4889-bf6a-96e6d86eaf39 status=200 bytes=107 duration=1.039957ms
+2026/02/20 08:20:35 http POST /api/games status=201 bytes=1747 duration=6.383178ms
+2026/02/20 08:20:35 http POST /api/games/da7bfd03-8e7c-4252-bff2-8afc361db6c8/moves status=200 bytes=1974 duration=10.383283ms
+2026/02/20 08:20:35 http GET /api/games/da7bfd03-8e7c-4252-bff2-8afc361db6c8/moves status=200 bytes=168 duration=1.408591ms
+2026/02/20 08:20:35 http DELETE /api/games/da7bfd03-8e7c-4252-bff2-8afc361db6c8 status=204 bytes=0 duration=4.288634ms]]></system-out>
+		</testcase>
+	</testsuite>
+</testsuites>

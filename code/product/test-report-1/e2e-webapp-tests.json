@@ -1,0 +1,16 @@
+{"Time":"2026-02-20T08:20:19.697974323Z","Action":"start","Package":"ppo/tests/e2e"}
+{"Time":"2026-02-20T08:20:19.700575342Z","Action":"run","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow"}
+{"Time":"2026-02-20T08:20:19.700598958Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"=== RUN   TestWebappE2EFlow\n"}
+{"Time":"2026-02-20T08:20:35.324351864Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 webapp listening on 127.0.0.1:34093\n"}
+{"Time":"2026-02-20T08:20:35.451337523Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 http GET /api/users status=405 bytes=31 duration=135.244µs\n"}
+{"Time":"2026-02-20T08:20:35.456163127Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 http POST /api/users status=201 bytes=107 duration=3.659475ms\n"}
+{"Time":"2026-02-20T08:20:35.457715223Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 http GET /api/users/2bc08b54-96d3-4889-bf6a-96e6d86eaf39 status=200 bytes=107 duration=1.039957ms\n"}
+{"Time":"2026-02-20T08:20:35.46454263Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 http POST /api/games status=201 bytes=1747 duration=6.383178ms\n"}
+{"Time":"2026-02-20T08:20:35.475775658Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 http POST /api/games/da7bfd03-8e7c-4252-bff2-8afc361db6c8/moves status=200 bytes=1974 duration=10.383283ms\n"}
+{"Time":"2026-02-20T08:20:35.478286584Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 http GET /api/games/da7bfd03-8e7c-4252-bff2-8afc361db6c8/moves status=200 bytes=168 duration=1.408591ms\n"}
+{"Time":"2026-02-20T08:20:35.483085344Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"2026/02/20 08:20:35 http DELETE /api/games/da7bfd03-8e7c-4252-bff2-8afc361db6c8 status=204 bytes=0 duration=4.288634ms\n"}
+{"Time":"2026-02-20T08:20:35.542364781Z","Action":"output","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Output":"--- PASS: TestWebappE2EFlow (15.84s)\n"}
+{"Time":"2026-02-20T08:20:35.542392937Z","Action":"pass","Package":"ppo/tests/e2e","Test":"TestWebappE2EFlow","Elapsed":15.84}
+{"Time":"2026-02-20T08:20:35.542399678Z","Action":"output","Package":"ppo/tests/e2e","Output":"PASS\n"}
+{"Time":"2026-02-20T08:20:35.542768273Z","Action":"output","Package":"ppo/tests/e2e","Output":"ok  \tppo/tests/e2e\t15.845s\n"}
+{"Time":"2026-02-20T08:20:35.542791451Z","Action":"pass","Package":"ppo/tests/e2e","Elapsed":15.845}
