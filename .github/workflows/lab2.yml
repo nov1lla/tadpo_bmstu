@@ -31,7 +31,7 @@ jobs:
 
       - name: Run tests in Docker
         env:
-          REPO_URL: https://${{ secrets.REPO_READ_TOKEN }}@github.com/robodanill/TADPO.git
+          REPO_URL: https://${{ secrets.REPO_READ_TOKEN }}@github.com/nov1lla/tadpo_bmstu.git
           REPO_REF: ${{ github.sha }}
           RUN_TRAFFIC_CAPTURE: 1
         run: |

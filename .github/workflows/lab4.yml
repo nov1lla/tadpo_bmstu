@@ -17,6 +17,8 @@ jobs:
 
       - name: Run tests in Docker (unit -> integration -> e2e -> bdd)
         env:
+          REPO_URL: https://${{ secrets.REPO_READ_TOKEN }}@github.com/nov1lla/tadpo_bmstu.git
+          REPO_REF: ${{ github.sha }}
           RUN_TRAFFIC_CAPTURE: 0
           BDD_TECH_PASSWORD: ${{ secrets.BDD_TECH_PASSWORD }}
         run: |
