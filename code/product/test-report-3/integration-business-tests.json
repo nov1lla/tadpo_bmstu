@@ -1,0 +1,148 @@
+{"Time":"2026-02-20T08:20:17.785400177Z","Action":"start","Package":"ppo/business/internal/adapter/openai"}
+{"Time":"2026-02-20T08:20:17.785543184Z","Action":"start","Package":"ppo/business/internal/config"}
+{"Time":"2026-02-20T08:20:17.785576615Z","Action":"output","Package":"ppo/business/internal/config","Output":"?   \tppo/business/internal/config\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:17.785611858Z","Action":"skip","Package":"ppo/business/internal/config","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.788779767Z","Action":"run","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent"}
+{"Time":"2026-02-20T08:20:17.788807298Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent","Output":"=== RUN   TestParseJSONFromContent\n"}
+{"Time":"2026-02-20T08:20:17.788819967Z","Action":"run","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/plain_json"}
+{"Time":"2026-02-20T08:20:17.788824212Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/plain_json","Output":"=== RUN   TestParseJSONFromContent/plain_json\n"}
+{"Time":"2026-02-20T08:20:17.789160375Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/plain_json","Output":"--- PASS: TestParseJSONFromContent/plain_json (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.789186119Z","Action":"pass","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/plain_json","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.789194192Z","Action":"run","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/markdown_fenced"}
+{"Time":"2026-02-20T08:20:17.789198919Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/markdown_fenced","Output":"=== RUN   TestParseJSONFromContent/markdown_fenced\n"}
+{"Time":"2026-02-20T08:20:17.789218186Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/markdown_fenced","Output":"--- PASS: TestParseJSONFromContent/markdown_fenced (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.78922681Z","Action":"pass","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/markdown_fenced","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.789231171Z","Action":"run","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/no_json"}
+{"Time":"2026-02-20T08:20:17.789233486Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/no_json","Output":"=== RUN   TestParseJSONFromContent/no_json\n"}
+{"Time":"2026-02-20T08:20:17.789237174Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/no_json","Output":"--- PASS: TestParseJSONFromContent/no_json (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.78923973Z","Action":"pass","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent/no_json","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.789242959Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent","Output":"--- PASS: TestParseJSONFromContent (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.789246202Z","Action":"pass","Package":"ppo/business/internal/adapter/openai","Test":"TestParseJSONFromContent","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.78924906Z","Action":"run","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveSuccess"}
+{"Time":"2026-02-20T08:20:17.789251887Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveSuccess","Output":"=== RUN   TestClientSuggestMoveSuccess\n"}
+{"Time":"2026-02-20T08:20:17.789833099Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveSuccess","Output":"2026/02/20 08:20:17 openai model=test-model\n"}
+{"Time":"2026-02-20T08:20:17.790936753Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveSuccess","Output":"2026/02/20 08:20:17 openai request done: model=test-model status=200 duration=1.224383ms\n"}
+{"Time":"2026-02-20T08:20:17.791198695Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveSuccess","Output":"--- PASS: TestClientSuggestMoveSuccess (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.791218065Z","Action":"pass","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveSuccess","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.791226915Z","Action":"run","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveAPIError"}
+{"Time":"2026-02-20T08:20:17.791232938Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveAPIError","Output":"=== RUN   TestClientSuggestMoveAPIError\n"}
+{"Time":"2026-02-20T08:20:17.791510574Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveAPIError","Output":"2026/02/20 08:20:17 openai model=test-model\n"}
+{"Time":"2026-02-20T08:20:17.791817085Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveAPIError","Output":"2026/02/20 08:20:17 openai request failed: model=test-model status=400 duration=471.805µs\n"}
+{"Time":"2026-02-20T08:20:17.792080557Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveAPIError","Output":"--- PASS: TestClientSuggestMoveAPIError (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.792106433Z","Action":"pass","Package":"ppo/business/internal/adapter/openai","Test":"TestClientSuggestMoveAPIError","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.792114796Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Output":"PASS\n"}
+{"Time":"2026-02-20T08:20:17.792447086Z","Action":"output","Package":"ppo/business/internal/adapter/openai","Output":"ok  \tppo/business/internal/adapter/openai\t0.007s\n"}
+{"Time":"2026-02-20T08:20:17.792460679Z","Action":"pass","Package":"ppo/business/internal/adapter/openai","Elapsed":0.007}
+{"Time":"2026-02-20T08:20:17.87534557Z","Action":"start","Package":"ppo/business/internal/integration"}
+{"Time":"2026-02-20T08:20:17.875407229Z","Action":"start","Package":"ppo/business/internal/service/idgen"}
+{"Time":"2026-02-20T08:20:17.875434946Z","Action":"output","Package":"ppo/business/internal/service/idgen","Output":"?   \tppo/business/internal/service/idgen\t[no test files]\n"}
+{"Time":"2026-02-20T08:20:17.875442521Z","Action":"skip","Package":"ppo/business/internal/service/idgen","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.875456541Z","Action":"start","Package":"ppo/business/internal/usecase"}
+{"Time":"2026-02-20T08:20:17.877128307Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestAnimatorSimpleMove"}
+{"Time":"2026-02-20T08:20:17.877143967Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAnimatorSimpleMove","Output":"=== RUN   TestAnimatorSimpleMove\n"}
+{"Time":"2026-02-20T08:20:17.877153277Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAnimatorSimpleMove","Output":"--- PASS: TestAnimatorSimpleMove (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.87715735Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestAnimatorSimpleMove","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.87716175Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestAnimatorRejectsPathLeavingBoard"}
+{"Time":"2026-02-20T08:20:17.877164293Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAnimatorRejectsPathLeavingBoard","Output":"=== RUN   TestAnimatorRejectsPathLeavingBoard\n"}
+{"Time":"2026-02-20T08:20:17.877170425Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAnimatorRejectsPathLeavingBoard","Output":"--- PASS: TestAnimatorRejectsPathLeavingBoard (0.00s)\n"}
+{"Time":"2026-02-20T08:20:17.877173782Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestAnimatorRejectsPathLeavingBoard","Elapsed":0}
+{"Time":"2026-02-20T08:20:17.877176889Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterAndLogin_Classic"}
+{"Time":"2026-02-20T08:20:17.877179079Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterAndLogin_Classic","Output":"=== RUN   TestAuthUseCaseRegisterAndLogin_Classic\n"}
+{"Time":"2026-02-20T08:20:17.878775128Z","Action":"run","Package":"ppo/business/internal/integration","Test":"TestBusinessIntegrationUserMoveFlow"}
+{"Time":"2026-02-20T08:20:17.878802016Z","Action":"output","Package":"ppo/business/internal/integration","Test":"TestBusinessIntegrationUserMoveFlow","Output":"=== RUN   TestBusinessIntegrationUserMoveFlow\n"}
+{"Time":"2026-02-20T08:20:18.027724776Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterAndLogin_Classic","Output":"--- PASS: TestAuthUseCaseRegisterAndLogin_Classic (0.15s)\n"}
+{"Time":"2026-02-20T08:20:18.028263877Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterAndLogin_Classic","Elapsed":0.15}
+{"Time":"2026-02-20T08:20:18.028345392Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterRejectsInvalidData"}
+{"Time":"2026-02-20T08:20:18.028350217Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterRejectsInvalidData","Output":"=== RUN   TestAuthUseCaseRegisterRejectsInvalidData\n"}
+{"Time":"2026-02-20T08:20:18.029011565Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterRejectsInvalidData","Output":"--- PASS: TestAuthUseCaseRegisterRejectsInvalidData (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.029369063Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseRegisterRejectsInvalidData","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.029680663Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseLoginRejectsInvalidCredentials"}
+{"Time":"2026-02-20T08:20:18.030045716Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseLoginRejectsInvalidCredentials","Output":"=== RUN   TestAuthUseCaseLoginRejectsInvalidCredentials\n"}
+{"Time":"2026-02-20T08:20:18.086348151Z","Action":"output","Package":"ppo/business/internal/integration","Test":"TestBusinessIntegrationUserMoveFlow","Output":"--- PASS: TestBusinessIntegrationUserMoveFlow (0.21s)\n"}
+{"Time":"2026-02-20T08:20:18.086434046Z","Action":"pass","Package":"ppo/business/internal/integration","Test":"TestBusinessIntegrationUserMoveFlow","Elapsed":0.21}
+{"Time":"2026-02-20T08:20:18.086451431Z","Action":"output","Package":"ppo/business/internal/integration","Output":"PASS\n"}
+{"Time":"2026-02-20T08:20:18.088258538Z","Action":"output","Package":"ppo/business/internal/integration","Output":"ok  \tppo/business/internal/integration\t0.213s\n"}
+{"Time":"2026-02-20T08:20:18.088541568Z","Action":"pass","Package":"ppo/business/internal/integration","Elapsed":0.213}
+{"Time":"2026-02-20T08:20:18.17375915Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseLoginRejectsInvalidCredentials","Output":"--- PASS: TestAuthUseCaseLoginRejectsInvalidCredentials (0.14s)\n"}
+{"Time":"2026-02-20T08:20:18.173809636Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestAuthUseCaseLoginRejectsInvalidCredentials","Elapsed":0.14}
+{"Time":"2026-02-20T08:20:18.173843971Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseNewInitialisesBoard"}
+{"Time":"2026-02-20T08:20:18.173846379Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseNewInitialisesBoard","Output":"=== RUN   TestGameUseCaseNewInitialisesBoard\n"}
+{"Time":"2026-02-20T08:20:18.173940721Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseNewInitialisesBoard","Output":"--- PASS: TestGameUseCaseNewInitialisesBoard (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.174015113Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseNewInitialisesBoard","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.174057731Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveDelegatesToMoveUseCase"}
+{"Time":"2026-02-20T08:20:18.17407947Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveDelegatesToMoveUseCase","Output":"=== RUN   TestGameUseCaseProcessMoveDelegatesToMoveUseCase\n"}
+{"Time":"2026-02-20T08:20:18.174141888Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveDelegatesToMoveUseCase","Output":"--- PASS: TestGameUseCaseProcessMoveDelegatesToMoveUseCase (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.175586395Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveDelegatesToMoveUseCase","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.176255261Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveRequiresGameID"}
+{"Time":"2026-02-20T08:20:18.17650873Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveRequiresGameID","Output":"=== RUN   TestGameUseCaseProcessMoveRequiresGameID\n"}
+{"Time":"2026-02-20T08:20:18.176800533Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveRequiresGameID","Output":"--- PASS: TestGameUseCaseProcessMoveRequiresGameID (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.177159251Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseProcessMoveRequiresGameID","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.177413353Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGame"}
+{"Time":"2026-02-20T08:20:18.177663197Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGame","Output":"=== RUN   TestGameUseCaseFinishGame\n"}
+{"Time":"2026-02-20T08:20:18.177902962Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGame","Output":"--- PASS: TestGameUseCaseFinishGame (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.178211876Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGame","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.178521133Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGameRejectsRepeat"}
+{"Time":"2026-02-20T08:20:18.178819325Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGameRejectsRepeat","Output":"=== RUN   TestGameUseCaseFinishGameRejectsRepeat\n"}
+{"Time":"2026-02-20T08:20:18.178893508Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGameRejectsRepeat","Output":"--- PASS: TestGameUseCaseFinishGameRejectsRepeat (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.179231156Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseFinishGameRejectsRepeat","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.179418623Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGenerateHistory"}
+{"Time":"2026-02-20T08:20:18.179618171Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGenerateHistory","Output":"=== RUN   TestGameUseCaseGenerateHistory\n"}
+{"Time":"2026-02-20T08:20:18.180159607Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGenerateHistory","Output":"--- PASS: TestGameUseCaseGenerateHistory (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.180265639Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGenerateHistory","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.180335845Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGetChessboard"}
+{"Time":"2026-02-20T08:20:18.180402943Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGetChessboard","Output":"=== RUN   TestGameUseCaseGetChessboard\n"}
+{"Time":"2026-02-20T08:20:18.180477852Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGetChessboard","Output":"--- PASS: TestGameUseCaseGetChessboard (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.180550153Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestGameUseCaseGetChessboard","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.180618405Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseAddUserMove_SimpleStep"}
+{"Time":"2026-02-20T08:20:18.180685191Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseAddUserMove_SimpleStep","Output":"=== RUN   TestMoveUseCaseAddUserMove_SimpleStep\n"}
+{"Time":"2026-02-20T08:20:18.180755962Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseAddUserMove_SimpleStep","Output":"--- PASS: TestMoveUseCaseAddUserMove_SimpleStep (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.1808243Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseAddUserMove_SimpleStep","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.18088992Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMove"}
+{"Time":"2026-02-20T08:20:18.180958001Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMove","Output":"=== RUN   TestMoveUseCaseGetOpponentMove\n"}
+{"Time":"2026-02-20T08:20:18.181024433Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMove","Output":"2026/02/20 08:20:18 opponent suggestion: game=game-1 piece=dark-1 start=(2,3) path=[(4,5)] end=(4,5)\n"}
+{"Time":"2026-02-20T08:20:18.181091305Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMove","Output":"2026/02/20 08:20:18 opponent captured pieces: game=game-1 captures=[light-1]\n"}
+{"Time":"2026-02-20T08:20:18.181155448Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMove","Output":"--- PASS: TestMoveUseCaseGetOpponentMove (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181169603Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMove","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181182369Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMovePropagatesErrors"}
+{"Time":"2026-02-20T08:20:18.181191773Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMovePropagatesErrors","Output":"=== RUN   TestMoveUseCaseGetOpponentMovePropagatesErrors\n"}
+{"Time":"2026-02-20T08:20:18.181194151Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMovePropagatesErrors","Output":"--- PASS: TestMoveUseCaseGetOpponentMovePropagatesErrors (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181195709Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestMoveUseCaseGetOpponentMovePropagatesErrors","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181197278Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseUpdateFields"}
+{"Time":"2026-02-20T08:20:18.181198469Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseUpdateFields","Output":"=== RUN   TestUserUseCaseUpdateFields\n"}
+{"Time":"2026-02-20T08:20:18.181200237Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseUpdateFields","Output":"--- PASS: TestUserUseCaseUpdateFields (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181201675Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseUpdateFields","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181203109Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCasePropagatesUpdateError"}
+{"Time":"2026-02-20T08:20:18.181204569Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCasePropagatesUpdateError","Output":"=== RUN   TestUserUseCasePropagatesUpdateError\n"}
+{"Time":"2026-02-20T08:20:18.181206338Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCasePropagatesUpdateError","Output":"--- PASS: TestUserUseCasePropagatesUpdateError (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181208296Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCasePropagatesUpdateError","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181209843Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate"}
+{"Time":"2026-02-20T08:20:18.181211164Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate","Output":"=== RUN   TestUserUseCaseCreate\n"}
+{"Time":"2026-02-20T08:20:18.181212853Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate","Output":"--- PASS: TestUserUseCaseCreate (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181214253Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181215689Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRequiresIDGenerator"}
+{"Time":"2026-02-20T08:20:18.181217059Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRequiresIDGenerator","Output":"=== RUN   TestUserUseCaseCreateRequiresIDGenerator\n"}
+{"Time":"2026-02-20T08:20:18.181218708Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRequiresIDGenerator","Output":"--- PASS: TestUserUseCaseCreateRequiresIDGenerator (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.18122011Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRequiresIDGenerator","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181221618Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRejectsInvalidData"}
+{"Time":"2026-02-20T08:20:18.181222767Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRejectsInvalidData","Output":"=== RUN   TestUserUseCaseCreateRejectsInvalidData\n"}
+{"Time":"2026-02-20T08:20:18.181227785Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRejectsInvalidData","Output":"--- PASS: TestUserUseCaseCreateRejectsInvalidData (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.18122953Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreateRejectsInvalidData","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181231647Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet"}
+{"Time":"2026-02-20T08:20:18.181233004Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet","Output":"=== RUN   TestUserUseCaseGet\n"}
+{"Time":"2026-02-20T08:20:18.181234678Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet","Output":"--- PASS: TestUserUseCaseGet (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181235867Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181237186Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGetReturnsRepositoryError"}
+{"Time":"2026-02-20T08:20:18.181238314Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGetReturnsRepositoryError","Output":"=== RUN   TestUserUseCaseGetReturnsRepositoryError\n"}
+{"Time":"2026-02-20T08:20:18.181239979Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGetReturnsRepositoryError","Output":"--- PASS: TestUserUseCaseGetReturnsRepositoryError (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.18124121Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGetReturnsRepositoryError","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181242723Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate_Classic"}
+{"Time":"2026-02-20T08:20:18.18124382Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate_Classic","Output":"=== RUN   TestUserUseCaseCreate_Classic\n"}
+{"Time":"2026-02-20T08:20:18.181245716Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate_Classic","Output":"--- PASS: TestUserUseCaseCreate_Classic (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181247291Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseCreate_Classic","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181248661Z","Action":"run","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet_Classic"}
+{"Time":"2026-02-20T08:20:18.181249791Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet_Classic","Output":"=== RUN   TestUserUseCaseGet_Classic\n"}
+{"Time":"2026-02-20T08:20:18.181251373Z","Action":"output","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet_Classic","Output":"--- PASS: TestUserUseCaseGet_Classic (0.00s)\n"}
+{"Time":"2026-02-20T08:20:18.181252806Z","Action":"pass","Package":"ppo/business/internal/usecase","Test":"TestUserUseCaseGet_Classic","Elapsed":0}
+{"Time":"2026-02-20T08:20:18.181254188Z","Action":"output","Package":"ppo/business/internal/usecase","Output":"PASS\n"}
+{"Time":"2026-02-20T08:20:18.181292109Z","Action":"output","Package":"ppo/business/internal/usecase","Output":"ok  \tppo/business/internal/usecase\t0.306s\n"}
+{"Time":"2026-02-20T08:20:18.181295003Z","Action":"pass","Package":"ppo/business/internal/usecase","Elapsed":0.306}

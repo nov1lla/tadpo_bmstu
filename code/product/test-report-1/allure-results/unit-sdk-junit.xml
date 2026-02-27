@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites tests="5">
+	<testsuite name="ppo/sdk/component" tests="0" failures="0" errors="0" id="0" hostname="82d7aea47f13" time="0.000" timestamp="2026-02-20T08:20:17Z"></testsuite>
+	<testsuite name="ppo/sdk/port" tests="0" failures="0" errors="0" id="1" hostname="82d7aea47f13" time="0.000" timestamp="2026-02-20T08:20:17Z"></testsuite>
+	<testsuite name="ppo/sdk/port/repo" tests="0" failures="0" errors="0" id="2" hostname="82d7aea47f13" time="0.000" timestamp="2026-02-20T08:20:17Z"></testsuite>
+	<testsuite name="ppo/sdk/usecase" tests="0" failures="0" errors="0" id="3" hostname="82d7aea47f13" time="0.000" timestamp="2026-02-20T08:20:17Z"></testsuite>
+	<testsuite name="ppo/sdk/domain" tests="5" failures="0" errors="0" id="4" hostname="82d7aea47f13" time="0.002" timestamp="2026-02-20T08:20:17Z">
+		<testcase name="TestCheckersRules_MustCaptureWhenAvailable" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestCheckersRules_MustContinueCaptureWhilePossible" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestNewPathValidatesAdjacency" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestNewPathRejectsNonAdjacentHop" classname="ppo/sdk/domain" time="0.000"></testcase>
+		<testcase name="TestComputeExitPathLeavesBoard" classname="ppo/sdk/domain" time="0.000"></testcase>
+	</testsuite>
+</testsuites>
